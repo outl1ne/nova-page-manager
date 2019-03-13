@@ -1,9 +1,9 @@
 <?php
 
-namespace Optimistdigital\NovaPageManager\Http\Middleware;
+namespace OptimistDigital\NovaPageManager\Http\Middleware;
 
 use Laravel\Nova\Nova;
-use Optimistdigital\NovaPageManager\NovaPageManager;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class Authorize
 {

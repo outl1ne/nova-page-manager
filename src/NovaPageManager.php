@@ -1,6 +1,6 @@
 <?php
 
-namespace Optimistdigital\NovaPageManager;
+namespace OptimistDigital\NovaPageManager;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Tool;
@@ -14,8 +14,8 @@ class NovaPageManager extends Tool
      */
     public function boot()
     {
-        Nova::script('nova-page-manager', __DIR__.'/../dist/js/tool.js');
-        Nova::style('nova-page-manager', __DIR__.'/../dist/css/tool.css');
+        Nova::script('nova-page-manager', __DIR__ . '/../dist/js/tool.js');
+        Nova::style('nova-page-manager', __DIR__ . '/../dist/css/tool.css');
     }
 
     /**

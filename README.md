@@ -1,6 +1,6 @@
 # Nova Menu Builder
 
-This [Laravel Nova](https://github.com/InfinetyEs/Nova-Menu-Builder) package allows you to create and manage pages and regions. The package is geared towards headless CMS's.
+This [Laravel Nova](https://nova.laravel.com) package allows you to create and manage pages and regions. The package is geared towards headless CMS's.
 
 ## Features
 

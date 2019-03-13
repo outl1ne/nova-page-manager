@@ -11,13 +11,13 @@
   },
   "autoload": {
     "psr-4": {
-      "Optimistdigital\\NovaPageManager\\": "src/"
+      "OptimistDigital\\NovaPageManager\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "Optimistdigital\\NovaPageManager\\ToolServiceProvider"
+        "OptimistDigital\\NovaPageManager\\ToolServiceProvider"
       ]
     }
   },

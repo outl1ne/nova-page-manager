@@ -1,12 +1,12 @@
 <?php
 
-namespace Optimistdigital\NovaPageManager;
+namespace OptimistDigital\NovaPageManager;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Optimistdigital\NovaPageManager\Http\Middleware\Authorize;
+use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -17,7 +17,7 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        $this->loadViewsFrom(__DIR__.'/../resources/views', 'nova-page-manager');
+        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-page-manager');
 
         $this->app->booted(function () {
             $this->routes();
@@ -40,8 +40,8 @@ class ToolServiceProvider extends ServiceProvider
         }
 
         Route::middleware(['nova', Authorize::class])
-                ->prefix('nova-vendor/nova-page-manager')
-                ->group(__DIR__.'/../routes/api.php');
+            ->prefix('nova-vendor/nova-page-manager')
+            ->group(__DIR__ . '/../routes/api.php');
     }
 
     /**
