@@ -1,6 +1,32 @@
-<router-link tag="h3" :to="{name: 'nova-page-manager'}" class="cursor-pointer flex items-center font-normal dim text-white mb-6 text-base no-underline">
-    <svg class="sidebar-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path fill="var(--sidebar-icon)" d="M3 1h4c1.1045695 0 2 .8954305 2 2v4c0 1.1045695-.8954305 2-2 2H3c-1.1045695 0-2-.8954305-2-2V3c0-1.1045695.8954305-2 2-2zm0 2v4h4V3H3zm10-2h4c1.1045695 0 2 .8954305 2 2v4c0 1.1045695-.8954305 2-2 2h-4c-1.1045695 0-2-.8954305-2-2V3c0-1.1045695.8954305-2 2-2zm0 2v4h4V3h-4zM3 11h4c1.1045695 0 2 .8954305 2 2v4c0 1.1045695-.8954305 2-2 2H3c-1.1045695 0-2-.8954305-2-2v-4c0-1.1045695.8954305-2 2-2zm0 2v4h4v-4H3zm10-2h4c1.1045695 0 2 .8954305 2 2v4c0 1.1045695-.8954305 2-2 2h-4c-1.1045695 0-2-.8954305-2-2v-4c0-1.1045695.8954305-2 2-2zm0 2v4h4v-4h-4z"/></svg>
+<h3 class="flex items-center font-normal text-white mb-6 text-base no-underline">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="sidebar-icon">
+        <path fill="var(--sidebar-icon)" class="heroicon-ui" d="M20 6a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V6c0-1.1.9-2 2-2h7.41l2 2H20zM4 6v12h16V8h-7.41l-2-2H4z"/>
+    </svg>
     <span class="sidebar-label">
-        Nova Page Manager
+        Page manager
     </span>
-</router-link>
+</h3>
+
+<ul class="list-reset mb-8">
+    <li class="leading-wide mb-4 text-sm">
+        <router-link :to="{
+            name: 'index',
+            params: {
+                resourceName: 'pages'
+            }
+        }" class="text-white ml-8 no-underline dim">
+            Pages
+        </router-link>
+    </li>
+
+    <li class="leading-wide mb-4 text-sm">
+        <router-link :to="{
+            name: 'index',
+            params: {
+                resourceName: 'regions'
+            }
+        }" class="text-white ml-8 no-underline dim">
+            Regions
+        </router-link>
+    </li>
+</ul>

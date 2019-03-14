@@ -7,6 +7,8 @@ use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
+use OptimistDigital\NovaPageManager\Nova\Page;
+use OptimistDigital\NovaPageManager\Nova\Region;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -19,6 +21,10 @@ class ToolServiceProvider extends ServiceProvider
     {
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-page-manager');
 
+        $this->publishes([
+            __DIR__ . '/../database/migrations' => database_path('migrations'),
+        ], 'migrations');
+
         $this->app->booted(function () {
             $this->routes();
         });
@@ -26,6 +32,11 @@ class ToolServiceProvider extends ServiceProvider
         Nova::serving(function (ServingNova $event) {
             //
         });
+
+        Nova::resources([
+            Page::class,
+            Region::class,
+        ]);
     }
 
     /**
