@@ -7,6 +7,13 @@ use Laravel\Nova\Tool;
 
 class NovaPageManager extends Tool
 {
+    private static $templates = [];
+
+    public function __construct(array $templates = [])
+    {
+        self::$templates = $templates;
+    }
+
     /**
      * Perform any tasks that need to happen when the tool is booted.
      *
@@ -26,5 +33,10 @@ class NovaPageManager extends Tool
     public function renderNavigation()
     {
         return view('nova-page-manager::navigation');
+    }
+
+    public static function getTemplates(): array
+    {
+        return self::$templates;
     }
 }

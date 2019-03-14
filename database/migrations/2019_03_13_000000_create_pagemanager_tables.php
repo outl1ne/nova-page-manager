@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePagesTable extends Migration
+class CreatePagemanagerTables extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,24 @@ class CreatePagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('pages', function (Blueprint $table) {
+        Schema::create('nova-pages', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
+            $table->string('name');
+            $table->string('slug')->default('');
+            $table->string('locale');
+            $table->string('template');
+            $table->json('data')->nullable();
+        });
+
+        Schema::create('nova-regions', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->timestamps();
+            $table->string('name');
+            $table->string('slug')->default('');
+            $table->string('locale');
+            $table->string('template');
+            $table->json('data')->nullable();
         });
     }
 
@@ -26,6 +41,7 @@ class CreatePagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('pages');
+        Schema::dropIfExists('nova-pages');
+        Schema::dropIfExists('nova-regions');
     }
 }
