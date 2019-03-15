@@ -2,13 +2,7 @@
 
 namespace OptimistDigital\NovaPageManager\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Region extends Model
+class Region extends TemplateModel
 {
     protected $table = 'nova-regions';
-
-    protected $casts = [
-        'data' => 'array'
-    ];
 }
