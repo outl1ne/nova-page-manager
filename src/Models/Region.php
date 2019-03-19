@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Region extends TemplateModel
 {
+    public static $type = 'region';
+
     public static function boot()
     {
         parent::boot();

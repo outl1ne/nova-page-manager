@@ -10,4 +10,6 @@ class Page extends TemplateResource
      * @var string
      */
     public static $model = 'OptimistDigital\NovaPageManager\Models\Page';
+
+    public $type = 'page';
 }

@@ -10,4 +10,6 @@ class Region extends TemplateResource
      * @var string
      */
     public static $model = 'OptimistDigital\NovaPageManager\Models\Region';
+
+    public $type = 'region';
 }

@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Builder;
 
 class Page extends TemplateModel
 {
+    public static $type = 'page';
+
     public static function boot()
     {
         parent::boot();
