@@ -38,12 +38,18 @@ class TemplateResource extends Resource
      */
     public function fields(Request $request)
     {
-        $templatesArray = NovaPageManager::getTemplates();
+        // Filter 'page' and 'region' templates
+        $templatesArray = array_filter(NovaPageManager::getTemplates(), function ($template) {
+            return ($template::$type === $this->type);
+        });
+
+        // Create properly formatted array
         $templates = [];
         foreach ($templatesArray as $tmpl) {
             $templates[$tmpl::$name] = $tmpl::$name;
         }
 
+        // If is existing model, find correct class
         if (isset($this->template)) {
             foreach ($templatesArray as $tmpl) {
                 if ($tmpl::$name == $this->template) $templateClass = new $tmpl;
