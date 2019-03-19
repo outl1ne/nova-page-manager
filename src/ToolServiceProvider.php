@@ -3,12 +3,12 @@
 namespace OptimistDigital\NovaPageManager;
 
 use Laravel\Nova\Nova;
-use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
 use OptimistDigital\NovaPageManager\Nova\Page;
 use OptimistDigital\NovaPageManager\Nova\Region;
+use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -33,6 +33,12 @@ class ToolServiceProvider extends ServiceProvider
             Page::class,
             Region::class,
         ]);
+
+        if ($this->app->runningInConsole()) {
+            $this->commands([
+                CreateTemplate::class
+            ]);
+        }
     }
 
     /**
@@ -49,15 +55,5 @@ class ToolServiceProvider extends ServiceProvider
         Route::middleware(['nova', Authorize::class])
             ->prefix('nova-vendor/nova-page-manager')
             ->group(__DIR__ . '/../routes/api.php');
-    }
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-        //
     }
 }
