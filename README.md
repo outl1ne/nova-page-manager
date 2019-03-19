@@ -21,7 +21,7 @@ composer require optimistdigital/nova-page-manager
 Publish the database migration(s) and run migrate:
 
 ```bash
-php artisan vendor:publish --tag=migrations
+php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServiceProvider" --tag="migrations"
 php artisan migrate
 ```
 
