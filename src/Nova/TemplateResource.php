@@ -62,10 +62,30 @@ class TemplateResource extends Resource
             ID::make()->sortable(),
             Text::make('Name', 'name'),
             Text::make('Slug', 'slug'),
-            Select::make('Locale', 'locale')->options([
-                'en_US' => 'English'
-            ]),
-            Select::make('Template', 'template')->options($templates),
+
+            Select::make('Locale', 'locale')
+                ->options([
+                    'en_US' => 'English'
+                ])
+                ->hideWhenUpdating(),
+            Text::make('Locale', 'locale')
+                ->withMeta(['extraAttributes' => [
+                    'readonly' => true
+                ]])
+                ->hideWhenCreating()
+                ->hideFromIndex()
+                ->hideFromDetail(),
+
+            Select::make('Template', 'template')
+                ->options($templates)
+                ->hideWhenUpdating(),
+            Text::make('Template', 'template')
+                ->withMeta(['extraAttributes' => [
+                    'readonly' => true
+                ]])
+                ->hideWhenCreating()
+                ->hideFromIndex()
+                ->hideFromDetail(),
 
             new Panel('Page information', $templateFields)
         ];
