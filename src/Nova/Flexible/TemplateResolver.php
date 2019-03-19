@@ -1,6 +1,6 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Nova\Flexible\Resolvers;
+namespace OptimistDigital\NovaPageManager\Nova\Flexible;
 
 use Whitecube\NovaFlexibleContent\Value\Resolver;
 
