@@ -10,7 +10,6 @@ abstract class Template
     public static $name = '';
 
     abstract function fields(Request $request): array;
-    abstract function cards(Request $request): array;
 
     public function _getTemplateFields(Request $request)
     {
