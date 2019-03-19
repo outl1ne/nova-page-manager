@@ -8,10 +8,12 @@ use Laravel\Nova\Tool;
 class NovaPageManager extends Tool
 {
     private static $templates = [];
+    private static $locales = [];
 
-    public function __construct(array $templates = [])
+    public function __construct(array $data = [])
     {
-        self::$templates = $templates;
+        self::$templates = $data['templates'] ?: [];
+        self::$locales = $data['locales'] ?: ['en_US' => 'English'];
     }
 
     /**
@@ -38,5 +40,10 @@ class NovaPageManager extends Tool
     public static function getTemplates(): array
     {
         return self::$templates;
+    }
+
+    public static function getLocales(): array
+    {
+        return self::$locales;
     }
 }

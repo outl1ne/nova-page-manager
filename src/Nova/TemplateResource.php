@@ -59,15 +59,15 @@ class TemplateResource extends Resource
 
         $templateFields = isset($templateClass) ? $templateClass->_getTemplateFields($request) : [];
 
+        $locales = NovaPageManager::getLocales();
+
         return [
             ID::make()->sortable(),
             Text::make('Name', 'name'),
             Text::make('Slug', 'slug'),
 
             Select::make('Locale', 'locale')
-                ->options([
-                    'en_US' => 'English'
-                ])
+                ->options($locales)
                 ->hideWhenUpdating(),
             Text::make('Locale', 'locale')
                 ->withMeta(['extraAttributes' => [
