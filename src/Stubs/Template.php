@@ -14,9 +14,4 @@ class :className extends Template
     {
         return [];
     }
-
-    public function cards(Request $request): array
-    {
-        return [];
-    }
 }
