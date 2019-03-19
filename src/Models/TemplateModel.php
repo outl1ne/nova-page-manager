@@ -7,6 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 class TemplateModel extends Model
 {
     protected $casts = [
-        'data' => 'array'
+        'data' => 'object'
     ];
 }

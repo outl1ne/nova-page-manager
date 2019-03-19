@@ -29,10 +29,6 @@ class ToolServiceProvider extends ServiceProvider
             $this->routes();
         });
 
-        Nova::serving(function (ServingNova $event) {
-            //
-        });
-
         Nova::resources([
             Page::class,
             Region::class,
