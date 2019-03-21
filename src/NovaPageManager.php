@@ -10,12 +10,6 @@ class NovaPageManager extends Tool
     private static $templates = [];
     private static $locales = [];
 
-    public function __construct(array $data = [])
-    {
-        self::$templates = $data['templates'] ?: [];
-        self::$locales = $data['locales'] ?: ['en_US' => 'English'];
-    }
-
     /**
      * Perform any tasks that need to happen when the tool is booted.
      *
@@ -35,6 +29,12 @@ class NovaPageManager extends Tool
     public function renderNavigation()
     {
         return view('nova-page-manager::navigation');
+    }
+
+    public static function configure(array $data = [])
+    {
+        self::$templates = $data['templates'] ?: [];
+        self::$locales = $data['locales'] ?: ['en_US' => 'English'];
     }
 
     public static function getTemplates(): array

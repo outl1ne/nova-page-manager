@@ -36,10 +36,7 @@ public function tools()
 {
     return [
         // ...
-        new \OptimistDigital\NovaPageManager\NovaPageManager([
-            'templates' => [], // Register Template classes, ie: [HomePageTemplate::class]
-            'locales' => [] // Register locales, ie: ['en_US' => 'English']
-        ]),
+        new \OptimistDigital\NovaPageManager\NovaPageManager
     ];
 }
 ```
@@ -58,48 +55,42 @@ This will ask you a few additional details and will create a base template in `A
 
 ### Registering templates
 
-All your templates have to be registered in the `NovaPageManager` constructor, inside the `NovaServiceProvider`'s `tools()` function.
+All your templates have to be registered using the `NovaPageManager::configure()` function, preferably in `NovaServiceProvider`'s `boot()` function.
 
 Example:
 
 ```php
 // in app/Providers/NovaServiceProvider.php
 
-public function tools()
+public function boot()
 {
-    return [
-        // ...
-        new \OptimistDigital\NovaPageManager\NovaPageManager([
-            'templates' => [
-                \App\Nova\Templates\HomePageTemplate::class
-            ],
-            'locales' => []
-        ]),
-    ];
+    \OptimistDigital\NovaPageManager\NovaPageManager::configure([
+        'templates' => [
+            \App\Nova\Templates\HomePageTemplate::class
+        ],
+        'locales' => []
+    ]);
 }
 ```
 
 ### Defining locales
 
-Locales can be defined similarly to how templates are registered. Pass the dictionary of languages to the `NovaPageManager` constructor.
+Locales can be defined similarly to how templates are registered. Pass the dictionary of languages to the `NovaPageManager::configure()` function.
 
 Example:
 
 ```php
 // in app/Providers/NovaServiceProvider.php
 
-public function tools()
+public function boot()
 {
-    return [
-        // ...
-        new \OptimistDigital\NovaPageManager\NovaPageManager([
-            'templates' => [],
-            'locales' => [
-                'en_US' => 'English',
-                'et_EE' => 'Estonian'
-            ]
-        ]),
-    ];
+    \OptimistDigital\NovaPageManager\NovaPageManager::configure([
+        'templates' => [],
+        'locales' => [
+            'en_US' => 'English',
+            'et_EE' => 'Estonian'
+        ]
+    ]);
 }
 ```
 
