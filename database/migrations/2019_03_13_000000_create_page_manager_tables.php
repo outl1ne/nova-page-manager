@@ -21,6 +21,9 @@ class CreatePageManagerTables extends Migration
             $table->string('slug')->default('')->unique();
             $table->string('locale');
             $table->string('template');
+            $table->string('seo_title')->nullable();
+            $table->string('seo_description')->nullable();
+            $table->string('seo_image')->nullable();
             $table->json('data')->nullable();
 
             $table->unique(['locale', 'template']);
@@ -34,6 +37,6 @@ class CreatePageManagerTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nova_page_manager_data');
+        Schema::dropIfExists('nova_page_manager');
     }
 }

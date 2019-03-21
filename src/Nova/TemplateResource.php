@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Resource;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Heading;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use Laravel\Nova\Panel;
 
@@ -61,7 +63,7 @@ class TemplateResource extends Resource
 
         $locales = NovaPageManager::getLocales();
 
-        return [
+        $fields = [
             ID::make()->sortable(),
             Text::make('Name', 'name'),
             Text::make('Slug', 'slug'),
@@ -86,9 +88,23 @@ class TemplateResource extends Resource
                 ]])
                 ->hideWhenCreating()
                 ->hideFromIndex()
-                ->hideFromDetail(),
+                ->hideFromDetail()
+        ];
 
-            new Panel('Page information', $templateFields)
+        if ($templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
+
+        $fields[] = new Panel('Page information', $templateFields);
+
+        return $fields;
+    }
+
+    protected function getSeoFields()
+    {
+        return [
+            Heading::make('SEO')->hideFromIndex()->hideWhenCreating()->hideFromDetail(),
+            Text::make('SEO Title', 'seo_title')->hideFromIndex()->hideWhenCreating(),
+            Text::make('SEO Description', 'seo_description')->hideFromIndex()->hideWhenCreating(),
+            Image::make('SEO Image', 'seo_image')->hideFromIndex()->hideWhenCreating()
         ];
     }
 
