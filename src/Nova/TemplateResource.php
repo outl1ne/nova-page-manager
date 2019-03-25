@@ -14,6 +14,7 @@ use Laravel\Nova\Fields\FieldCollection;
 use OptimistDigital\NovaPageManager\Nova\Fields\TranslationsField;
 use OptimistDigital\NovaPageManager\Nova\Fields\LocaleField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
+use OptimistDigital\NovaPageManager\Nova\Filters\TemplateLocaleFilter;
 
 class TemplateResource extends Resource
 {
@@ -104,7 +105,9 @@ class TemplateResource extends Resource
      */
     public function filters(Request $request)
     {
-        return [];
+        return [
+            new TemplateLocaleFilter
+        ];
     }
 
     /**
