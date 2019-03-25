@@ -6,11 +6,14 @@ use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Resource;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Heading;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use Laravel\Nova\Panel;
+use Laravel\Nova\Fields\FieldCollection;
+use OptimistDigital\NovaPageManager\Nova\Fields\TranslationsField;
+use OptimistDigital\NovaPageManager\Nova\Fields\LocaleField;
+use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
 
 class TemplateResource extends Resource
 {
@@ -46,12 +49,6 @@ class TemplateResource extends Resource
             return ($template::$type === $this->type);
         });
 
-        // Create properly formatted array
-        $templates = [];
-        foreach ($templatesArray as $tmpl) {
-            $templates[$tmpl::$name] = $tmpl::$name;
-        }
-
         // If is existing model, find correct class
         if (isset($this->template)) {
             foreach ($templatesArray as $tmpl) {
@@ -61,37 +58,17 @@ class TemplateResource extends Resource
 
         $templateFields = isset($templateClass) ? $templateClass->_getTemplateFields($request) : [];
 
-        $locales = NovaPageManager::getLocales();
-
         $fields = [
             ID::make()->sortable(),
             Text::make('Name', 'name'),
             Text::make('Slug', 'slug'),
 
-            Select::make('Locale', 'locale')
-                ->options($locales)
-                ->hideWhenUpdating(),
-            Text::make('Locale', 'locale')
-                ->withMeta(['extraAttributes' => [
-                    'readonly' => true
-                ]])
-                ->hideWhenCreating()
-                ->hideFromIndex()
-                ->hideFromDetail(),
-
-            Select::make('Template', 'template')
-                ->options($templates)
-                ->hideWhenUpdating(),
-            Text::make('Template', 'template')
-                ->withMeta(['extraAttributes' => [
-                    'readonly' => true
-                ]])
-                ->hideWhenCreating()
-                ->hideFromIndex()
-                ->hideFromDetail()
+            LocaleField::make('Locale', 'locale'),
+            TemplateField::make('Template', 'template'),
+            TranslationsField::make('Translations')
         ];
 
-        if ($templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
+        if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
 
         $fields[] = new Panel('Page information', $templateFields);
 
@@ -150,5 +127,10 @@ class TemplateResource extends Resource
     public function actions(Request $request)
     {
         return [];
+    }
+
+    public function test($request)
+    {
+        return new FieldCollection(array_values($this->filter($this->fields($request))));
     }
 }

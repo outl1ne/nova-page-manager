@@ -24,9 +24,10 @@ class CreatePageManagerTables extends Migration
             $table->string('seo_title')->nullable();
             $table->string('seo_description')->nullable();
             $table->string('seo_image')->nullable();
+            $table->bigInteger('parent_id')->nullable();
             $table->json('data')->nullable();
 
-            $table->unique(['locale', 'template']);
+            $table->unique(['parent_id', 'locale']);
         });
     }
 
