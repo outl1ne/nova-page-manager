@@ -18,8 +18,7 @@ abstract class Template
             if (!empty($field->attribute)) {
                 $field->attribute = 'data->' . $field->attribute;
             }
-
-            return $field;
+            return $field->hideFromIndex();
         }, $this->fields($request));
     }
 }
