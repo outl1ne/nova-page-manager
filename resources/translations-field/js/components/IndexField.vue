@@ -1,10 +1,10 @@
 <template>
     <div v-if="field.value.locales">
-        <span v-for="locale in Object.keys(field.value.locales)" :key="locale">
+        <span v-for="locale in locales" :key="locale" class="flex" style="margin: 2px 0;">
             <!-- Edit link -->
             <router-link
                 v-if="field.value.locales[locale]"
-                class="cursor-pointer text-70 hover:text-primary mr-3"
+                class="btn btn-default btn-primary flex items-center cursor-pointer select-none"
                 :dusk="`${field.value.locales[locale].id}-edit-button`"
                 :to="{
                     name: 'edit',
@@ -20,14 +20,14 @@
                 }"
                 :title="__('Edit')"
             >
-                <icon type="edit" /> {{ locale }}
+                <icon type="edit" style="margin-right: 8px;" /> {{ locale }}
             </router-link>
 
             <!-- Create link -->
             <router-link
-                v-else-if="field.value.locale !== locale"
+                v-else
                 dusk="create-button"
-                :class="classes"
+                class="btn btn-default btn-primary flex items-center cursor-pointer select-none"
                 :to="{
                     name: 'create',
                     params: {
@@ -54,6 +54,13 @@ export default {
   methods: {
     hasChildInLocale(locale) {
       return this.field.resourceLocales[this.field.value.id].includes(locale);
+    }
+  },
+  computed: {
+    locales() {
+      return Object.keys(this.field.value.locales).filter(
+        l => l !== this.field.value.locale
+      );
     }
   }
 };
