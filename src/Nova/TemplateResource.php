@@ -15,6 +15,7 @@ use OptimistDigital\NovaPageManager\Nova\Fields\TranslationsField;
 use OptimistDigital\NovaPageManager\Nova\Fields\LocaleField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
 use OptimistDigital\NovaPageManager\Nova\Filters\TemplateLocaleFilter;
+use OptimistDigital\NovaPageManager\Nova\Filters\TemplateChildrenFilter;
 
 class TemplateResource extends Resource
 {
@@ -106,7 +107,8 @@ class TemplateResource extends Resource
     public function filters(Request $request)
     {
         return [
-            new TemplateLocaleFilter
+            new TemplateLocaleFilter,
+            new TemplateChildrenFilter
         ];
     }
 
@@ -130,10 +132,5 @@ class TemplateResource extends Resource
     public function actions(Request $request)
     {
         return [];
-    }
-
-    public function test($request)
-    {
-        return new FieldCollection(array_values($this->filter($this->fields($request))));
     }
 }
