@@ -22,7 +22,7 @@ export default {
 
   computed: {
     displayValue() {
-      return this.field.resources[this.field.value] || "-";
+      return this.field.resources[this.value] || "-";
     }
   },
 
