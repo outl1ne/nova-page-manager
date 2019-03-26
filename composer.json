@@ -3,7 +3,22 @@
   "description": "Page(s) and region(s) manager for Laravel Nova.",
   "keywords": [
     "laravel",
-    "nova"
+    "nova",
+    "page",
+    "manager",
+    "optimistdigital"
+  ],
+  "authors": [
+    {
+      "name": "Tarvo Reinpalu",
+      "email": "tarvoreinpalu@gmail.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Optimist Digital",
+      "email": "info@optimistdigital.com",
+      "role": "Maintainer"
+    }
   ],
   "license": "MIT",
   "require": {
