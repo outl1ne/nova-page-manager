@@ -10,7 +10,11 @@ This [Laravel Nova](https://nova.laravel.com) package allows you to create and m
 
 ## Screenshots
 
-TODO
+![Index View](docs/index.png)
+
+![Filter Dropdown](docs/filter.png)
+
+![Page Content Area](docs/content.png)
 
 ## Installation
 
