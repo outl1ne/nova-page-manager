@@ -47,7 +47,6 @@ class TemplateResource extends Resource
     {
         // Filter 'page' and 'region' templates
         $templatesArray = array_filter(NovaPageManager::getTemplates(), function ($template) {
-            if (!class_exists($template)) return false;
             return ($template::$type === $this->type);
         });
 

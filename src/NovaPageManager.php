@@ -45,7 +45,9 @@ class NovaPageManager extends Tool
 
     public static function getTemplates(): array
     {
-        return self::$templates;
+        return array_filter(self::$templates, function ($template) {
+            return class_exists($template);
+        });
     }
 
     public static function getLocales(): array
