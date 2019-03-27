@@ -6,7 +6,7 @@ This [Laravel Nova](https://nova.laravel.com) package allows you to create and m
 
 - Pages and Regions management
 - Programmatically created templates for Pages and Regions
-- Multilanguage support - each page and region has a defined locale
+- Multilanguage support
 
 ## Screenshots
 
