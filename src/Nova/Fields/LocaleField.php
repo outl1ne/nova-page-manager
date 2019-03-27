@@ -35,5 +35,8 @@ class LocaleField extends Field
                 ];
             })
         ]);
+
+        $locales = array_keys(NovaPageManager::getLocales());
+        $this->rules('required', 'in:' . implode(',', $locales));
     }
 }

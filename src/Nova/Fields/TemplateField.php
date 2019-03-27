@@ -43,5 +43,10 @@ class TemplateField extends Field
                 }),
             'resourceTemplates' => TemplateModel::all()->pluck('template', 'id')
         ]);
+
+        $templates = array_map(function ($template) {
+            return $template::$name;
+        }, NovaPageManager::getTemplates());
+        $this->rules('required', 'in:' . implode(',', $templates));
     }
 }
