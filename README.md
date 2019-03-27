@@ -55,7 +55,30 @@ Templates can be created using the following Artisan command:
 php artisan pagemanager:template {className}
 ```
 
-This will ask you a few additional details and will create a base template in `App\Nova\Templates`;
+This will ask you a few additional details and will create a base template in `App\Nova\Templates`.
+
+The template base has a few properties:
+
+```php
+// Define whether the template is for a page or a region
+// Applicable values: 'page', 'region'
+public static $type = 'page';
+
+// The unique name for the page, usually similar to a slug
+public static $name = 'about-us';
+
+// The package has built in SEO fields support
+// This boolean decides whether or not to display them
+public static $seo = false;
+
+// Return all fields here, just as you would inside a resource
+public function fields(Request $request): array
+{
+  return [
+      Text::make('Title', 'title')
+  ];
+}
+```
 
 ### Registering templates
 
@@ -95,6 +118,30 @@ public function boot()
             'et_EE' => 'Estonian'
         ]
     ]);
+}
+```
+
+### Using together with [Nova Flexible Content](https://whitecube.github.io/nova-flexible-content)
+
+If you want to use [Nova Flexible Content](https://whitecube.github.io/nova-flexible-content) inside the templates, you have to add the custom `TemplateResolver` to the `Flexible` field.
+
+See this example:
+
+```php
+use OptimistDigital\NovaPageManager\Nova\Flexible\TemplateResolver;
+
+// ...
+
+public function fields(Request $request): array
+  {
+    return [
+      Flexible::make('Banner')
+        ->addLayout('Simple content section', 'whatever', [
+          Text::make('Title'),
+          Markdown::make('Content')
+      ])
+      ->resolver(TemplateResolver::class) // Custom resolver here
+  ];
 }
 ```
 

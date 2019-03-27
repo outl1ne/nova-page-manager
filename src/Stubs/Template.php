@@ -9,6 +9,7 @@ class :className extends Template
 {
     public static $type = ':type';
     public static $name = ':name';
+    public static $seo = false;
 
     public function fields(Request $request): array
     {
