@@ -13,7 +13,9 @@ class CreatePageManagerTables extends Migration
      */
     public function up()
     {
-        Schema::create('nova_page_manager', function (Blueprint $table) {
+        $table = config('nova-page-manager.table', 'nova_page_manager');
+
+        Schema::create($table, function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->timestamps();
             $table->enum('type', ['page', 'region']);
@@ -38,6 +40,8 @@ class CreatePageManagerTables extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('nova_page_manager');
+        $table = config('nova-page-manager.table', 'nova_page_manager');
+
+        Schema::dropIfExists($table);
     }
 }

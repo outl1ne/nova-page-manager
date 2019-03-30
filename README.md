@@ -24,6 +24,12 @@ Install the package in a Laravel Nova project via Composer:
 composer require optimistdigital/nova-page-manager
 ```
 
+Publish the `nova-page-manager` configuration file and edit it to your preference:
+
+```bash
+php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServiceProvider" --tag="config"
+```
+
 Publish the database migration(s) and run migrate:
 
 ```bash

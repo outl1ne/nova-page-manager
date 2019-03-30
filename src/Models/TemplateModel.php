@@ -14,6 +14,13 @@ class TemplateModel extends Model
         'data' => 'object'
     ];
 
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+
+        $this->setTable(config('nova-page-manager.table', $this->table));
+    }
+
     protected static function boot()
     {
         parent::boot();
