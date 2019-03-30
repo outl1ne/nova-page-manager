@@ -30,9 +30,7 @@ class TemplateModel extends Model
             if ($template->parent_id === null) {
                 // Find child templates
                 $childTemplates = TemplateModel::where('parent_id', '=', $template->id)->get();
-                if (count($childTemplates) === 0) {
-                    return;
-                }
+                if (count($childTemplates) === 0) return;
 
                 // Pick the first template randomly and let it become the parent
                 $childTemplates[0]->update(['parent_id' => null]);
