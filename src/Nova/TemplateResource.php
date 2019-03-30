@@ -59,11 +59,13 @@ class TemplateResource extends Resource
 
         $templateFields = isset($templateClass) ? $templateClass->_getTemplateFields($request) : [];
 
+        $table = config('nova-page-manager.table', 'nova-page-manager');
+
         $fields = [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
-            Text::make('Slug', 'slug')->creationRules('required', 'unique:nova_page_manager,slug')
-                                      ->updateRules('required', 'unique:nova_page_manager,slug,{{resourceId}}'),
+            Text::make('Slug', 'slug')->creationRules('required', "unique:{$table},slug")
+                                      ->updateRules('required', "unique:{$table},slug,{{resourceId}}"),
 
             LocaleField::make('Locale', 'locale'),
             TemplateField::make('Template', 'template'),
