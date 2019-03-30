@@ -62,7 +62,8 @@ class TemplateResource extends Resource
         $fields = [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
-            Text::make('Slug', 'slug')->rules('required', 'unique:nova_page_manager,slug,{{resourceId}}'),
+            Text::make('Slug', 'slug')->createRules('required', 'unique:nova_page_manager,slug')
+                                      ->updateRules('required', 'unique:nova_page_manager,slug,{{resourceId}}'),
 
             LocaleField::make('Locale', 'locale'),
             TemplateField::make('Template', 'template'),
