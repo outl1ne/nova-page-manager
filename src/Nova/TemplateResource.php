@@ -59,7 +59,7 @@ class TemplateResource extends Resource
 
         $templateFields = isset($templateClass) ? $templateClass->_getTemplateFields($request) : [];
 
-        $table = config('nova-page-manager.table', 'nova-page-manager');
+        $table = config('nova-page-manager.table', 'nova_page_manager');
 
         $fields = [
             ID::make()->sortable(),
