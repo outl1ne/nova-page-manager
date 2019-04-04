@@ -8,6 +8,12 @@ class TemplateResolver extends Resolver
 {
     protected function extractValueFromResource($resource, $attribute)
     {
-        return data_get($resource, str_replace('->', '.', $attribute));
+        $value = data_get($resource, str_replace('->', '.', $attribute)) ?? [];
+        if (is_string($value)) $value = json_decode($value) ?? [];
+
+        return collect($value)->map(function ($item) {
+            if (is_array($item)) return (object)$item;
+            return $item;
+        })->toArray();
     }
 }
