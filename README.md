@@ -127,30 +127,6 @@ public function boot()
 }
 ```
 
-### Using together with [Nova Flexible Content](https://whitecube.github.io/nova-flexible-content)
-
-If you want to use [Nova Flexible Content](https://whitecube.github.io/nova-flexible-content) inside the templates, you have to add the custom `TemplateResolver` to the `Flexible` field.
-
-See this example:
-
-```php
-use OptimistDigital\NovaPageManager\Nova\Flexible\TemplateResolver;
-
-// ...
-
-public function fields(Request $request): array
-  {
-    return [
-      Flexible::make('Banner')
-        ->addLayout('Simple content section', 'whatever', [
-          Text::make('Title'),
-          Markdown::make('Content')
-      ])
-      ->resolver(TemplateResolver::class) // Custom resolver here
-  ];
-}
-```
-
 ## Credits
 
 - [Tarvo Reinpalu](https://github.com/Tarpsvo)
