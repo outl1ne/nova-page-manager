@@ -6,14 +6,14 @@ use Laravel\Nova\Fields\Field;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use OptimistDigital\NovaPageManager\Models\TemplateModel;
 
-class TranslationsField extends Field
+class LocaleParentField extends Field
 {
     /**
      * The field's component.
      *
      * @var string
      */
-    public $component = 'translations-field';
+    public $component = 'locale-parent-field';
 
     /**
      * Create a new field.
@@ -26,7 +26,7 @@ class TranslationsField extends Field
     public function __construct($name, $attribute = null, $resolveCallback = null)
     {
         // Mask this field as Parent ID
-        parent::__construct($name, 'parent_id', $resolveCallback);
+        parent::__construct($name, 'locale_parent_id', $resolveCallback);
 
         $this->withMeta([
             'asHtml' => true,
@@ -52,16 +52,16 @@ class TranslationsField extends Field
         $locales = NovaPageManager::getLocales();
         $model = get_class($resource);
         $id = $resource->id;
-        $parentId = $resource->parent_id;
+        $localeParentId = $resource->locale_parent_id;
 
         // ID
         $value['id'] = $id;
         $value['locale'] = $resource->locale;
-        $value['parent_id'] = $resource->parent_id;
+        $value['locale_parent_id'] = $resource->locale_parent_id;
 
         // Is master
-        if (empty($parentId)) {
-            $children = $model::where('parent_id', $id)->where('id', '!=', $id)->get();
+        if (empty($localeParentId)) {
+            $children = $model::where('locale_parent_id', $id)->where('id', '!=', $id)->get();
             $value['locales'] = [];
             foreach ($locales as $key => $localeName) {
                 $value['locales'][$key] = $children->first(function ($c) use ($key) {

@@ -10,26 +10,26 @@
 </template>
 
 <script>
-import { FormField, HandlesValidationErrors } from "laravel-nova";
+import { FormField, HandlesValidationErrors } from 'laravel-nova';
 
 export default {
   mixins: [FormField, HandlesValidationErrors],
 
-  props: ["resourceName", "resourceId", "field"],
+  props: ['resourceName', 'resourceId', 'field'],
 
   data() {
     return {
-      template: void 0
+      template: void 0,
     };
   },
 
   computed: {
     hasParentResourceTemplate() {
       if (this.field.value) return true;
-      const parentId = this.getParameterByName("parentId");
-      if (parentId === null || !this.field.resourceTemplates) return false;
-      return this.field.resourceTemplates[parentId] !== null;
-    }
+      const localeParentId = this.getParameterByName('localeParentId');
+      if (localeParentId === null || !this.field.resourceTemplates) return false;
+      return this.field.resourceTemplates[localeParentId] !== null;
+    },
   },
 
   methods: {
@@ -39,8 +39,8 @@ export default {
     setInitialValue() {
       const template =
         this.field.resourceTemplates &&
-        this.getParameterByName("parentId") &&
-        this.field.resourceTemplates[this.getParameterByName("parentId")];
+        this.getParameterByName('localeParentId') &&
+        this.field.resourceTemplates[this.getParameterByName('localeParentId')];
       this.template = this.field.value || template;
     },
 
@@ -53,13 +53,13 @@ export default {
 
     getParameterByName(name) {
       const url = window.location.href;
-      name = name.replace(/[\[\]]/g, "\\$&");
-      const regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+      name = name.replace(/[\[\]]/g, '\\$&');
+      const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
       const results = regex.exec(url);
       if (!results) return null;
-      if (!results[2]) return "";
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
-    }
-  }
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
+    },
+  },
 };
 </script>

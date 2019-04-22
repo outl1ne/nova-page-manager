@@ -20,4 +20,9 @@ class Page extends TemplateModel
             $builder->where('type', 'page');
         });
     }
+
+    public function parent()
+    {
+        return $this->belongsTo(Page::class);
+    }
 }

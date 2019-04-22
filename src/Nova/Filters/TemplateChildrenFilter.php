@@ -19,8 +19,8 @@ class TemplateChildrenFilter extends BooleanFilter
      */
     public function apply(Request $request, $query, $value)
     {
-        if (isset($value['show_children']) && $value['show_children']) return $query;
-        return $query->whereNull('parent_id');
+        if (isset($value['show_child_locales']) && $value['show_child_locales']) return $query;
+        return $query->whereNull('locale_parent_id');
     }
 
     /**
@@ -32,7 +32,7 @@ class TemplateChildrenFilter extends BooleanFilter
     public function options(Request $request)
     {
         return [
-            'Show children' => 'show_children'
+            'Show child locales' => 'show_child_locales'
         ];
     }
 

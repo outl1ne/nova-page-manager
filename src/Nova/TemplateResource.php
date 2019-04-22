@@ -7,15 +7,16 @@ use Illuminate\Http\Request;
 use Laravel\Nova\Resource;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Select;
 use Laravel\Nova\Fields\Heading;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use Laravel\Nova\Panel;
-use Laravel\Nova\Fields\FieldCollection;
-use OptimistDigital\NovaPageManager\Nova\Fields\TranslationsField;
+use OptimistDigital\NovaPageManager\Nova\Fields\LocaleParentField;
 use OptimistDigital\NovaPageManager\Nova\Fields\LocaleField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
 use OptimistDigital\NovaPageManager\Nova\Filters\TemplateLocaleFilter;
 use OptimistDigital\NovaPageManager\Nova\Filters\TemplateChildrenFilter;
+use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
 
 class TemplateResource extends Resource
 {
@@ -65,12 +66,18 @@ class TemplateResource extends Resource
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
             Text::make('Slug', 'slug')->creationRules('required', "unique:{$table},slug")
-                                      ->updateRules('required', "unique:{$table},slug,{{resourceId}}"),
+                ->updateRules('required', "unique:{$table},slug,{{resourceId}}"),
+        ];
 
+        if ($this->type === 'page') {
+            $fields[] = ParentField::make('Parent', 'parent_id');
+        }
+
+        $fields = array_merge($fields, [
             LocaleField::make('Locale', 'locale'),
             TemplateField::make('Template', 'template'),
-            TranslationsField::make('Translations')
-        ];
+            LocaleParentField::make('Translations')
+        ]);
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
 
@@ -87,6 +94,11 @@ class TemplateResource extends Resource
             Text::make('SEO Description', 'seo_description')->hideFromIndex()->hideWhenCreating(),
             Image::make('SEO Image', 'seo_image')->hideFromIndex()->hideWhenCreating()
         ];
+    }
+
+    public function title()
+    {
+        return $this->name . ' (' . $this->slug . ')';
     }
 
     /**

@@ -40,7 +40,7 @@
                         viaResource: viaResource,
                         viaResourceId: viaResourceId,
                         viaRelationship: viaRelationship,
-                        parentId: field.value.id,
+                        localeParentId: field.value.id,
                         locale: locale
                     },
                 }"
@@ -48,7 +48,7 @@
                 <svg style="width: 20px; height: 20px; margin-right: 4px;" viewBox="0 0 24 24">
                     <path fill="var(--primary)" d="M19,13H13V19H11V13H5V11H11V5H13V11H19V13Z" />
                 </svg>
-                {{ locale }}
+                {{ locale }}
             </router-link>
         </span>
     </div>
@@ -56,18 +56,16 @@
 
 <script>
 export default {
-  props: ["resourceName", "field"],
+  props: ['resourceName', 'field'],
   methods: {
     hasChildInLocale(locale) {
       return this.field.resourceLocales[this.field.value.id].includes(locale);
-    }
+    },
   },
   computed: {
     locales() {
-      return Object.keys(this.field.value.locales).filter(
-        l => l !== this.field.value.locale
-      );
-    }
-  }
+      return Object.keys(this.field.value.locales).filter(l => l !== this.field.value.locale);
+    },
+  },
 };
 </script>

@@ -1,10 +1,12 @@
 {
     "/js/page-manager-tool.js": "/js/page-manager-tool.js",
     "/css/page-manager-tool.css": "/css/page-manager-tool.css",
-    "/css/translations-field.css": "/css/translations-field.css",
+    "/css/locale-parent-field.css": "/css/locale-parent-field.css",
     "/css/locale-field.css": "/css/locale-field.css",
     "/css/template-field.css": "/css/template-field.css",
-    "/js/translations-field.js": "/js/translations-field.js",
     "/js/template-field.js": "/js/template-field.js",
-    "/js/locale-field.js": "/js/locale-field.js"
+    "/js/parent-field.js": "/js/parent-field.js",
+    "/js/locale-parent-field.js": "/js/locale-parent-field.js",
+    "/js/locale-field.js": "/js/locale-field.js",
+    "/css/parent-field.css": "/css/parent-field.css"
 }

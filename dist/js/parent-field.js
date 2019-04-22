@@ -60,11 +60,12 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 27);
+/******/ 	return __webpack_require__(__webpack_require__.s = 49);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
+/******/ ({
+
+/***/ 0:
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -173,7 +174,8 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 1 */
+
+/***/ 1:
 /***/ (function(module, exports, __webpack_require__) {
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -10400,57 +10402,35 @@ module.exports = g;
 });
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */,
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */,
-/* 25 */,
-/* 26 */,
-/* 27 */
+
+/***/ 49:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(28);
+module.exports = __webpack_require__(50);
 
 
 /***/ }),
-/* 28 */
+
+/***/ 50:
 /***/ (function(module, exports, __webpack_require__) {
 
 Nova.booting(function (Vue, router, store) {
-  Vue.component("index-locale-field", __webpack_require__(29));
-  Vue.component("detail-locale-field", __webpack_require__(32));
-  Vue.component("form-locale-field", __webpack_require__(35));
+  Vue.component('index-parent-field', __webpack_require__(51));
+  Vue.component('detail-parent-field', __webpack_require__(54));
+  Vue.component('form-parent-field', __webpack_require__(57));
 });
 
 /***/ }),
-/* 29 */
+
+/***/ 51:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(30)
+var __vue_script__ = __webpack_require__(52)
 /* template */
-var __vue_template__ = __webpack_require__(31)
+var __vue_template__ = __webpack_require__(53)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -10467,7 +10447,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/locale-field/js/components/IndexField.vue"
+Component.options.__file = "resources/parent-field/js/components/IndexField.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -10476,9 +10456,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-d41c220a", Component.options)
+    hotAPI.createRecord("data-v-482c52ab", Component.options)
   } else {
-    hotAPI.reload("data-v-d41c220a", Component.options)
+    hotAPI.reload("data-v-482c52ab", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -10489,7 +10469,8 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 30 */
+
+/***/ 52:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10500,16 +10481,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["resourceName", "field"],
+  props: ['resourceName', 'field'],
   computed: {
     value: function value() {
-      return this.field.locales[this.field.value].label;
+      return this.field.options[this.field.value].name;
     }
   }
 });
 
 /***/ }),
-/* 31 */
+
+/***/ 53:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -10526,20 +10508,21 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-d41c220a", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-482c52ab", module.exports)
   }
 }
 
 /***/ }),
-/* 32 */
+
+/***/ 54:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(33)
+var __vue_script__ = __webpack_require__(55)
 /* template */
-var __vue_template__ = __webpack_require__(34)
+var __vue_template__ = __webpack_require__(56)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -10556,7 +10539,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/locale-field/js/components/DetailField.vue"
+Component.options.__file = "resources/parent-field/js/components/DetailField.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -10565,9 +10548,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7d0450f4", Component.options)
+    hotAPI.createRecord("data-v-568fe9d6", Component.options)
   } else {
-    hotAPI.reload("data-v-7d0450f4", Component.options)
+    hotAPI.reload("data-v-568fe9d6", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -10578,7 +10561,8 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 33 */
+
+/***/ 55:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10593,16 +10577,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["resource", "resourceName", "resourceId", "field"],
+  props: ['resource', 'resourceName', 'resourceId', 'field'],
   computed: {
-    value: function value() {
-      return this.field.locales[this.field.value].label;
+    displayValue: function displayValue() {
+      return this.field.options[this.field.value] || '-';
     }
   }
 });
 
 /***/ }),
-/* 34 */
+
+/***/ 56:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -10614,13 +10599,7 @@ var render = function() {
     { attrs: { field: _vm.field } },
     [
       _c("template", { slot: "value" }, [
-        _vm._v(
-          "\n        " +
-            _vm._s(_vm.value) +
-            " (" +
-            _vm._s(_vm.field.value) +
-            ")\n    "
-        )
+        _vm._v("\n        " + _vm._s(_vm.displayValue) + "\n    ")
       ])
     ],
     2
@@ -10632,20 +10611,21 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-7d0450f4", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-568fe9d6", module.exports)
   }
 }
 
 /***/ }),
-/* 35 */
+
+/***/ 57:
 /***/ (function(module, exports, __webpack_require__) {
 
 var disposed = false
 var normalizeComponent = __webpack_require__(0)
 /* script */
-var __vue_script__ = __webpack_require__(36)
+var __vue_script__ = __webpack_require__(58)
 /* template */
-var __vue_template__ = __webpack_require__(37)
+var __vue_template__ = __webpack_require__(59)
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -10662,7 +10642,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources/locale-field/js/components/FormField.vue"
+Component.options.__file = "resources/parent-field/js/components/FormField.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -10671,9 +10651,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-5ec5fc9a", Component.options)
+    hotAPI.createRecord("data-v-20af6803", Component.options)
   } else {
-    hotAPI.reload("data-v-5ec5fc9a", Component.options)
+    hotAPI.reload("data-v-20af6803", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -10684,7 +10664,8 @@ module.exports = Component.exports
 
 
 /***/ }),
-/* 36 */
+
+/***/ 58:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10708,18 +10689,21 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony default export */ __webpack_exports__["default"] = ({
   mixins: [__WEBPACK_IMPORTED_MODULE_0_laravel_nova__["FormField"], __WEBPACK_IMPORTED_MODULE_0_laravel_nova__["HandlesValidationErrors"]],
 
-  props: ["resourceName", "resourceId", "field"],
+  props: ['resourceName', 'resourceId', 'field'],
 
   data: function data() {
     return {
-      locale: void 0
+      parent: void 0
     };
+  },
+  mounted: function mounted() {
+    console.info(this);
   },
 
 
   computed: {
-    localeAlreadySet: function localeAlreadySet() {
-      return this.field.value || this.getParameterByName("locale") !== null;
+    canHaveParent: function canHaveParent() {
+      return this.field.canHaveParent && this.getParameterByName('localeParentId') === null;
     }
   },
 
@@ -10728,7 +10712,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
      * Set the initial, internal value for the field.
      */
     setInitialValue: function setInitialValue() {
-      this.locale = this.field.value || this.getParameterByName("locale");
+      this.parent = this.field.value;
     },
 
 
@@ -10736,81 +10720,85 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
      * Fill the given FormData object with the field's internal value.
      */
     fill: function fill(formData) {
-      formData.append(this.field.attribute, this.locale);
+      if (this.parent) formData.append(this.field.attribute, this.parent);
     },
     getParameterByName: function getParameterByName(name) {
       var url = window.location.href;
-      name = name.replace(/[\[\]]/g, "\\$&");
-      var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+      name = name.replace(/[\[\]]/g, '\\$&');
+      var regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
       var results = regex.exec(url);
       if (!results) return null;
-      if (!results[2]) return "";
-      return decodeURIComponent(results[2].replace(/\+/g, " "));
+      if (!results[2]) return '';
+      return decodeURIComponent(results[2].replace(/\+/g, ' '));
     }
   }
 });
 
 /***/ }),
-/* 37 */
+
+/***/ 59:
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c(
-    "default-field",
-    { attrs: { field: _vm.field, errors: _vm.errors } },
-    [
-      _c("template", { slot: "field" }, [
-        _c(
-          "select",
-          {
-            directives: [
+  return _vm.canHaveParent
+    ? _c(
+        "default-field",
+        { attrs: { field: _vm.field, errors: _vm.errors } },
+        [
+          _c("template", { slot: "field" }, [
+            _c(
+              "select",
               {
-                name: "model",
-                rawName: "v-model",
-                value: _vm.locale,
-                expression: "locale"
-              }
-            ],
-            staticClass: "w-full form-control form-input form-input-bordered",
-            attrs: { name: "locale", disabled: _vm.localeAlreadySet },
-            on: {
-              change: function($event) {
-                var $$selectedVal = Array.prototype.filter
-                  .call($event.target.options, function(o) {
-                    return o.selected
-                  })
-                  .map(function(o) {
-                    var val = "_value" in o ? o._value : o.value
-                    return val
-                  })
-                _vm.locale = $event.target.multiple
-                  ? $$selectedVal
-                  : $$selectedVal[0]
-              }
-            }
-          },
-          [
-            _c("option", { attrs: { value: "null" } }, [
-              _vm._v("Choose a locale")
-            ]),
-            _vm._v(" "),
-            _vm._l(_vm.field.locales, function(locale) {
-              return _c(
-                "option",
-                { key: locale.value, domProps: { value: locale.value } },
-                [_vm._v(_vm._s(locale.label))]
-              )
-            })
-          ],
-          2
-        )
-      ])
-    ],
-    2
-  )
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.parent,
+                    expression: "parent"
+                  }
+                ],
+                staticClass:
+                  "w-full form-control form-input form-input-bordered",
+                attrs: { name: "parent" },
+                on: {
+                  change: function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.parent = $event.target.multiple
+                      ? $$selectedVal
+                      : $$selectedVal[0]
+                  }
+                }
+              },
+              [
+                _c("option", { attrs: { value: "null" } }, [
+                  _vm._v("Choose parent")
+                ]),
+                _vm._v(" "),
+                _vm._l(Object.keys(_vm.field.options), function(pageId) {
+                  return _c(
+                    "option",
+                    { key: pageId, domProps: { value: pageId } },
+                    [_vm._v(_vm._s(_vm.field.options[pageId]))]
+                  )
+                })
+              ],
+              2
+            )
+          ])
+        ],
+        2
+      )
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -10818,9 +10806,10 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-5ec5fc9a", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-20af6803", module.exports)
   }
 }
 
 /***/ })
-/******/ ]);
+
+/******/ });

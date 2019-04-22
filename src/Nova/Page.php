@@ -2,6 +2,8 @@
 
 namespace OptimistDigital\NovaPageManager\Nova;
 
+use Laravel\Nova\Http\Requests\NovaRequest;
+
 class Page extends TemplateResource
 {
     /**
