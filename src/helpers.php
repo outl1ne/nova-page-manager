@@ -3,8 +3,8 @@
 use OptimistDigital\NovaPageManager\Models\Page;
 use Illuminate\Support\Collection;
 
-if (!function_exists('nova_get_pages')) {
-    function nova_get_pages()
+if (!function_exists('nova_get_pages_structure')) {
+    function nova_get_pages_structure()
     {
         $formatPages = function (Collection $pages) use (&$formatPages) {
             $data = [];
