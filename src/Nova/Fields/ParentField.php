@@ -48,8 +48,63 @@ class ParentField extends Field
     {
         parent::resolve($resource, $attribute);
 
+        $options = $this->meta['options'];
+
+        if (isset($resource->id)) {
+            $excluded = $this->findExcludedChildAndParentPages($resource);
+            $excludedIds = array_map(function ($page) {
+                return $page['id'];
+            }, $excluded);
+
+            $options = array_filter(
+                $options,
+                function ($key) use ($excludedIds) {
+                    return !in_array($key, $excludedIds);
+                },
+                ARRAY_FILTER_USE_KEY
+            );
+        }
+
+        $parent = null;
+        if (isset($resource->parent_id)) {
+            $parentPage = Page::find($resource->parent_id);
+            $parent = [
+                'name' => $parentPage->name,
+                'slug' => $parentPage->slug,
+            ];
+        }
+
         $this->withMeta([
-            'canHaveParent' => empty($resource->locale_parent_id)
+            'canHaveParent' => empty($resource->locale_parent_id),
+            'options' => $options,
+            'parent' => $parent,
         ]);
+    }
+
+    public function findExcludedChildAndParentPages($page)
+    {
+        // Always exclude the current page as being your own parent is a paradox
+        $childrenAndParents = [$page];
+
+        // All parent's parents
+        if (isset($page->parent_id)) {
+            $_current = Page::find($page->parent_id);
+            while (isset($_current->parent_id)) {
+                $_current = Page::find($_current->parent_id);
+                $childrenAndParents[] = $_current;
+            }
+        }
+
+        // All children
+        $childPages = Page::where('parent_id', $page->id)->get();
+
+        while (sizeof($childPages) > 0) {
+            $childrenAndParents = array_merge($childrenAndParents, $childPages->toArray());
+            $childPages = Page::whereIn('parent_id', $childPages->map(function ($childPage) {
+                return $childPage->id;
+            }))->get();
+        }
+
+        return $childrenAndParents;
     }
 }

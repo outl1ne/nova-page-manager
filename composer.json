@@ -27,7 +27,10 @@
   "autoload": {
     "psr-4": {
       "OptimistDigital\\NovaPageManager\\": "src/"
-    }
+    },
+    "files": [
+      "src/helpers.php"
+    ]
   },
   "extra": {
     "laravel": {

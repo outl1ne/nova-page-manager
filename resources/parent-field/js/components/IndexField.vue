@@ -1,5 +1,5 @@
 <template>
-  <span>{{ value }} ({{ field.value }})</span>
+  <span>{{ value }}</span>
 </template>
 
 <script>
@@ -7,7 +7,8 @@ export default {
   props: ['resourceName', 'field'],
   computed: {
     value() {
-      return this.field.options[this.field.value].name;
+      if (!this.field.parent) return '-';
+      return `${this.field.parent.name} (${this.field.parent.slug})`;
     },
   },
 };
