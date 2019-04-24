@@ -31,6 +31,9 @@ class NovaPageManager extends Tool
 
         Nova::script('nova-parent-field', __DIR__ . '/../dist/js/parent-field.js');
         Nova::style('nova-parent-field', __DIR__ . '/../dist/css/parent-field.css');
+
+        Nova::script('nova-region-field', __DIR__ . '/../dist/js/region-field.js');
+        Nova::style('nova-region-field', __DIR__ . '/../dist/css/region-field.css');
     }
 
     /**
@@ -56,8 +59,32 @@ class NovaPageManager extends Tool
         });
     }
 
+    public static function getPageTemplates(): array
+    {
+        return array_filter(self::getTemplates(), function ($template) {
+            return $template::$type === 'page';
+        });
+    }
+
+    public static function getRegionTemplates(): array
+    {
+        return array_filter(self::getTemplates(), function ($template) {
+            return $template::$type === 'region';
+        });
+    }
+
     public static function getLocales(): array
     {
         return self::$locales;
+    }
+
+    public static function getPagesTableName(): string
+    {
+        return config('nova-page-manager.table', 'nova_page_manager') . '_pages';
+    }
+
+    public static function getRegionsTableName(): string
+    {
+        return config('nova-page-manager.table', 'nova_page_manager') . '_regions';
     }
 }

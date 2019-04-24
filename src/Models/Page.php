@@ -2,22 +2,32 @@
 
 namespace OptimistDigital\NovaPageManager\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class Page extends TemplateModel
 {
-    public static $type = 'page';
+    public function __construct(array $attributes = [])
+    {
+        parent::__construct($attributes);
+        $this->setTable(NovaPageManager::getPagesTableName());
+    }
 
-    public static function boot()
+    protected static function boot()
     {
         parent::boot();
 
-        static::saving(function ($model) {
-            $model->type = 'page';
-        });
+        static::deleting(function ($template) {
+            // Is a parent template
+            if ($template->parent_id === null) {
+                // Find child templates
+                $childTemplates = Page::where('parent_id', '=', $template->id)->get();
+                if (count($childTemplates) === 0) return;
 
-        static::addGlobalScope('type', function (Builder $builder) {
-            $builder->where('type', 'page');
+                // Set their parent to null
+                $childTemplates->each(function ($template) {
+                    $template->update(['parent_id' => null]);
+                });
+            }
         });
     }
 

@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
-use OptimistDigital\NovaPageManager\Models\TemplateModel;
+use Illuminate\Support\Facades\DB;
 
 class AddChildParentRelationships extends Migration
 {
@@ -22,7 +22,7 @@ class AddChildParentRelationships extends Migration
         });
 
         // Copy "type" to "type_temp"
-        TemplateModel::all()->each(function ($model) {
+        DB::table($tableName)->get()->each(function ($model) {
             $model->update(['type_temp' => $model->type]);
         });
 

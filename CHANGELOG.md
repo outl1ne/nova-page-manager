@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- Regions and pages are now in separate tables (migration required)
+- Only one region (and its translation) per region template is now allowed
+- Refactored `Page`, `Region` and `TemplateResource` resource classes
+
+### Removed
+
+- Removed `type` column from pages table (while renaming the table)
+
 ## [1.1.0] - 2019-04-04
 
 ### Added

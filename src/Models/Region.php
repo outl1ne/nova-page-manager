@@ -2,22 +2,13 @@
 
 namespace OptimistDigital\NovaPageManager\Models;
 
-use Illuminate\Database\Eloquent\Builder;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class Region extends TemplateModel
 {
-    public static $type = 'region';
-
-    public static function boot()
+    public function __construct(array $attributes = [])
     {
-        parent::boot();
-
-        static::saving(function ($model) {
-            $model->type = 'region';
-        });
-
-        static::addGlobalScope('type', function (Builder $builder) {
-            $builder->where('type', 'region');
-        });
+        parent::__construct($attributes);
+        $this->setTable(NovaPageManager::getRegionsTableName());
     }
 }

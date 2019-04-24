@@ -4,25 +4,13 @@ namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaPageManager\Models\TemplateModel;
+use OptimistDigital\NovaPageManager\Models\Page;
+use OptimistDigital\NovaPageManager\Models\Region;
 
 class TemplateField extends Field
 {
-    /**
-     * The field's component.
-     *
-     * @var string
-     */
     public $component = 'template-field';
 
-    /**
-     * Create a new field.
-     *
-     * @param  string  $name
-     * @param  string|null  $attribute
-     * @param  mixed|null  $resolveCallback
-     * @return void
-     */
     public function __construct($name, $attribute = null, $resolveCallback = null)
     {
         parent::__construct($name, $attribute, $resolveCallback);
@@ -41,7 +29,7 @@ class TemplateField extends Field
                         'value' => $template::$name
                     ];
                 }),
-            'resourceTemplates' => TemplateModel::all()->pluck('template', 'id')
+            'resourceTemplates' => collect(Page::all(), Region::all())->flatten()->pluck('template', 'id')
         ]);
 
         $templates = array_map(function ($template) {

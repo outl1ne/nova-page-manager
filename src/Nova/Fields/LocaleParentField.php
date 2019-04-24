@@ -4,7 +4,8 @@ namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaPageManager\Models\TemplateModel;
+use OptimistDigital\NovaPageManager\Models\Page;
+use OptimistDigital\NovaPageManager\Models\Region;
 
 class LocaleParentField extends Field
 {
@@ -30,9 +31,12 @@ class LocaleParentField extends Field
 
         $this->withMeta([
             'asHtml' => true,
-            'resources' => TemplateModel::all()->map(function ($template) {
+            'resources' => collect(Page::all(), Region::all())->flatten()->map(function ($template) {
+                $label = $template->name;
+                if (!empty($template->slug)) $label .= ' (' . $template->slug . ')';
+
                 return [
-                    'label' => $template->name . ' (' . $template->slug . ')',
+                    'label' => $label,
                     'value' => $template->id
                 ];
             })->pluck('label', 'value')

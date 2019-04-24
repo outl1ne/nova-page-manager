@@ -2,16 +2,62 @@
 
 namespace OptimistDigital\NovaPageManager\Nova;
 
-use Laravel\Nova\Http\Requests\NovaRequest;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Panel;
+use OptimistDigital\NovaPageManager\NovaPageManager;
+use OptimistDigital\NovaPageManager\Nova\Fields\LocaleParentField;
+use OptimistDigital\NovaPageManager\Nova\Fields\LocaleField;
+use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
+use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
 
 class Page extends TemplateResource
 {
-    /**
-     * The model the resource corresponds to.
-     *
-     * @var string
-     */
+    public static $title = 'name';
     public static $model = 'OptimistDigital\NovaPageManager\Models\Page';
+    public static $displayInNavigation = false;
 
-    public $type = 'page';
+    protected $type = 'page';
+
+    public function fields(Request $request)
+    {
+        // Get base data
+        $tableName = NovaPageManager::getPagesTableName();
+        $templateClass = $this->getTemplateClass();
+        $templateFields = $this->getTemplateFields();
+
+        $fields = [
+            ID::make()->sortable(),
+            Text::make('Name', 'name')->rules('required'),
+            Text::make('Slug', 'slug')
+                ->creationRules('required', "unique:{$tableName},slug")
+                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}}"),
+            ParentField::make('Parent', 'parent_id'),
+            LocaleField::make('Locale', 'locale'),
+            TemplateField::make('Template', 'template'),
+            LocaleParentField::make('Translations'),
+        ];
+
+        if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
+
+        $fields[] = new Panel('Page data', $templateFields);
+
+        return $fields;
+    }
+
+    protected function getSeoFields()
+    {
+        return [
+            Heading::make('SEO')->hideFromIndex()->hideWhenCreating()->hideFromDetail(),
+            Text::make('SEO Title', 'seo_title')->hideFromIndex()->hideWhenCreating(),
+            Text::make('SEO Description', 'seo_description')->hideFromIndex()->hideWhenCreating(),
+            Image::make('SEO Image', 'seo_image')->hideFromIndex()->hideWhenCreating()
+        ];
+    }
+
+    public function title()
+    {
+        return $this->name . ' (' . $this->slug . ')';
+    }
 }

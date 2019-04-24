@@ -11,4 +11,6 @@ mix
   .js('resources/template-field/js/template-field.js', 'js')
   .sass('resources/template-field/sass/template-field.scss', 'css')
   .js('resources/parent-field/js/parent-field.js', 'js')
-  .sass('resources/parent-field/sass/parent-field.scss', 'css');
+  .sass('resources/parent-field/sass/parent-field.scss', 'css')
+  .js('resources/region-field/js/region-field.js', 'js')
+  .sass('resources/region-field/sass/region-field.scss', 'css');
