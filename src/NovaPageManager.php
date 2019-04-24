@@ -48,8 +48,8 @@ class NovaPageManager extends Tool
 
     public static function configure(array $data = [])
     {
-        self::$templates = $data['templates'] ?: [];
-        self::$locales = $data['locales'] ?: ['en_US' => 'English'];
+        self::$templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
+        self::$locales = isset($data['locales']) && is_array($data['locales']) ? $data['locales'] : ['en_US' => 'English'];
     }
 
     public static function getTemplates(): array
