@@ -29,17 +29,25 @@ class LocaleParentField extends Field
         // Mask this field as Parent ID
         parent::__construct($name, 'locale_parent_id', $resolveCallback);
 
-        $this->withMeta([
-            'asHtml' => true,
-            'resources' => collect(Page::all(), Region::all())->flatten()->map(function ($template) {
+        $_pages = Page::whereNull('locale_parent_id')->get();
+        $_regions = Region::whereNull('locale_parent_id')->get();
+
+        $resources = $_pages->merge($_regions)
+            ->flatten()
+            ->map(function ($template) {
                 $label = $template->name;
                 if (!empty($template->slug)) $label .= ' (' . $template->slug . ')';
 
                 return [
                     'label' => $label,
-                    'value' => $template->id
+                    'id' => $template->id
                 ];
-            })->pluck('label', 'value')
+            })
+            ->pluck('label', 'id');
+
+        $this->withMeta([
+            'asHtml' => true,
+            'resources' => $resources,
         ]);
     }
 
