@@ -1,6 +1,7 @@
 <?php
 
 use OptimistDigital\NovaPageManager\Models\Page;
+use OptimistDigital\NovaPageManager\Models\Region;
 use Illuminate\Support\Collection;
 
 if (!function_exists('nova_get_pages_structure')) {
@@ -31,5 +32,29 @@ if (!function_exists('nova_get_pages_structure')) {
 
         $parentPages = Page::whereNull('parent_id')->whereNull('locale_parent_id')->get();
         return $formatPages($parentPages);
+    }
+}
+
+if (!function_exists('nova_get_regions')) {
+    function nova_get_regions()
+    {
+        $formatRegions = function (Collection $regions) {
+            $data = [];
+            $regions->each(function ($region) use (&$data) {
+                $localeChildren = Region::where('locale_parent_id', $region->id)->get();
+                $_regions = collect([$region, $localeChildren])->flatten();
+                $data[] = [
+                    'locales' => $_regions->pluck('locale'),
+                    'id' => $_regions->pluck('id', 'locale'),
+                    'name' => $_regions->pluck('name', 'locale'),
+                    'template' => $region->template,
+                    'data' => $_regions->pluck('data', 'locale'),
+                ];
+            });
+            return $data;
+        };
+
+        $parentRegions = Region::whereNull('locale_parent_id')->get();
+        return $formatRegions($parentRegions);
     }
 }
