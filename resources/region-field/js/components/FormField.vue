@@ -1,10 +1,11 @@
 <template>
   <default-field :field="field" :errors="errors">
     <template slot="field">
-      <select name="locale" class="w-full form-control form-input form-input-bordered" v-model="region" :disabled="hasLocaleParentId">
+      <select name="locale" class="w-full form-control form-input form-input-bordered" v-model="region" v-if="canEditRegion">
         <option value="null">Choose a region</option>
         <option :value="region" v-for="region in field.regions" :key="region">{{ region }}</option>
       </select>
+      <input v-else class="w-full form-control form-input form-input-bordered" type="text" :disabled="true" :value="region">
     </template>
   </default-field>
 </template>
@@ -24,8 +25,8 @@ export default {
   },
 
   computed: {
-    hasLocaleParentId() {
-      return this.getParameterByName('localeParentId') !== void 0;
+    canEditRegion() {
+      return !(this.field.value || this.getParameterByName('localeParentId') !== void 0);
     },
   },
 
@@ -45,7 +46,7 @@ export default {
       name = name.replace(/[\[\]]/g, '\\$&');
       const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
       const results = regex.exec(url);
-      if (!results) return null;
+      if (!results) return void 0;
       if (!results[2]) return '';
       return decodeURIComponent(results[2].replace(/\+/g, ' '));
     },
