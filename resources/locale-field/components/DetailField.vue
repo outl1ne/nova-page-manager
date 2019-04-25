@@ -8,11 +8,11 @@
 
 <script>
 export default {
-  props: ["resource", "resourceName", "resourceId", "field"],
+  props: ['resource', 'resourceName', 'resourceId', 'field'],
   computed: {
     value() {
       return this.field.locales[this.field.value].label;
-    }
-  }
+    },
+  },
 };
 </script>

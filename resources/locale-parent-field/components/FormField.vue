@@ -8,6 +8,7 @@
 
 <script>
 import { FormField, HandlesValidationErrors } from 'laravel-nova';
+import { getParameterByName } from '../../js/util';
 
 export default {
   mixins: [FormField, HandlesValidationErrors],
@@ -27,30 +28,14 @@ export default {
   },
 
   methods: {
-    /*
-     * Set the initial, internal value for the field.
-     */
     setInitialValue() {
-      this.value = this.field.value || this.getParameterByName('localeParentId');
+      this.value = this.field.value || getParameterByName('localeParentId');
     },
 
-    /**
-     * Fill the given FormData object with the field's internal value.
-     */
     fill(formData) {
       if (this.value !== null) {
         formData.append(this.field.attribute, this.value);
       }
-    },
-
-    getParameterByName(name) {
-      const url = window.location.href;
-      name = name.replace(/[\[\]]/g, '\\$&');
-      const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-      const results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, ' '));
     },
   },
 };

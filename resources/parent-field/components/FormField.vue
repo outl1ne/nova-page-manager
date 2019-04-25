@@ -11,6 +11,7 @@
 
 <script>
 import { FormField, HandlesValidationErrors } from 'laravel-nova';
+import { getParameterByName } from '../../js/util';
 
 export default {
   mixins: [FormField, HandlesValidationErrors],
@@ -25,7 +26,7 @@ export default {
 
   computed: {
     canHaveParent() {
-      return this.field.canHaveParent && this.getParameterByName('localeParentId') === null;
+      return this.field.canHaveParent && getParameterByName('localeParentId') === null;
     },
     options() {
       const ids = Object.keys(this.field.options).filter(id => id !== this.resourceId);
@@ -37,28 +38,12 @@ export default {
   },
 
   methods: {
-    /*
-     * Set the initial, internal value for the field.
-     */
     setInitialValue() {
       this.parent = this.field.value || '';
     },
 
-    /**
-     * Fill the given FormData object with the field's internal value.
-     */
     fill(formData) {
       formData.append(this.field.attribute, this.parent);
-    },
-
-    getParameterByName(name) {
-      const url = window.location.href;
-      name = name.replace(/[\[\]]/g, '\\$&');
-      const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-      const results = regex.exec(url);
-      if (!results) return null;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, ' '));
     },
   },
 };

@@ -12,6 +12,7 @@
 
 <script>
 import { FormField, HandlesValidationErrors } from 'laravel-nova';
+import { getParameterByName } from '../../js/util';
 
 export default {
   mixins: [FormField, HandlesValidationErrors],
@@ -26,29 +27,19 @@ export default {
 
   computed: {
     canEditRegion() {
-      return !(this.field.value || this.getParameterByName('localeParentId') !== void 0);
+      return !(this.field.value || getParameterByName('localeParentId') !== void 0);
     },
   },
 
   methods: {
     setInitialValue() {
-      const localeParentId = this.getParameterByName('localeParentId');
+      const localeParentId = getParameterByName('localeParentId');
       this.region = localeParentId ? this.field.existingRegions[localeParentId] : this.field.value;
     },
 
     fill(formData) {
       formData.append(this.field.attribute, this.region);
       if (this.hasLocaleParentId) formData.append('slug', `${this.region}_${new Date().getTime()}`);
-    },
-
-    getParameterByName(name) {
-      const url = window.location.href;
-      name = name.replace(/[\[\]]/g, '\\$&');
-      const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
-      const results = regex.exec(url);
-      if (!results) return void 0;
-      if (!results[2]) return '';
-      return decodeURIComponent(results[2].replace(/\+/g, ' '));
     },
   },
 };

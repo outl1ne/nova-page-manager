@@ -8,6 +8,6 @@
 
 <script>
 export default {
-  props: ["resource", "resourceName", "resourceId", "field"]
+  props: ['resource', 'resourceName', 'resourceId', 'field'],
 };
 </script>
