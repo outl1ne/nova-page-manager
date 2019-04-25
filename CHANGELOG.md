@@ -7,10 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0]
+
+### Added
+
+- Added `nova_get_regions()` helper
+
 ### Changed
 
 - Regions and pages are now in separate tables (migration required)
-- Only one region (and its translation) per region template is now allowed
+- Only one region (and its translations) per region template is now allowed
 - Refactored `Page`, `Region` and `TemplateResource` resource classes
 
 ### Removed
@@ -57,6 +63,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multilanguage support
 
 [unreleased]: https://github.com/optimistdigital/nova-page-manager/compare/1.1.0...HEAD
+[1.2.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.2...1.1.0
 [1.0.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.1...1.0.2
 [1.0.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.0...1.0.1
