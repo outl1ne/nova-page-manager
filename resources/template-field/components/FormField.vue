@@ -2,7 +2,7 @@
   <default-field :field="field" :errors="errors">
     <template slot="field">
       <select name="template" class="w-full form-control form-input form-input-bordered" v-model="template" :disabled="hasParentResourceTemplate">
-        <option value="null">Choose a template</option>
+        <option value="">Choose a template</option>
         <option :value="template.value" v-for="template in field.templates" :key="template.value">{{ template.label }}</option>
       </select>
     </template>
@@ -28,22 +28,20 @@ export default {
     hasParentResourceTemplate() {
       if (this.field.value) return true;
       const localeParentId = getParameterByName('localeParentId');
-      if (localeParentId === null || !this.field.resourceTemplates) return false;
-      return this.field.resourceTemplates[localeParentId] !== null;
+      if (!localeParentId || !this.field.resourceTemplates) return false;
+      return !!this.field.resourceTemplates[localeParentId];
     },
   },
 
   methods: {
     setInitialValue() {
-      const template =
-        this.field.resourceTemplates &&
-        getParameterByName('localeParentId') &&
-        this.field.resourceTemplates[getParameterByName('localeParentId')];
-      this.template = this.field.value || template;
+      const localeParentId = getParameterByName('localeParentId');
+      const template = this.field.resourceTemplates && localeParentId && this.field.resourceTemplates[localeParentId];
+      this.template = this.field.value || template || '';
     },
 
     fill(formData) {
-      formData.append(this.field.attribute, this.template);
+      if (this.template) formData.append(this.field.attribute, this.template);
     },
   },
 };

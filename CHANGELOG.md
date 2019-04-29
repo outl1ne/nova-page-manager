@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1]
+
+### Changed
+
+- Fixed multiple issues with form fields being disabled when they're not supposed to be
+- Fixed issues with empty placeholders in select type form fields
+
 ## [1.2.0]
 
 ### Added
@@ -63,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multilanguage support
 
 [unreleased]: https://github.com/optimistdigital/nova-page-manager/compare/1.1.0...HEAD
+[1.2.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.2...1.1.0
 [1.0.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.1...1.0.2

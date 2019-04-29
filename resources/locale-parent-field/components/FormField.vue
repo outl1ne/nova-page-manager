@@ -33,9 +33,7 @@ export default {
     },
 
     fill(formData) {
-      if (this.value !== null) {
-        formData.append(this.field.attribute, this.value);
-      }
+      if (this.value) formData.append(this.field.attribute, this.value);
     },
   },
 };

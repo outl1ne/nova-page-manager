@@ -1,8 +1,8 @@
 <template>
   <default-field :field="field" :errors="errors">
     <template slot="field">
-      <select name="locale" class="w-full form-control form-input form-input-bordered" v-model="region" v-if="canEditRegion">
-        <option value="null">Choose a region</option>
+      <select name="region" class="w-full form-control form-input form-input-bordered" v-model="region" v-if="canEditRegion">
+        <option value="">Choose a region</option>
         <option :value="region" v-for="region in field.regions" :key="region">{{ region }}</option>
       </select>
       <input v-else class="w-full form-control form-input form-input-bordered" type="text" :disabled="true" :value="region">
@@ -27,19 +27,19 @@ export default {
 
   computed: {
     canEditRegion() {
-      return !(this.field.value || getParameterByName('localeParentId') !== void 0);
+      return !this.field.value && !getParameterByName('localeParentId');
     },
   },
 
   methods: {
     setInitialValue() {
       const localeParentId = getParameterByName('localeParentId');
-      this.region = localeParentId ? this.field.existingRegions[localeParentId] : this.field.value;
+      const value = localeParentId ? this.field.existingRegions[localeParentId] : this.field.value;
+      this.region = value || '';
     },
 
     fill(formData) {
-      formData.append(this.field.attribute, this.region);
-      if (this.hasLocaleParentId) formData.append('slug', `${this.region}_${new Date().getTime()}`);
+      if (this.region) formData.append(this.field.attribute, this.region);
     },
   },
 };

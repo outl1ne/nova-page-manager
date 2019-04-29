@@ -2,7 +2,7 @@
   <default-field :field="field" :errors="errors">
     <template slot="field">
       <select name="locale" class="w-full form-control form-input form-input-bordered" v-model="locale" :disabled="localeAlreadySet">
-        <option value="null">Choose a locale</option>
+        <option value="">Choose a locale</option>
         <option :value="locale.value" v-for="locale in field.locales" :key="locale.value">{{ locale.label }}</option>
       </select>
     </template>
@@ -26,17 +26,17 @@ export default {
 
   computed: {
     localeAlreadySet() {
-      return this.field.value || getParameterByName('locale') !== null;
+      return this.field.value || !!getParameterByName('locale');
     },
   },
 
   methods: {
     setInitialValue() {
-      this.locale = this.field.value || getParameterByName('locale');
+      this.locale = this.field.value || getParameterByName('locale') || '';
     },
 
     fill(formData) {
-      formData.append(this.field.attribute, this.locale);
+      if (this.locale) formData.append(this.field.attribute, this.locale);
     },
   },
 };

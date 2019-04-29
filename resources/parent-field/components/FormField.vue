@@ -26,7 +26,7 @@ export default {
 
   computed: {
     canHaveParent() {
-      return this.field.canHaveParent && getParameterByName('localeParentId') === null;
+      return this.field.canHaveParent && !getParameterByName('localeParentId');
     },
     options() {
       const ids = Object.keys(this.field.options).filter(id => id !== this.resourceId);
@@ -43,7 +43,7 @@ export default {
     },
 
     fill(formData) {
-      formData.append(this.field.attribute, this.parent);
+      if (this.parent) formData.append(this.field.attribute, this.parent);
     },
   },
 };
