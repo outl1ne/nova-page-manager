@@ -31,8 +31,8 @@ class CreateTemplate extends Command
     public function handle()
     {
         $this->className = $this->getClassNameArgument();
-        $this->name = $this->getNameArgument();
         $this->type = $this->getTypeArgument();
+        $this->name = $this->getNameArgument();
         $path = $this->getPath();
         $this->files->put($path, $this->buildClass());
         $this->info('Successfully created Template at ' . $path);
@@ -114,13 +114,19 @@ class CreateTemplate extends Command
         $replace = [
             ':className' => $this->className,
             ':name' => $this->name,
-            ':type' => $this->type
+            ':type' => $this->type,
         ];
 
-        $template = $this->files->get(__DIR__ . '/../Stubs/Template.php');
+        $templateFilePath = ($this->type === 'page')
+            ? __DIR__ . '/../Stubs/PageTemplate.php'
+            : __DIR__ . '/../Stubs/RegionTemplate.php';
+
+        $template = $this->files->get($templateFilePath);
+
         foreach ($replace as $key => $value) {
             $template = str_replace($key, $value, $template);
         }
+
         return $template;
     }
 }
