@@ -7,6 +7,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2]
+
+### Changed
+
+- Ask for template type before template slug
+- Remove 'seo' field from region template
+
 ## [1.2.1]
 
 ### Changed
@@ -70,6 +77,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multilanguage support
 
 [unreleased]: https://github.com/optimistdigital/nova-page-manager/compare/1.1.0...HEAD
+[1.2.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.1...1.2.2
 [1.2.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.0...1.2.1
 [1.2.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.1.0...1.2.0
 [1.1.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.2...1.1.0
