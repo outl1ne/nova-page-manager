@@ -58,3 +58,28 @@ if (!function_exists('nova_get_regions')) {
         return $formatRegions($parentRegions);
     }
 }
+
+if (!function_exists('nova_get_page')) {
+    function nova_get_page($pageId)
+    {
+        if (empty($pageId)) return null;
+        $page = Page::find($pageId);
+        if (empty($page)) return null;
+
+        // Find all related locales
+        if (empty($page->locale_parent_id)) {
+            $pages = Page::where('id', $pageId)->orWhere('locale_parent_id', $pageId)->get();
+        } else {
+            $pages = Page::where('id', $pageId)->orWhere('id', $page->locale_parent_id);
+        }
+
+        return [
+            'locales' => $pages->pluck('locale'),
+            'id' => $pages->pluck('id', 'locale'),
+            'name' => $pages->pluck('name', 'locale'),
+            'slug' => $pages->pluck('slug', 'locale'),
+            'data' => $pages->pluck('data', 'locale'),
+            'template' => $pages->first()->template,
+        ];
+    }
+}
