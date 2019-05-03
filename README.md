@@ -127,6 +127,118 @@ public function boot()
 }
 ```
 
+## Helper functions
+
+### nova_get_pages_structure()
+
+The helper function `nova_get_pages_structure()` returns the base pages structure (slugs, templates, child-parent relationships) that you can build your routes upon in the front-end. This does not return the pages' data.
+
+Example response:
+
+```json
+[
+  {
+    "locales": ["en_US", "et_EE"],
+    "id": {
+      "en_US": 3,
+      "et_EE": 4
+    },
+    "name": {
+      "en_US": "Home",
+      "et_EE": "Kodu"
+    },
+    "slug": {
+      "en_US": "/",
+      "et_EE": "/"
+    },
+    "template": "home-page",
+    "children": [
+      {
+        "locales": ["en_US"],
+        "id": {
+          "en_US": 5
+        },
+        "name": {
+          "en_US": "About"
+        },
+        "slug": {
+          "en_US": "about"
+        },
+        "template": "home-page"
+      }
+    ]
+  }
+]
+```
+
+### nova_get_regions()
+
+The helper function `nova_get_regions()` returns all the regions and their data.
+
+Example response:
+
+```json
+[
+  {
+    "locales": ["en_US"],
+    "id": {
+      "en_US": 3
+    },
+    "name": {
+      "en_US": "Main header"
+    },
+    "template": "main-header",
+    "data": {
+      "en_US": {
+        "content": [
+          {
+            "layout": "horizontal-text-section",
+            "attributes": {
+              "text": "Lorem ipsum"
+            }
+          }
+        ]
+      }
+    }
+  }
+]
+```
+
+### nova_get_page(\$pageId)
+
+The helper function `nova_get_page($pageId)` finds and returns the page with the given ID and all the pages related to it through the locale relationship. If you query a single page that's translated into multiple languages, then you will get the page and all its translations.
+
+Example response for querying page with ID `3` (`nova_get_page(3)`):
+
+```json
+{
+  "locales": ["en_US", "et_EE"],
+  "id": {
+    "en_US": 3,
+    "et_EE": 4
+  },
+  "name": {
+    "en_US": "Home",
+    "et_EE": "Kodu"
+  },
+  "slug": {
+    "en_US": "/",
+    "et_EE": "/"
+  },
+  "data": {
+    "en_US": {
+      "banner": [],
+      "categories_grid": []
+    },
+    "et_EE": {
+      "banner": [],
+      "categories_grid": []
+    }
+  },
+  "template": "home-page"
+}
+```
+
 ## Credits
 
 - [Tarvo Reinpalu](https://github.com/Tarpsvo)
