@@ -31,8 +31,8 @@ class Page extends TemplateResource
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
             Text::make('Slug', 'slug')
-                ->creationRules('required', "unique:{$tableName},slug")
-                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}}"),
+                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
+                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,locale,$request->locale"),
             ParentField::make('Parent', 'parent_id'),
             LocaleField::make('Locale', 'locale'),
             TemplateField::make('Template', 'template'),
