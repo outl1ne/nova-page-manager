@@ -7,6 +7,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.4.0]
+
+### Changed
+
+- Made `nova_get_page(id)` return just one page, instead of all related locales of the page
+
 ## [1.3.1]
 
 ### Changed
@@ -17,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Make slug-locale pair unique in pages table (migration required)
+- Made slug-locale pair unique in pages table (migration required)
 
 ## [1.2.3]
 
@@ -95,6 +101,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multilanguage support
 
 [unreleased]: https://github.com/optimistdigital/nova-page-manager/compare/1.1.0...HEAD
+[1.4.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.3.1...1.4.0
 [1.3.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.3.0...1.3.1
 [1.3.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.3...1.3.0
 [1.2.3]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.2...1.2.3
