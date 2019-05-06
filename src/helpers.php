@@ -66,20 +66,13 @@ if (!function_exists('nova_get_page')) {
         $page = Page::find($pageId);
         if (empty($page)) return null;
 
-        // Find all related locales
-        if (empty($page->locale_parent_id)) {
-            $pages = Page::where('id', $pageId)->orWhere('locale_parent_id', $pageId)->get();
-        } else {
-            $pages = Page::where('id', $pageId)->orWhere('id', $page->locale_parent_id);
-        }
-
         return [
-            'locales' => $pages->pluck('locale'),
-            'id' => $pages->pluck('id', 'locale'),
-            'name' => $pages->pluck('name', 'locale'),
-            'slug' => $pages->pluck('slug', 'locale'),
-            'data' => $pages->pluck('data', 'locale'),
-            'template' => $pages->first()->template,
+            'locale' => $page->locale,
+            'id' => $page->id,
+            'name' => $page->name,
+            'slug' => $page->slug,
+            'data' => $page->data,
+            'template' => $page->template,
         ];
     }
 }

@@ -206,34 +206,19 @@ Example response:
 
 ### nova_get_page(\$pageId)
 
-The helper function `nova_get_page($pageId)` finds and returns the page with the given ID and all the pages related to it through the locale relationship. If you query a single page that's translated into multiple languages, then you will get the page and all its translations.
+The helper function `nova_get_page($pageId)` finds and returns the page with the given ID.
 
 Example response for querying page with ID `3` (`nova_get_page(3)`):
 
 ```json
 {
-  "locales": ["en_US", "et_EE"],
-  "id": {
-    "en_US": 3,
-    "et_EE": 4
-  },
-  "name": {
-    "en_US": "Home",
-    "et_EE": "Kodu"
-  },
-  "slug": {
-    "en_US": "/",
-    "et_EE": "/"
-  },
+  "locale": "en_US",
+  "id": 3,
+  "name": "Home",
+  "slug": "/",
   "data": {
-    "en_US": {
-      "banner": [],
-      "categories_grid": []
-    },
-    "et_EE": {
-      "banner": [],
-      "categories_grid": []
-    }
+    "banner": [],
+    "categories_grid": []
   },
   "template": "home-page"
 }
