@@ -133,7 +133,10 @@ if (!function_exists('nova_resolve_flexible_content_response')) {
                     }
                 }
 
-                $data[] = $row;
+                // Ignore unused layout values
+                if (!empty($row)) {
+                    $data[] = $row;
+                }
             }
         }
 
