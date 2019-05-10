@@ -82,6 +82,66 @@ if (!function_exists('nova_get_page')) {
     }
 }
 
+class FlexibleLoose extends \Whitecube\NovaFlexibleContent\Flexible {
+
+    public function getLayouts() {
+        return $this->layouts;
+    }
+
+}
+
+
+if (!function_exists('access_protected_prop')) {
+    function access_protected_prop($obj, $prop) {
+        $reflection = new ReflectionClass($obj);
+        $property = $reflection->getProperty($prop);
+        $property->setAccessible(true);
+        return $property->getValue($obj);
+    }
+}
+
+
+if (!function_exists('nova_resolve_flexible_content_response')) {
+    function nova_resolve_flexible_content_response($field, $layoutValues)
+    {
+
+        $data = [];
+
+        foreach ($layoutValues as $layoutValue) {
+
+            foreach (access_protected_prop($field, 'layouts') as $item) {
+
+                $layoutName = access_protected_prop($item, 'name');
+
+                if ($layoutName != $layoutValue['layout']) {
+                    continue;
+                }
+
+                $row = [];
+                $flexFields = access_protected_prop($item, 'fields');
+
+                foreach ($layoutValue['attributes'] as $fieldName => $fieldValue) {
+
+
+                    $subField = $flexFields->where('name', $fieldName)->first();
+
+                    if ($subField) {
+                        if (method_exists($subField, 'resolveResponseValue')) {
+                            $data[$fieldName] = $subField->resolveResponseValue($fieldValue);
+                        } else {
+                            $row[$fieldName] = $fieldValue;
+                        }
+                    }
+
+                }
+
+                $data[] = $row;
+            }
+        }
+
+        return $data;
+    }
+}
 
 if (!function_exists('nova_resolve_page_fields')) {
     /**
@@ -106,8 +166,12 @@ if (!function_exists('nova_resolve_page_fields')) {
 
         foreach ($data as $fieldName => $fieldAttribute) {
 
-            /** @var  $field */
             $field = $fields->where('name', $fieldName)->first();
+
+            if ($field->component == 'nova-flexible-content') {
+                $data[$fieldName] = nova_resolve_flexible_content_response($field, $fieldAttribute);
+                continue;
+            }
 
             if ($field && $field->name == $fieldName) {
 
