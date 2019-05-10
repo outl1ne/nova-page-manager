@@ -109,7 +109,7 @@ if (!function_exists('nova_resolve_page_fields')) {
             /** @var  $field */
             $field = $fields->where('name', $fieldName)->first();
 
-            if ($field->name == $fieldName) {
+            if ($field && $field->name == $fieldName) {
 
                 if (method_exists($field, 'resolveResponseValue')) {
                     $data[$fieldName] = $field->resolveResponseValue($fieldAttribute);
