@@ -59,7 +59,12 @@ if (!function_exists('nova_get_regions')) {
                     'id' => $_regions->pluck('id', 'locale'),
                     'name' => $_regions->pluck('name', 'locale'),
                     'template' => $region->template,
-                    'data' => $_regions->pluck('data', 'locale'),
+                    'data' => $_regions->map(function ($_region) {
+                        return [
+                            'locale' => $_region->locale,
+                            'data' => nova_resolve_template_model_data($_region),
+                        ];
+                    })->pluck('data', 'locale'),
                 ];
             });
             return $data;
