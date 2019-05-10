@@ -111,9 +111,7 @@ if (!function_exists('nova_resolve_page_fields')) {
 
             if ($field->name == $fieldName) {
 
-                $interfaces = collect(class_implements($field));
-
-                if ($interfaces->has(NovaResponseResolverInterface::class)) {
+                if (method_exists($field, 'resolveResponseValue')) {
                     $data[$fieldName] = $field->resolveResponseValue($fieldAttribute);
                 }
             }
