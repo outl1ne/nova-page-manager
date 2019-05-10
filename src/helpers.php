@@ -1,8 +1,12 @@
 <?php
 
+use OptimistDigital\NovaPageManager\Interfaces\NovaResponseResolverInterface;
 use OptimistDigital\NovaPageManager\Models\Page;
 use OptimistDigital\NovaPageManager\Models\Region;
 use Illuminate\Support\Collection;
+use OptimistDigital\NovaPageManager\Models\TemplateModel;
+use OptimistDigital\NovaPageManager\NovaPageManager;
+use OptimistDigital\NovaPageManager\Template;
 
 if (!function_exists('nova_get_pages_structure')) {
     function nova_get_pages_structure()
@@ -60,6 +64,7 @@ if (!function_exists('nova_get_regions')) {
 }
 
 if (!function_exists('nova_get_page')) {
+
     function nova_get_page($pageId)
     {
         if (empty($pageId)) return null;
@@ -71,8 +76,49 @@ if (!function_exists('nova_get_page')) {
             'id' => $page->id,
             'name' => $page->name,
             'slug' => $page->slug,
-            'data' => $page->data,
+            'data' => nova_resolve_page_data($page),
             'template' => $page->template,
         ];
+    }
+}
+
+
+if (!function_exists('nova_resolve_page_fields')) {
+    /**
+     * @param TemplateModel $page
+     * @return array
+     */
+    function nova_resolve_page_data(TemplateModel $page) {
+
+        $findTemplateClass = function($tmpl) use($page) {
+            return $tmpl::$name === $page->template;
+        };
+
+        $templateClass = collect(NovaPageManager::getPageTemplates())->first($findTemplateClass);
+
+        /** @var Template $instance */
+        $instance = new $templateClass();
+
+        $fields = collect($instance->fields(request()));
+
+        // $page->data is object, can't iterate that like a normal person
+        $data = json_decode(json_encode($page->data), true);
+
+        foreach ($data as $fieldName => $fieldAttribute) {
+
+            /** @var  $field */
+            $field = $fields->where('name', $fieldName)->first();
+
+            if ($field->name == $fieldName) {
+
+                $interfaces = collect(class_implements($field));
+
+                if ($interfaces->has(NovaResponseResolverInterface::class)) {
+                    $data[$fieldName] = $field->resolveResponseValue($fieldAttribute);
+                }
+            }
+        }
+
+        return $data;
     }
 }
