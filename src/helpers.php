@@ -1,12 +1,14 @@
 <?php
 
-use OptimistDigital\NovaPageManager\Interfaces\NovaResponseResolverInterface;
 use OptimistDigital\NovaPageManager\Models\Page;
 use OptimistDigital\NovaPageManager\Models\Region;
 use Illuminate\Support\Collection;
 use OptimistDigital\NovaPageManager\Models\TemplateModel;
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaPageManager\Template;
+
+// ------------------------------
+// nova_get_pages_structure
+// ------------------------------
 
 if (!function_exists('nova_get_pages_structure')) {
     function nova_get_pages_structure()
@@ -39,6 +41,11 @@ if (!function_exists('nova_get_pages_structure')) {
     }
 }
 
+
+// ------------------------------
+// nova_get_regions
+// ------------------------------
+
 if (!function_exists('nova_get_regions')) {
     function nova_get_regions()
     {
@@ -63,6 +70,11 @@ if (!function_exists('nova_get_regions')) {
     }
 }
 
+
+// ------------------------------
+// nova_get_page
+// ------------------------------
+
 if (!function_exists('nova_get_page')) {
 
     function nova_get_page($pageId)
@@ -76,112 +88,98 @@ if (!function_exists('nova_get_page')) {
             'id' => $page->id,
             'name' => $page->name,
             'slug' => $page->slug,
-            'data' => nova_resolve_page_data($page),
+            'data' => nova_resolve_template_model_data($page),
             'template' => $page->template,
         ];
     }
 }
 
-class FlexibleLoose extends \Whitecube\NovaFlexibleContent\Flexible {
 
-    public function getLayouts() {
-        return $this->layouts;
-    }
+// ------------------------------
+// nova_resolve_template_field_value
+// ------------------------------
 
-}
-
-
-if (!function_exists('access_protected_prop')) {
-    function access_protected_prop($obj, $prop) {
-        $reflection = new ReflectionClass($obj);
-        $property = $reflection->getProperty($prop);
-        $property->setAccessible(true);
-        return $property->getValue($obj);
-    }
-}
-
-
-if (!function_exists('nova_resolve_flexible_content_response')) {
-    function nova_resolve_flexible_content_response($field, $layoutValues)
+if (!function_exists('nova_resolve_template_field_value')) {
+    function nova_resolve_template_field_value($field, $fieldValue)
     {
+        return method_exists($field, 'resolveResponseValue')
+            ? $field->resolveResponseValue($fieldValue)
+            : $fieldValue;
+    }
+}
 
-        $data = [];
 
-        foreach ($layoutValues as $layoutValue) {
+// ------------------------------
+// nova_resolve_template_model_data
+// ------------------------------
 
-            foreach (access_protected_prop($field, 'layouts') as $item) {
-
-                $layoutName = access_protected_prop($item, 'name');
-
-                if ($layoutName != $layoutValue['layout']) {
-                    continue;
-                }
-
-                $row = [];
-                $flexFields = access_protected_prop($item, 'fields');
-
-                foreach ($layoutValue['attributes'] as $fieldName => $fieldValue) {
-
-                    $subField = $flexFields->where('name', $fieldName)->first();
-
-                    if ($subField) {
-                        if (method_exists($subField, 'resolveResponseValue')) {
-                            $data[$fieldName] = $subField->resolveResponseValue($fieldValue);
-                        } else {
-                            $row[$fieldName] = $fieldValue;
-                        }
-                    }
-                }
-
-                // Ignore unused layout values
-                if (!empty($row)) {
-                    $data[] = $row;
-                }
-            }
+if (!function_exists('nova_resolve_template_model_data')) {
+    function nova_resolve_template_model_data(TemplateModel $templateModel)
+    {
+        // Find the Template class for the model
+        foreach (NovaPageManager::getTemplates() as $tmpl) {
+            if ($tmpl::$name === $templateModel->template) $templateClass = $tmpl;
         }
 
-        return $data;
-    }
-}
+        // Fail silently is template is no longer registered
+        if (!isset($templateClass)) return null;
 
-if (!function_exists('nova_resolve_page_fields')) {
-    /**
-     * @param TemplateModel $page
-     * @return array
-     */
-    function nova_resolve_page_data(TemplateModel $page) {
+        // Get the template's fields
+        $fields = collect((new $templateClass)->fields(request()));
 
-        $findTemplateClass = function($tmpl) use($page) {
-            return $tmpl::$name === $page->template;
-        };
+        $resolvedData = [];
+        foreach (((array)$templateModel->data) as $fieldName => $fieldValue) {
+            $field = $fields->where('attribute', $fieldName)->first();
+            if (!isset($field)) continue;
 
-        $templateClass = collect(NovaPageManager::getPageTemplates())->first($findTemplateClass);
-
-        /** @var Template $instance */
-        $instance = new $templateClass();
-
-        $fields = collect($instance->fields(request()));
-
-        // $page->data is object, can't iterate that like a normal person
-        $data = json_decode(json_encode($page->data), true);
-
-        foreach ($data as $fieldName => $fieldValue) {
-
-            $field = $fields->where('name', $fieldName)->first();
-
-            if ($field->component == 'nova-flexible-content') {
-                $data[$fieldName] = nova_resolve_flexible_content_response($field, $fieldValue);
+            if ($field->component === 'nova-flexible-content') {
+                $resolvedData[$fieldName] = nova_resolve_flexible_fields_data($field, $fieldValue);
                 continue;
             }
 
-            if ($field && $field->name == $fieldName) {
+            $resolvedData[$fieldName] = nova_resolve_template_field_value($field, $fieldValue);
+        }
+        return $resolvedData;
+    }
+}
 
-                if (method_exists($field, 'resolveResponseValue')) {
-                    $data[$fieldName] = $field->resolveResponseValue($fieldValue);
+
+// ------------------------------
+// nova_resolve_flexible_fields_data
+// ------------------------------
+
+if (!function_exists('nova_resolve_flexible_fields_data')) {
+    function nova_resolve_flexible_fields_data($field, $flexibleFieldValue)
+    {
+        // Accessing protected property helper
+        $accessProtectedProperty = function ($object, $property) {
+            $reflection = new ReflectionClass($object);
+            $_property = $reflection->getProperty($property);
+            $_property->setAccessible(true);
+            return $_property->getValue($object);
+        };
+
+        $flexibleLayouts = $accessProtectedProperty($field, 'layouts');
+
+        $resolvedData = [];
+        foreach ($flexibleFieldValue as $layoutValue) {
+            foreach ($flexibleLayouts as $layout) {
+                $layoutName = $accessProtectedProperty($layout, 'name');
+                if ($layoutName !== $layoutValue->layout) continue;
+
+                $layoutFields = $accessProtectedProperty($layout, 'fields');
+
+                $row = [];
+
+                foreach ($layoutValue->attributes as $fieldName => $fieldValue) {
+                    $subField = $layoutFields->where('attribute', $fieldName)->first();
+                    if (!isset($subField)) continue;
+                    $row[$fieldName] = nova_resolve_template_field_value($subField, $fieldValue);
                 }
+
+                $resolvedData[] = $row;
             }
         }
-
-        return $data;
+        return $resolvedData;
     }
 }
