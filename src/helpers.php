@@ -169,15 +169,18 @@ if (!function_exists('nova_resolve_flexible_fields_data')) {
 
                 $layoutFields = $accessProtectedProperty($layout, 'fields');
 
-                $row = [];
+                $resolvedLayoutData = [
+                    'layout' => $layoutName,
+                    'attributes' => [],
+                ];
 
                 foreach ($layoutValue->attributes as $fieldAttribute => $fieldValue) {
                     $subField = $layoutFields->where('attribute', $fieldAttribute)->first();
                     if (!isset($subField)) continue;
-                    $row[$fieldAttribute] = nova_resolve_template_field_value($subField, $fieldValue);
+                    $resolvedLayoutData['attributes'][$fieldAttribute] = nova_resolve_template_field_value($subField, $fieldValue);
                 }
 
-                $resolvedData[] = $row;
+                $resolvedData[] = $resolvedLayoutData;
             }
         }
         return $resolvedData;
