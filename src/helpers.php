@@ -128,16 +128,16 @@ if (!function_exists('nova_resolve_template_model_data')) {
         $fields = collect((new $templateClass)->fields(request()));
 
         $resolvedData = [];
-        foreach (((array)$templateModel->data) as $fieldName => $fieldValue) {
-            $field = $fields->where('attribute', $fieldName)->first();
+        foreach (((array)$templateModel->data) as $fieldAttribute => $fieldValue) {
+            $field = $fields->where('attribute', $fieldAttribute)->first();
             if (!isset($field)) continue;
 
             if ($field->component === 'nova-flexible-content') {
-                $resolvedData[$fieldName] = nova_resolve_flexible_fields_data($field, $fieldValue);
+                $resolvedData[$fieldAttribute] = nova_resolve_flexible_fields_data($field, $fieldValue);
                 continue;
             }
 
-            $resolvedData[$fieldName] = nova_resolve_template_field_value($field, $fieldValue);
+            $resolvedData[$fieldAttribute] = nova_resolve_template_field_value($field, $fieldValue);
         }
         return $resolvedData;
     }
@@ -171,10 +171,10 @@ if (!function_exists('nova_resolve_flexible_fields_data')) {
 
                 $row = [];
 
-                foreach ($layoutValue->attributes as $fieldName => $fieldValue) {
-                    $subField = $layoutFields->where('attribute', $fieldName)->first();
+                foreach ($layoutValue->attributes as $fieldAttribute => $fieldValue) {
+                    $subField = $layoutFields->where('attribute', $fieldAttribute)->first();
                     if (!isset($subField)) continue;
-                    $row[$fieldName] = nova_resolve_template_field_value($subField, $fieldValue);
+                    $row[$fieldAttribute] = nova_resolve_template_field_value($subField, $fieldValue);
                 }
 
                 $resolvedData[] = $row;
