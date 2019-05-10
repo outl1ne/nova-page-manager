@@ -122,7 +122,6 @@ if (!function_exists('nova_resolve_flexible_content_response')) {
 
                 foreach ($layoutValue['attributes'] as $fieldName => $fieldValue) {
 
-
                     $subField = $flexFields->where('name', $fieldName)->first();
 
                     if ($subField) {
@@ -132,7 +131,6 @@ if (!function_exists('nova_resolve_flexible_content_response')) {
                             $row[$fieldName] = $fieldValue;
                         }
                     }
-
                 }
 
                 $data[] = $row;
@@ -164,19 +162,19 @@ if (!function_exists('nova_resolve_page_fields')) {
         // $page->data is object, can't iterate that like a normal person
         $data = json_decode(json_encode($page->data), true);
 
-        foreach ($data as $fieldName => $fieldAttribute) {
+        foreach ($data as $fieldName => $fieldValue) {
 
             $field = $fields->where('name', $fieldName)->first();
 
             if ($field->component == 'nova-flexible-content') {
-                $data[$fieldName] = nova_resolve_flexible_content_response($field, $fieldAttribute);
+                $data[$fieldName] = nova_resolve_flexible_content_response($field, $fieldValue);
                 continue;
             }
 
             if ($field && $field->name == $fieldName) {
 
                 if (method_exists($field, 'resolveResponseValue')) {
-                    $data[$fieldName] = $field->resolveResponseValue($fieldAttribute);
+                    $data[$fieldName] = $field->resolveResponseValue($fieldValue);
                 }
             }
         }
