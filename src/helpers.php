@@ -105,10 +105,10 @@ if (!function_exists('nova_get_page')) {
 // ------------------------------
 
 if (!function_exists('nova_resolve_template_field_value')) {
-    function nova_resolve_template_field_value($field, $fieldValue)
+    function nova_resolve_template_field_value($field, $fieldValue, $templateModel)
     {
         return method_exists($field, 'resolveResponseValue')
-            ? $field->resolveResponseValue($fieldValue)
+            ? $field->resolveResponseValue($fieldValue, $templateModel)
             : $fieldValue;
     }
 }
@@ -138,11 +138,11 @@ if (!function_exists('nova_resolve_template_model_data')) {
             if (!isset($field)) continue;
 
             if ($field->component === 'nova-flexible-content') {
-                $resolvedData[$fieldAttribute] = nova_resolve_flexible_fields_data($field, $fieldValue);
+                $resolvedData[$fieldAttribute] = nova_resolve_flexible_fields_data($field, $fieldValue, $templateModel);
                 continue;
             }
 
-            $resolvedData[$fieldAttribute] = nova_resolve_template_field_value($field, $fieldValue);
+            $resolvedData[$fieldAttribute] = nova_resolve_template_field_value($field, $fieldValue, $templateModel);
         }
         return $resolvedData;
     }
@@ -154,7 +154,7 @@ if (!function_exists('nova_resolve_template_model_data')) {
 // ------------------------------
 
 if (!function_exists('nova_resolve_flexible_fields_data')) {
-    function nova_resolve_flexible_fields_data($field, $flexibleFieldValue)
+    function nova_resolve_flexible_fields_data($field, $flexibleFieldValue, $templateModel)
     {
         // Accessing protected property helper
         $accessProtectedProperty = function ($object, $property) {
@@ -182,7 +182,7 @@ if (!function_exists('nova_resolve_flexible_fields_data')) {
                 foreach ($layoutValue->attributes as $fieldAttribute => $fieldValue) {
                     $subField = $layoutFields->where('attribute', $fieldAttribute)->first();
                     if (!isset($subField)) continue;
-                    $resolvedLayoutData['attributes'][$fieldAttribute] = nova_resolve_template_field_value($subField, $fieldValue);
+                    $resolvedLayoutData['attributes'][$fieldAttribute] = nova_resolve_template_field_value($subField, $fieldValue, $templateModel);
                 }
 
                 $resolvedData[] = $resolvedLayoutData;
