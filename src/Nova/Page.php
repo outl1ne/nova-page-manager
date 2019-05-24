@@ -28,6 +28,10 @@ class Page extends TemplateResource
         $tableName = NovaPageManager::getPagesTableName();
         $templateClass = $this->getTemplateClass();
         $templateFields = $this->getTemplateFields();
+        $localeParentField = LocaleParentField::make("Translations");
+        if (count(NovaPageManager::getLocales()) > 2) {
+            $localeParentField = $localeParentField->hideFromIndex();
+        }
 
         $fields = [
             ID::make()->sortable(),
@@ -38,7 +42,7 @@ class Page extends TemplateResource
             ParentField::make('Parent', 'parent_id'),
             LocaleField::make('Locale', 'locale'),
             TemplateField::make('Template', 'template'),
-            LocaleParentField::make('Translations'),
+            $localeParentField
         ];
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());

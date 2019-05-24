@@ -23,6 +23,10 @@ class Region extends TemplateResource
     {
         // Get base data
         $templateFields = $this->getTemplateFields();
+        $localeParentField = LocaleParentField::make("Translations");
+        if (count(NovaPageManager::getLocales()) > 2) {
+            $localeParentField = $localeParentField->hideFromIndex();
+        }
 
         // Create fields array
         $fields = [
@@ -30,7 +34,7 @@ class Region extends TemplateResource
             Text::make('Name', 'name')->rules('required'),
             RegionField::make('Region'),
             LocaleField::make('Locale', 'locale'),
-            LocaleParentField::make('Translations'),
+            $localeParentField,
             new Panel('Region data', $templateFields),
         ];
 
