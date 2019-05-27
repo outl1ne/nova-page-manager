@@ -30,7 +30,7 @@ class Page extends TemplateResource
         $templateFields = $this->getTemplateFields();
         $localeParentField = LocaleParentField::make('Translations');
 
-        if (count(NovaPageManager::getLocales()) > 2) {
+        if (count(NovaPageManager::getLocales()) > config('nova-page-manager.max_locales_shown_on_index', 2)) {
             $localeParentField = $localeParentField->hideFromIndex();
         }
 
