@@ -1,5 +1,5 @@
 <template>
-  <localization-options field="field" resource-name="resourceName" />
+  <localization-options :field="field" :resource-name="resourceName" style="margin: 10px 0;" />
 </template>
 
 <script>

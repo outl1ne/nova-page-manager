@@ -1,8 +1,8 @@
 {
+    "/js/locale-parent-field.js": "/js/locale-parent-field.js",
     "/js/template-field.js": "/js/template-field.js",
     "/js/region-field.js": "/js/region-field.js",
     "/js/parent-field.js": "/js/parent-field.js",
-    "/js/locale-parent-field.js": "/js/locale-parent-field.js",
     "/js/locale-field.js": "/js/locale-field.js",
     "/js/page-manager-tool.js": "/js/page-manager-tool.js"
 }
