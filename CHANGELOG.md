@@ -15,6 +15,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Translation options are now shown on both Index and Detail views
 - When the amount of translation options exceeds the configured limit, the options are only displayed on the Detail view (thanks to [@slovenianGooner](https://github.com/slovenianGooner))
+- Fixed `LocaleParentField` not showing the title that was defined in the `Resource`
+- Fixed `LocaleParentField` not showing the parent value even though it has a parent
 
 ## [1.5.2]
 
