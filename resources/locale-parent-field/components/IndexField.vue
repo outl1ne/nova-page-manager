@@ -57,11 +57,6 @@
 <script>
 export default {
   props: ['resourceName', 'field'],
-  methods: {
-    hasChildInLocale(locale) {
-      return this.field.resourceLocales[this.field.value.id].includes(locale);
-    },
-  },
   computed: {
     locales() {
       return Object.keys(this.field.value.locales).filter(l => l !== this.field.value.locale);
