@@ -1,5 +1,5 @@
 <template>
-  <default-field :field="{ name: 'Localization' }" :errors="errors">
+  <default-field :field="field" :errors="errors">
     <template slot="field">
       <input type="text" :value="displayValue" readonly class="w-full form-control form-input form-input-bordered" />
     </template>
@@ -29,7 +29,7 @@ export default {
 
   methods: {
     setInitialValue() {
-      this.value = this.field.value || getParameterByName('localeParentId');
+      this.value = (this.field.value && this.field.value.locale_parent_id) || getParameterByName('localeParentId');
     },
 
     fill(formData) {

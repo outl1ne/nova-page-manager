@@ -29,36 +29,12 @@ class LocaleParentField extends Field
         // Mask this field as Parent ID
         parent::__construct($name, 'locale_parent_id', $resolveCallback);
 
-        $_pages = Page::whereNull('locale_parent_id')->get();
-        $_regions = Region::whereNull('locale_parent_id')->get();
-
-        $resources = $_pages->merge($_regions)
-            ->flatten()
-            ->map(function ($template) {
-                $label = $template->name;
-                if (!empty($template->slug)) $label .= ' (' . $template->slug . ')';
-
-                return [
-                    'label' => $label,
-                    'id' => $template->id
-                ];
-            })
-            ->pluck('label', 'id');
-
         $this->withMeta([
             'asHtml' => true,
-            'resources' => $resources,
         ]);
     }
 
-    /**
-     * Resolve the field's value for display.
-     *
-     * @param  mixed  $resource
-     * @param  string|null  $attribute
-     * @return void
-     */
-    public function resolveForDisplay($resource, $attribute = null)
+    public function resolve($resource, $attribute = null)
     {
         $value = [];
         $locales = NovaPageManager::getLocales();
@@ -82,5 +58,22 @@ class LocaleParentField extends Field
         }
 
         $this->value = $value;
+
+        // Add meta
+        $resources = $model::whereNull('locale_parent_id')->get()
+            ->map(function ($template) {
+                $label = $template->name;
+                if (!empty($template->slug)) $label .= ' (' . $template->slug . ')';
+
+                return [
+                    'label' => $label,
+                    'id' => $template->id
+                ];
+            })
+            ->pluck('label', 'id');
+
+        $this->withMeta([
+            'resources' => $resources,
+        ]);
     }
 }
