@@ -1,7 +1,7 @@
 <template>
   <default-field :field="{ name: 'Localization' }" :errors="errors">
     <template slot="field">
-      <input type="text" :value="displayValue" readonly class="w-full form-control form-input form-input-bordered">
+      <input type="text" :value="displayValue" readonly class="w-full form-control form-input form-input-bordered" />
     </template>
   </default-field>
 </template>
