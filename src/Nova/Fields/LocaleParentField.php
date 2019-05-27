@@ -72,14 +72,13 @@ class LocaleParentField extends Field
         $value['locale_parent_id'] = $resource->locale_parent_id;
 
         // Is master
-        if (empty($localeParentId)) {
-            $children = $model::where('locale_parent_id', $id)->where('id', '!=', $id)->get();
-            $value['locales'] = [];
-            foreach ($locales as $key => $localeName) {
-                $value['locales'][$key] = $children->first(function ($c) use ($key) {
-                    return $c->locale === $key;
-                });
-            }
+        $queryParentId = empty($localeParentId) ? $id : $localeParentId;
+        $children = $model::where('locale_parent_id', $queryParentId)->where('id', '!=', $id)->get();
+        $value['locales'] = [];
+        foreach ($locales as $key => $localeName) {
+            $value['locales'][$key] = $children->first(function ($c) use ($key) {
+                return $c->locale === $key;
+            });
         }
 
         $this->value = $value;
