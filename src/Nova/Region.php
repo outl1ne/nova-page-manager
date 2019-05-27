@@ -9,7 +9,7 @@ use Laravel\Nova\Panel;
 use OptimistDigital\NovaPageManager\Nova\Fields\LocaleParentField;
 use OptimistDigital\NovaPageManager\Nova\Fields\LocaleField;
 use OptimistDigital\NovaPageManager\Nova\Fields\RegionField;
-use OptimistDigital\NovaPageManager\Models\Region as RegionModel;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class Region extends TemplateResource
 {
@@ -23,8 +23,9 @@ class Region extends TemplateResource
     {
         // Get base data
         $templateFields = $this->getTemplateFields();
-        $localeParentField = LocaleParentField::make("Translations");
-        if (count(NovaPageManager::getLocales()) > 2) {
+        $localeParentField = LocaleParentField::make('Translations');
+
+        if (count(NovaPageManager::getLocales()) > config('nova-page-manager.max_locales_shown_on_index', 2)) {
             $localeParentField = $localeParentField->hideFromIndex();
         }
 

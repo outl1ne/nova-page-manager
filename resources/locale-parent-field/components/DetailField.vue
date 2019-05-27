@@ -1,5 +1,5 @@
 <template>
-  <panel-item :field="{ name: 'Localization' }">
+  <panel-item :field="field">
     <template slot="value">
       <div v-if="field.value.locales">
         <span v-for="locale in locales" :key="locale" class="flex items-center" stype="margin: 2px 0;">
