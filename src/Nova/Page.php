@@ -28,7 +28,8 @@ class Page extends TemplateResource
         $tableName = NovaPageManager::getPagesTableName();
         $templateClass = $this->getTemplateClass();
         $templateFields = $this->getTemplateFields();
-        $localeParentField = LocaleParentField::make("Translations");
+        $localeParentField = LocaleParentField::make('Translations');
+
         if (count(NovaPageManager::getLocales()) > 2) {
             $localeParentField = $localeParentField->hideFromIndex();
         }

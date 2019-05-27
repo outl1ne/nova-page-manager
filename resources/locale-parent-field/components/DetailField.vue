@@ -1,5 +1,5 @@
 <template>
-  <panel-item :field="{ name: 'Localization' }">
+  <panel-item :field="field">
     <template slot="value">
       <div v-if="field.value.locales">
         <span v-for="locale in locales" :key="locale" class="flex items-center" stype="margin: 2px 0;">
@@ -64,11 +64,6 @@
 <script>
 export default {
   props: ['resource', 'resourceName', 'resourceId', 'field'],
-  methods: {
-    hasChildInLocale(locale) {
-      return this.field.resourceLocales[this.field.value.id].includes(locale);
-    },
-  },
   computed: {
     locales() {
       return Object.keys(this.field.value.locales).filter(l => l !== this.field.value.locale);
