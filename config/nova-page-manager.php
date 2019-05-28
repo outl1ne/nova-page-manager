@@ -27,4 +27,26 @@ return [
 
   'max_locales_shown_on_index' => 2,
 
+
+  /*
+  |--------------------------------------------------------------------------
+  | Overwrite the page resource with a custom implementation
+  |--------------------------------------------------------------------------
+  |
+  | Add a custom implementation of the Page resource
+  |
+  */
+  'page_resource' => null,
+
+
+  /*
+  |--------------------------------------------------------------------------
+  | Overwrite the region resource with a custom implementation
+  |--------------------------------------------------------------------------
+  |
+  | Add a custom implementation of the Region resource
+  |
+  */
+  'region_resource' => null
+
 ];

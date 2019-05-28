@@ -33,10 +33,14 @@ class ToolServiceProvider extends ServiceProvider
             $this->routes();
         });
 
-        Nova::resources([
-            Page::class,
-            Region::class,
-        ]);
+        $pageResource = config("nova-page-manager.page_resource");
+        if (!isset($pageResource)) {
+            $pageResource = Page::class;
+        }
+        $regionResource = config("nova-page-manager.region_resource");
+        if (!isset($regionResource)) {
+            $regionResource = Region::class;
+        }
 
         if ($this->app->runningInConsole()) {
             $this->commands([
