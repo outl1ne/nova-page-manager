@@ -14,6 +14,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 Thanks to [@slovenianGooner](https://github.com/slovenianGooner)
 
+If you want to get the updated config, you can force re-publish the config file.
+
+```bash
+php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServiceProvider" --tag="config" --force
+```
+
 ## [1.6.0]
 
 ### Added
