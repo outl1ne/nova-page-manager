@@ -22,7 +22,8 @@
   ],
   "license": "MIT",
   "require": {
-    "php": ">=7.1.0"
+    "php": ">=7.1.0",
+    "optimistdigital/nova-locale-field": "dev-master"
   },
   "autoload": {
     "psr-4": {
