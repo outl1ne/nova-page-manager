@@ -25,7 +25,7 @@ return [
   |
   */
 
-  'max_locales_shown_on_index' => 2,
+  'max_locales_shown_on_index' => 4,
 
 
   /*
