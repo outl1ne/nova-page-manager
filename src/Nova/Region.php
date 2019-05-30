@@ -6,10 +6,9 @@ use Laravel\Nova\Fields\Text;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Panel;
-use OptimistDigital\NovaPageManager\Nova\Fields\LocaleParentField;
-use OptimistDigital\NovaPageManager\Nova\Fields\LocaleField;
 use OptimistDigital\NovaPageManager\Nova\Fields\RegionField;
 use OptimistDigital\NovaPageManager\NovaPageManager;
+use OptimistDigital\NovaLocaleField\LocaleField;
 
 class Region extends TemplateResource
 {
@@ -23,19 +22,15 @@ class Region extends TemplateResource
     {
         // Get base data
         $templateFields = $this->getTemplateFields();
-        $localeParentField = LocaleParentField::make('Translations');
-
-        if (count(NovaPageManager::getLocales()) > config('nova-page-manager.max_locales_shown_on_index', 2)) {
-            $localeParentField = $localeParentField->hideFromIndex();
-        }
 
         // Create fields array
         $fields = [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
             RegionField::make('Region'),
-            LocaleField::make('Locale', 'locale'),
-            $localeParentField,
+            LocaleField::make('Locale', 'locale', 'locale_parent_id')
+                ->locales(NovaPageManager::getLocales())
+                ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
             new Panel('Region data', $templateFields),
         ];
 

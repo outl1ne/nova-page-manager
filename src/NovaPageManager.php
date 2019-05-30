@@ -18,8 +18,6 @@ class NovaPageManager extends Tool
     public function boot()
     {
         Nova::script('nova-page-manager', __DIR__ . '/../dist/js/page-manager-tool.js');
-        Nova::script('nova-locale-parent-field', __DIR__ . '/../dist/js/locale-parent-field.js');
-        Nova::script('nova-locale-field', __DIR__ . '/../dist/js/locale-field.js');
         Nova::script('nova-template-field', __DIR__ . '/../dist/js/template-field.js');
         Nova::script('nova-parent-field', __DIR__ . '/../dist/js/parent-field.js');
         Nova::script('nova-region-field', __DIR__ . '/../dist/js/region-field.js');

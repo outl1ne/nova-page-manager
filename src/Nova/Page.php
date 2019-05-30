@@ -9,10 +9,9 @@ use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaPageManager\Nova\Fields\LocaleParentField;
-use OptimistDigital\NovaPageManager\Nova\Fields\LocaleField;
 use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
+use OptimistDigital\NovaLocaleField\LocaleField;
 
 class Page extends TemplateResource
 {
@@ -28,11 +27,6 @@ class Page extends TemplateResource
         $tableName = NovaPageManager::getPagesTableName();
         $templateClass = $this->getTemplateClass();
         $templateFields = $this->getTemplateFields();
-        $localeParentField = LocaleParentField::make('Translations');
-
-        if (count(NovaPageManager::getLocales()) > config('nova-page-manager.max_locales_shown_on_index', 2)) {
-            $localeParentField = $localeParentField->hideFromIndex();
-        }
 
         $fields = [
             ID::make()->sortable(),
@@ -41,9 +35,10 @@ class Page extends TemplateResource
                 ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
                 ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,locale,$request->locale"),
             ParentField::make('Parent', 'parent_id'),
-            LocaleField::make('Locale', 'locale'),
             TemplateField::make('Template', 'template'),
-            $localeParentField
+            LocaleField::make('Locale', 'locale', 'locale_parent_id')
+                ->locales(NovaPageManager::getLocales())
+                ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4))
         ];
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
