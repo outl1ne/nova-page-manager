@@ -10,15 +10,5 @@ abstract class Template
     public static $name = '';
     public static $seo = false;
 
-    abstract function fields(Request $request): array;
-
-    public function _getTemplateFields(Request $request)
-    {
-        return array_map(function ($field) {
-            if (!empty($field->attribute)) {
-                $field->attribute = 'data->' . $field->attribute;
-            }
-            return $field->hideFromIndex();
-        }, $this->fields($request));
-    }
+    abstract function fields(Request $request, $locale): array;
 }

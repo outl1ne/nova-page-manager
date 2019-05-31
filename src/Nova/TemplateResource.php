@@ -32,8 +32,19 @@ abstract class TemplateResource extends Resource
     protected function getTemplateFields(): array
     {
         $templateClass = $this->getTemplateClass();
-        if (isset($templateClass)) return $templateClass->_getTemplateFields(request());
-        return [];
+        $templateFields = [];
+
+        if (isset($templateClass)) {
+            $fields = $this->fields(request(), $this->locale ?: null);
+            $templateFields = array_map(function ($field) {
+                if (!empty($field->attribute)) {
+                    $field->attribute = 'data->' . $field->attribute;
+                }
+                return $field->hideFromIndex();
+            }, $fields);
+        }
+
+        return $templateFields;
     }
 
     public function filters(Request $request)
