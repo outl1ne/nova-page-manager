@@ -10,5 +10,12 @@ abstract class Template
     public static $name = '';
     public static $seo = false;
 
-    abstract function fields(Request $request, $locale): array;
+    protected $resource = null;
+
+    public function __construct($resource = null)
+    {
+        $this->resource = $resource;
+    }
+
+    abstract function fields(Request $request): array;
 }

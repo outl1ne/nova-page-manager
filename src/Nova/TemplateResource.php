@@ -22,7 +22,7 @@ abstract class TemplateResource extends Resource
 
         if (isset($this->template)) {
             foreach ($templates as $template) {
-                if ($template::$name == $this->template) $this->templateClass = new $template;
+                if ($template::$name == $this->template) $this->templateClass = new $template($this->resource);
             }
         }
 
@@ -35,13 +35,13 @@ abstract class TemplateResource extends Resource
         $templateFields = [];
 
         if (isset($templateClass)) {
-            $fields = $this->fields(request(), $this->locale ?: null);
+            $rawFields = $templateClass->fields(request());
             $templateFields = array_map(function ($field) {
                 if (!empty($field->attribute)) {
                     $field->attribute = 'data->' . $field->attribute;
                 }
                 return $field->hideFromIndex();
-            }, $fields);
+            }, $rawFields);
         }
 
         return $templateFields;

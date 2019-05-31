@@ -130,7 +130,7 @@ if (!function_exists('nova_resolve_template_model_data')) {
         if (!isset($templateClass)) return null;
 
         // Get the template's fields
-        $fields = collect((new $templateClass)->fields(request(), $templateModel->locale ?: null));
+        $fields = collect((new $templateClass($templateModel))->fields(request()));
 
         $resolvedData = [];
         foreach (((array)$templateModel->data) as $fieldAttribute => $fieldValue) {
