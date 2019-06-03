@@ -43,7 +43,7 @@ export default {
     },
 
     fill(formData) {
-      if (this.parent) formData.append(this.field.attribute, this.parent);
+      formData.append(this.field.attribute, this.parent);
     },
   },
 };
