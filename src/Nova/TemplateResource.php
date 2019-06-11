@@ -5,8 +5,8 @@ namespace OptimistDigital\NovaPageManager\Nova;
 use Laravel\Nova\Resource;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use Illuminate\Http\Request;
-use OptimistDigital\NovaPageManager\Nova\Filters\TemplateLocaleFilter;
-use OptimistDigital\NovaPageManager\Nova\Filters\TemplateChildrenFilter;
+use OptimistDigital\NovaLocaleField\Filters\LocaleFilter;
+use OptimistDigital\NovaLocaleField\Filters\LocaleChildrenFilter;
 
 abstract class TemplateResource extends Resource
 {
@@ -50,8 +50,8 @@ abstract class TemplateResource extends Resource
     public function filters(Request $request)
     {
         return [
-            new TemplateLocaleFilter,
-            new TemplateChildrenFilter,
+            new LocaleFilter('locale'),
+            new LocaleChildrenFilter('locale_parent_id'),
         ];
     }
 }
