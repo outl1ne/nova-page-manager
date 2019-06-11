@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.7.3]
+
+### Changed
+
+- Require `doctrine/dbal` to fix initial migrations
+- Updated `optimistdigital/nova-locale-field` to use its locale and locale children filters
+- Removed filters from this project
+
 ## [1.7.2]
 
 ### Changed
@@ -163,6 +171,7 @@ php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServi
 - Programmatically created templates for pages and regions
 - Multilanguage support
 
+[1.7.3]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.2...1.7.3
 [1.7.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.1...1.7.2
 [1.7.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.0...1.7.1
 [1.7.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.6.1...1.7.0
