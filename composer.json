@@ -23,7 +23,8 @@
   "license": "MIT",
   "require": {
     "php": ">=7.1.0",
-    "optimistdigital/nova-locale-field": "^1.1.0"
+    "optimistdigital/nova-locale-field": "^1.1.0",
+    "doctrine/dbal": "^2.9"
   },
   "autoload": {
     "psr-4": {
