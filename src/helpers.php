@@ -88,7 +88,7 @@ if (!function_exists('nova_get_page')) {
         $page = Page::find($pageId);
         if (empty($page)) return null;
 
-        return [
+        $data = [
             'locale' => $page->locale,
             'id' => $page->id,
             'name' => $page->name,
@@ -96,6 +96,24 @@ if (!function_exists('nova_get_page')) {
             'data' => nova_resolve_template_model_data($page),
             'template' => $page->template,
         ];
+
+        // If SEO is enabled, return SEO fields as well
+        $template = collect(NovaPageManager::getPageTemplates())->first(function ($template) use ($page) {
+            return $template::$name === $page->template;
+        });
+
+        // Fail silently in case template was deleted
+        if (!isset($template)) return null;
+
+        if ($template::$seo) {
+            $data['seo'] = [
+                'title' => $page->seo_title,
+                'description' => $page->seo_description,
+                'image' => $page->seo_image,
+            ];
+        }
+
+        return $data;
     }
 }
 
