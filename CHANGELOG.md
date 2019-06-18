@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.0]
+
+### Added
+
+- Support `Laravel\Nova\Panel` component along with grouping by Panel (fields are grouped under Panel's name)
+
 ## [1.7.4]
 
 ### Changed
@@ -177,6 +183,7 @@ php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServi
 - Programmatically created templates for pages and regions
 - Multilanguage support
 
+[1.8.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.4...1.8.0
 [1.7.4]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.3...1.7.4
 [1.7.3]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.2...1.7.3
 [1.7.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.1...1.7.2
