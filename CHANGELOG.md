@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.8.1]
+
+### Changed
+
+- Fixed panels not being included in `nova_get_page()` return value
+- Fixed SEO fields not being included in `nova_get_page()` return value
+
 ## [1.8.0]
 
 ### Added
@@ -183,6 +190,7 @@ php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServi
 - Programmatically created templates for pages and regions
 - Multilanguage support
 
+[1.8.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.8.0...1.8.1
 [1.8.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.4...1.8.0
 [1.7.4]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.3...1.7.4
 [1.7.3]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.2...1.7.3

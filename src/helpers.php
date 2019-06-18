@@ -81,7 +81,6 @@ if (!function_exists('nova_get_regions')) {
 // ------------------------------
 
 if (!function_exists('nova_get_page')) {
-
     function nova_get_page($pageId)
     {
         if (empty($pageId)) return null;
