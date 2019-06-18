@@ -26,7 +26,7 @@ class Page extends TemplateResource
         // Get base data
         $tableName = NovaPageManager::getPagesTableName();
         $templateClass = $this->getTemplateClass();
-        $templateFields = $this->getTemplateFields();
+        $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
 
         $fields = [
             ID::make()->sortable(),
@@ -43,7 +43,19 @@ class Page extends TemplateResource
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
 
-        $fields[] = new Panel('Page data', $templateFields);
+        if (count($templateFieldsAndPanels['fields']) > 0) {
+            $fields[] = new Panel(
+                'Page data',
+                array_merge(
+                    [Heading::make('Page data')->hideFromDetail()],
+                    $templateFieldsAndPanels['fields']
+                )
+            );
+        }
+
+        if (count($templateFieldsAndPanels['panels']) > 0) {
+            $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
+        }
 
         return $fields;
     }

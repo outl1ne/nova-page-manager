@@ -9,6 +9,7 @@ use Laravel\Nova\Panel;
 use OptimistDigital\NovaPageManager\Nova\Fields\RegionField;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use OptimistDigital\NovaLocaleField\LocaleField;
+use Laravel\Nova\Fields\Heading;
 
 class Region extends TemplateResource
 {
@@ -21,7 +22,7 @@ class Region extends TemplateResource
     public function fields(Request $request)
     {
         // Get base data
-        $templateFields = $this->getTemplateFields();
+        $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
 
         // Create fields array
         $fields = [
@@ -31,8 +32,18 @@ class Region extends TemplateResource
             LocaleField::make('Locale', 'locale', 'locale_parent_id')
                 ->locales(NovaPageManager::getLocales())
                 ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
-            new Panel('Region data', $templateFields),
         ];
+
+        if (count($templateFieldsAndPanels['fields']) > 0) {
+            $fields[] = new Panel('Region data', array_merge(
+                [Heading::make('Region data')->hideFromDetail()],
+                $templateFieldsAndPanels['fields'],
+            ));
+        }
+
+        if (count($templateFieldsAndPanels['panels']) > 0) {
+            $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
+        }
 
         return $fields;
     }

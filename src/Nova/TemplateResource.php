@@ -29,22 +29,62 @@ abstract class TemplateResource extends Resource
         return $this->templateClass;
     }
 
-    protected function getTemplateFields(): array
+    /**
+     * Gets the template fields and separates them into an
+     * array of two keys: 'fields' and 'panels'.
+     *
+     * @return array
+     **/
+    protected function getTemplateFieldsAndPanels(): array
     {
         $templateClass = $this->getTemplateClass();
         $templateFields = [];
+        $templatePanels = [];
+
+        $handleField = function (&$field) {
+            if (!empty($field->attribute)) {
+                if (empty($field->panel)) {
+                    $field->attribute = 'data->' . $field->attribute;
+                } else {
+                    $sanitizedPanel = preg_replace('/\s+/', '_', strtolower($field->panel));
+                    $field->attribute = 'data->' . $sanitizedPanel . '->' . $field->attribute;
+                }
+            } else {
+                if ($field instanceof \Laravel\Nova\Fields\Heading) {
+                    return $field->hideFromDetail();
+                }
+            }
+
+            if (method_exists($field, 'hideFromIndex')) {
+                return $field->hideFromIndex();
+            }
+
+            return $field;
+        };
 
         if (isset($templateClass)) {
             $rawFields = $templateClass->fields(request());
-            $templateFields = array_map(function ($field) {
-                if (!empty($field->attribute)) {
-                    $field->attribute = 'data->' . $field->attribute;
+
+            foreach ($rawFields as $field) {
+                // Handle Panel
+                if ($field instanceof \Laravel\Nova\Panel) {
+                    $field->data = array_map(function ($_field) use (&$handleField) {
+                        return $handleField($_field);
+                    }, $field->data);
+
+                    $templatePanels[] = $field;
+                    continue;
                 }
-                return $field->hideFromIndex();
-            }, $rawFields);
+
+                // Handle Field
+                $templateFields[] = $handleField($field);
+            }
         }
 
-        return $templateFields;
+        return [
+            'fields' => $templateFields,
+            'panels' => $templatePanels,
+        ];
     }
 
     public function filters(Request $request)
