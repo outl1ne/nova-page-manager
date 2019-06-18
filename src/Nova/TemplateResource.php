@@ -46,7 +46,7 @@ abstract class TemplateResource extends Resource
                 if (empty($field->panel)) {
                     $field->attribute = 'data->' . $field->attribute;
                 } else {
-                    $sanitizedPanel = preg_replace('/\s+/', '_', strtolower($field->panel));
+                    $sanitizedPanel = nova_page_manager_sanitize_panel_name($field->panel);
                     $field->attribute = 'data->' . $sanitizedPanel . '->' . $field->attribute;
                 }
             } else {

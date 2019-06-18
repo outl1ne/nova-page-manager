@@ -135,14 +135,28 @@ if (!function_exists('nova_resolve_template_model_data')) {
         $resolvedData = [];
         foreach (((array)$templateModel->data) as $fieldAttribute => $fieldValue) {
             $field = $fields->where('attribute', $fieldAttribute)->first();
-            if (!isset($field)) continue;
+            $panel = $fields->where('component', 'panel')->first(function ($value, $key) use ($fieldAttribute) {
+                return nova_page_manager_sanitize_panel_name($value->name) === $fieldAttribute;
+            });
 
-            if ($field->component === 'nova-flexible-content') {
-                $resolvedData[$fieldAttribute] = nova_resolve_flexible_fields_data($field, $fieldValue, $templateModel);
-                continue;
+            if (!isset($field) && !isset($panel)) continue;
+
+            if (isset($field)) {
+                if ($field->component === 'nova-flexible-content') {
+                    $resolvedData[$fieldAttribute] = nova_resolve_flexible_fields_data($field, $fieldValue, $templateModel);
+                    continue;
+                }
+
+                $resolvedData[$fieldAttribute] = nova_resolve_template_field_value($field, $fieldValue, $templateModel);
             }
 
-            $resolvedData[$fieldAttribute] = nova_resolve_template_field_value($field, $fieldValue, $templateModel);
+            if (isset($panel)) {
+                foreach (((array)$panel->data) as $key => $panelField) {
+                    if ($panelField instanceof Laravel\Nova\Fields\Heading) continue;
+                    $value = nova_resolve_template_field_value($panelField, $fieldValue->{$panelField->attribute}, $templateModel);
+                    $resolvedData[$fieldAttribute][$panelField->attribute] = $value;
+                }
+            }
         }
         return $resolvedData;
     }
@@ -189,5 +203,16 @@ if (!function_exists('nova_resolve_flexible_fields_data')) {
             }
         }
         return $resolvedData;
+    }
+}
+
+// ------------------------------
+// nova_page_manager_sanitize_panel_name
+// ------------------------------
+
+if (!function_exists('nova_page_manager_sanitize_panel_name')) {
+    function nova_page_manager_sanitize_panel_name($name)
+    {
+        return str_replace(' ', '_', strtolower($name));
     }
 }
