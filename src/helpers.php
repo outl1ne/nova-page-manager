@@ -18,6 +18,8 @@ if (!function_exists('nova_get_pages_structure')) {
             $pages->each(function ($page) use (&$data, &$formatPages, $previewToken) {
                 $localeChildren = Page::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
                     $query->where('published', true)->orWhere('preview_token', $previewToken);
+                })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
+                    $query->where('preview_token', $previewToken);
                 })->get();
 
                 $_pages = collect([$page, $localeChildren])->flatten();
@@ -31,6 +33,8 @@ if (!function_exists('nova_get_pages_structure')) {
 
                 $children = Page::where('parent_id', $page->id)->where(function ($query) use ($previewToken) {
                     $query->where('published', true)->orWhere('preview_token', $previewToken);
+                })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
+                    $query->where('preview_token', $previewToken);
                 })->get();
 
                 if ($children->count() > 0) {
@@ -44,6 +48,8 @@ if (!function_exists('nova_get_pages_structure')) {
 
         $parentPages = Page::whereNull('parent_id')->whereNull('locale_parent_id')->where(function ($query) use ($previewToken) {
             $query->where('published', true)->orWhere('preview_token', $previewToken);
+        })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
+            $query->where('preview_token', $previewToken);
         })->get();
 
         return $formatPages($parentPages);
@@ -121,7 +127,9 @@ if (!function_exists('nova_get_page_by_slug')) {
     {
         if (empty($slug)) return null;
         
-        $page = Page::where('slug', $slug)->firstOrFail();
+        $page = Page::where('slug', $slug)->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
+            $query->where('preview_token', $previewToken);
+        })->firstOrFail();
         
         if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
             return null;
