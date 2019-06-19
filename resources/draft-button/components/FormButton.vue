@@ -31,7 +31,9 @@ export default {
   },
 
   mounted() {
-    this.actionButton.parentNode.append(this.$refs.draftButton);
+    if (!this.field.isDraft) {
+      this.actionButton.parentNode.append(this.$refs.draftButton);
+    }
   },
 
   methods: {

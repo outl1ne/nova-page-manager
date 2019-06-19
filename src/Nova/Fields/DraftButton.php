@@ -37,6 +37,7 @@ class DraftButton extends Field {
 
         $this->withMeta([
             'childDraft' => $resource->childDraft,
+            'isDraft' => isset($resource->draft_parent_id)
         ]);
     }
 
