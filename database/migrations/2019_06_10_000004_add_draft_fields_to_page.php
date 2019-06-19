@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Migrations\Migration;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class AddDraftFieldsToPage extends Migration
 {
@@ -12,8 +13,7 @@ class AddDraftFieldsToPage extends Migration
      */
     public function up()
     {
-        $tableName = config('nova-page-manager.table', 'nova_page_manager');
-        $pagesTableName = $tableName . '_pages';
+        $pagesTableName = NovaPageManager::getPagesTableName();
 
         Schema::table($pagesTableName, function ($table) use ($pagesTableName) {
             $table->string('preview_token')->nullable();
@@ -38,8 +38,7 @@ class AddDraftFieldsToPage extends Migration
      */
     public function down()
     {
-        $tableName = config('nova-page-manager.table', 'nova_page_manager');
-        $pagesTableName = $tableName . '_pages';
+        $pagesTableName = NovaPageManager::getPagesTableName();
 
         Schema::table($pagesTableName, function ($table) use ($pagesTableName) {
             $table->dropForeign($pagesTableName . '_draft_parent_id_foreign');
