@@ -3,6 +3,8 @@
 namespace OptimistDigital\NovaPageManager\Models;
 
 use OptimistDigital\NovaPageManager\NovaPageManager;
+use Illuminate\Support\Str;
+use Carbon\Carbon;
 
 class Page extends TemplateModel
 {
@@ -15,7 +17,7 @@ class Page extends TemplateModel
     protected static function boot()
     {
         parent::boot();
-
+        
         static::deleting(function ($template) {
             // Is a parent template
             if ($template->parent_id === null) {
@@ -29,10 +31,44 @@ class Page extends TemplateModel
                 });
             }
         });
+
+        static::saving(function ($page) {
+            if (isset($page->draft) && NovaPageManager::draftEnabled()) {
+                unset($page['draft']);
+                return Page::createDraft($page);
+            }
+            
+            return true;
+        });
     }
 
+    private static function createDraft($pageData) {
+        if (isset($pageData->id)) {
+            $newPage = $pageData->replicate();
+            $newPage->published = false;
+            $newPage->draft_parent_id = $pageData->id;
+            $newPage->preview_token = Str::random(20);
+            $newPage->save();
+            return false;
+        } 
+        
+        $pageData->published = false;
+        $pageData->preview_token = Str::random(20);
+        return true;
+    }
+    
     public function parent()
     {
         return $this->belongsTo(Page::class);
     }
+
+    public function draftParent() 
+    {
+        return $this->belongsTo(Page::class);
+    }
+
+    public function childDraft() {
+        return $this->hasOne(Page::class, 'draft_parent_id', 'id');
+    }
+
 }

@@ -14,6 +14,5 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-// Route::get('/endpoint', function (Request $request) {
-//     //
-// });
+
+Route::post('/publish/{pageId}', 'OptimistDigital\NovaPageManager\Http\Controllers\PageController@publishPage');

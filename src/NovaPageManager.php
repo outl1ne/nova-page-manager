@@ -9,6 +9,7 @@ class NovaPageManager extends Tool
 {
     private static $templates = [];
     private static $locales = [];
+    private static $draftEnabled = false;
 
     /**
      * Perform any tasks that need to happen when the tool is booted.
@@ -21,6 +22,8 @@ class NovaPageManager extends Tool
         Nova::script('nova-template-field', __DIR__ . '/../dist/js/template-field.js');
         Nova::script('nova-parent-field', __DIR__ . '/../dist/js/parent-field.js');
         Nova::script('nova-region-field', __DIR__ . '/../dist/js/region-field.js');
+        Nova::script('nova-published-field', __DIR__ . '/../dist/js/published-field.js');
+        Nova::script('nova-draft-button', __DIR__ . '/../dist/js/draft-button.js');
     }
 
     /**
@@ -37,6 +40,7 @@ class NovaPageManager extends Tool
     {
         self::$templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
         self::$locales = isset($data['locales']) && is_array($data['locales']) ? $data['locales'] : ['en_US' => 'English'];
+        self::$draftEnabled = isset($data['draft']) && $data['draft'] === true;
     }
 
     public static function getTemplates(): array
@@ -73,5 +77,10 @@ class NovaPageManager extends Tool
     public static function getRegionsTableName(): string
     {
         return config('nova-page-manager.table', 'nova_page_manager') . '_regions';
+    }
+
+    public static function draftEnabled(): bool
+    {
+        return self::$draftEnabled;
     }
 }

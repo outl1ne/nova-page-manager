@@ -127,6 +127,25 @@ public function boot()
 }
 ```
 
+### Enabling page draft feature
+
+Draft feature allows you to create previews of pages before publishing them. By default this feature is disabled but can be turned on with `draft` setting in `NovaPageManager::configure()` function.
+
+Example:
+
+```php
+// in app/Providers/NovaServiceProvider.php
+
+public function boot()
+{
+    \OptimistDigital\NovaPageManager\NovaPageManager::configure([
+        'templates' => [],
+        'locales' => [],
+        'draft' => true
+    ]);
+}
+```
+
 ### Overwrite package resources
 
 You can overwrite the package resources (Page & Region) by setting the config options in `nova-page-manager.php`.

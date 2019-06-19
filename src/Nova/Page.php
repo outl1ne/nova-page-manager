@@ -8,9 +8,13 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
+use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Http\Requests\ResourceDetailRequest;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
+use OptimistDigital\NovaPageManager\Nova\Fields\PublishedField;
+use OptimistDigital\NovaPageManager\Nova\Fields\DraftButton;
 use OptimistDigital\NovaLocaleField\LocaleField;
 
 class Page extends TemplateResource
@@ -33,13 +37,31 @@ class Page extends TemplateResource
             Text::make('Name', 'name')->rules('required'),
             Text::make('Slug', 'slug')
                 ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
-                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,locale,$request->locale"),
+                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale")
+                ->hideFromDetail(),
+            Text::make('Slug', function() {
+                $previewToken = $this->childDraft ? $this->childDraft->preview_token : $this->preview_token;
+                $previewPart = $previewToken ? '?preview=' . $previewToken : '';
+                return $this->slug . $previewPart;
+            })->onlyOnDetail(),
             ParentField::make('Parent', 'parent_id'),
             TemplateField::make('Template', 'template'),
             LocaleField::make('Locale', 'locale', 'locale_parent_id')
-                ->locales(NovaPageManager::getLocales())
-                ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4))
+            ->locales(NovaPageManager::getLocales())
+            ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
         ];
+
+        if (NovaPageManager::draftEnabled()) {
+            $fields[] = PublishedField::make('State', 'published');
+            
+            if ((!isset($this->draft_parent_id) 
+                && !isset($this->preview_token)
+                && !($request instanceof ResourceDetailRequest) )
+                || isset($this->childDraft) 
+            ) {
+                $fields[] = DraftButton::make('Draft');
+            }
+        }
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
 
@@ -73,5 +95,10 @@ class Page extends TemplateResource
     public function title()
     {
         return $this->name . ' (' . $this->slug . ')';
+    }
+
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        return $query->whereNull('draft_parent_id');
     }
 }

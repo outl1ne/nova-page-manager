@@ -11,12 +11,15 @@ use OptimistDigital\NovaPageManager\NovaPageManager;
 // ------------------------------
 
 if (!function_exists('nova_get_pages_structure')) {
-    function nova_get_pages_structure()
+    function nova_get_pages_structure($previewToken = null)
     {
-        $formatPages = function (Collection $pages) use (&$formatPages) {
+        $formatPages = function (Collection $pages) use (&$formatPages, $previewToken) {
             $data = [];
-            $pages->each(function ($page) use (&$data, &$formatPages) {
-                $localeChildren = Page::where('locale_parent_id', $page->id)->get();
+            $pages->each(function ($page) use (&$data, &$formatPages, $previewToken) {
+                $localeChildren = Page::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
+                    $query->where('published', true)->orWhere('preview_token', $previewToken);
+                })->get();
+
                 $_pages = collect([$page, $localeChildren])->flatten();
                 $_data = [
                     'locales' => $_pages->pluck('locale'),
@@ -26,7 +29,10 @@ if (!function_exists('nova_get_pages_structure')) {
                     'template' => $page->template,
                 ];
 
-                $children = Page::where('parent_id', $page->id)->get();
+                $children = Page::where('parent_id', $page->id)->where(function ($query) use ($previewToken) {
+                    $query->where('published', true)->orWhere('preview_token', $previewToken);
+                })->get();
+
                 if ($children->count() > 0) {
                     $_data['children'] = $formatPages($children);
                 }
@@ -36,11 +42,13 @@ if (!function_exists('nova_get_pages_structure')) {
             return $data;
         };
 
-        $parentPages = Page::whereNull('parent_id')->whereNull('locale_parent_id')->get();
+        $parentPages = Page::whereNull('parent_id')->whereNull('locale_parent_id')->where(function ($query) use ($previewToken) {
+            $query->where('published', true)->orWhere('preview_token', $previewToken);
+        })->get();
+
         return $formatPages($parentPages);
     }
 }
-
 
 // ------------------------------
 // nova_get_regions
@@ -81,11 +89,43 @@ if (!function_exists('nova_get_regions')) {
 // ------------------------------
 
 if (!function_exists('nova_get_page')) {
-    function nova_get_page($pageId)
+
+    function nova_get_page($pageId, $previewToken = null)
     {
         if (empty($pageId)) return null;
+        
         $page = Page::find($pageId);
-        if (empty($page)) return null;
+
+        if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
+            return null;
+        }
+
+        return [
+            'locale' => $page->locale,
+            'id' => $page->id,
+            'name' => $page->name,
+            'slug' => $page->slug,
+            'data' => nova_resolve_template_model_data($page),
+            'template' => $page->template,
+        ];
+    }
+}
+
+// ------------------------------
+// nova_get_page_by_slug
+// ------------------------------
+
+if (!function_exists('nova_get_page_by_slug')) {
+
+    function nova_get_page_by_slug($slug, $previewToken = null)
+    {
+        if (empty($slug)) return null;
+        
+        $page = Page::where('slug', $slug)->firstOrFail();
+        
+        if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
+            return null;
+        }
 
         $data = [
             'locale' => $page->locale,
