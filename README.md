@@ -154,9 +154,9 @@ Note: If you create your resources under `App\Nova` namespace, to avoid key dupl
 
 ## Helper functions
 
-### nova_get_pages_structure()
+### nova_get_pages_structure(\$previewToken)
 
-The helper function `nova_get_pages_structure()` returns the base pages structure (slugs, templates, child-parent relationships) that you can build your routes upon in the front-end. This does not return the pages' data.
+The helper function `nova_get_pages_structure($previewToken)` returns the base pages structure (slugs, templates, child-parent relationships) that you can build your routes upon in the front-end. This does not return the pages' data. Preview token is optional and used only if draft feature is enabled. By default drafts will not be included in the structure.
 
 Example response:
 
@@ -246,6 +246,27 @@ Example response for querying page with ID `3` (`nova_get_page(3)`):
     "categories_grid": []
   },
   "template": "home-page"
+}
+```
+
+### nova_get_page_by_slug($slug, $previewToken)
+
+The helper function `nova_get_page_by_slug($slug, $previewToken)` finds and returns the page with the given slug. Preview token is optional and used to query draft pages when draft feature is enabled.
+
+Example response for querying page with slug `/home` and preview token `L1SVNKDzBNVkBq8EQSna` (`nova_get_page("home", "L1SVNKDzBNVkBq8EQSna")`):
+
+```json
+{
+  "locale": "en_US",
+  "id": 3,
+  "name": "Home",
+  "slug": "/",
+  "data": {
+    "banner": [],
+    "categories_grid": []
+  },
+  "template": "home-page",
+  "preview_token": "L1SVNKDzBNVkBq8EQSna"
 }
 ```
 
