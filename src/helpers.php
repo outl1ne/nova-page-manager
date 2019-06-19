@@ -100,7 +100,14 @@ if (!function_exists('nova_get_page')) {
     {
         if (empty($pageId)) return null;
         
-        $page = Page::find($pageId);
+
+        $page = Page::where(function ($query) use ($previewToken, $pageId) {
+            $query->where('id', $pageId)->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
+                $query->where('preview_token', $previewToken);
+            });
+        })->orWhere(function ($query) use ($previewToken, $pageId) {
+            $query->where('preview_token', $previewToken)->where('draft_parent_id', $pageId);
+        })->firstOrFail();
 
         if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
             return null;
