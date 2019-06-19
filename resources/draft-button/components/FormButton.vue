@@ -26,7 +26,7 @@ export default {
 
   beforeMount() {
     if (this.field.childDraft && this.field.childDraft.id) {
-      this.$router.replace(`/resources/pages/${this.field.childDraft.id}`);
+      this.$router.replace(`/resources/pages/${this.field.childDraft.id}/edit`);
     }
   },
 
