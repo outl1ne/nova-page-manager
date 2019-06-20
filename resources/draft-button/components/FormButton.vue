@@ -24,15 +24,14 @@ export default {
     };
   },
 
+  mounted() {
+    this.actionButton.parentNode.append(this.$refs.draftButton);
+  },
+
   beforeMount() {
     if (this.field.childDraft && this.field.childDraft.id) {
       this.$router.replace(`/resources/pages/${this.field.childDraft.id}/edit`);
-    }
-  },
-
-  mounted() {
-    if (!this.field.isDraft) {
-      this.actionButton.parentNode.append(this.$refs.draftButton);
+      this.$nextTick(this.$parent.$parent.getFields); // ! Might break with new Laravel Nova versions
     }
   },
 

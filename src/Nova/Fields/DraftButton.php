@@ -4,7 +4,8 @@ namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
 
-class DraftButton extends Field {
+class DraftButton extends Field
+{
     /**
      * The field's component.
      *
@@ -20,14 +21,14 @@ class DraftButton extends Field {
      * @param  mixed|null  $resolveCallback
      * @return void
      */
-    public function __construct($name, $attribute = null, $resolveCallback = null) 
+    public function __construct($name, $attribute = null, $resolveCallback = null)
     {
         parent::__construct($name, $attribute, $resolveCallback);
 
         $this->withMeta([
             'asHtml' => true,
         ]);
-        
+
         $this->hideFromIndex();
     }
 
@@ -37,8 +38,7 @@ class DraftButton extends Field {
 
         $this->withMeta([
             'childDraft' => $resource->childDraft,
-            'isDraft' => isset($resource->draft_parent_id)
+            'isDraft' => isset($resource->draft_parent_id),
         ]);
     }
-
 }

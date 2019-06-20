@@ -39,7 +39,7 @@ class Page extends TemplateResource
                 ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
                 ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale")
                 ->hideFromDetail(),
-            Text::make('Slug', function() {
+            Text::make('Slug', function () {
                 $previewToken = $this->childDraft ? $this->childDraft->preview_token : $this->preview_token;
                 $previewPart = $previewToken ? '?preview=' . $previewToken : '';
                 return $this->slug . $previewPart;
@@ -47,17 +47,17 @@ class Page extends TemplateResource
             ParentField::make('Parent', 'parent_id'),
             TemplateField::make('Template', 'template'),
             LocaleField::make('Locale', 'locale', 'locale_parent_id')
-            ->locales(NovaPageManager::getLocales())
-            ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
+                ->locales(NovaPageManager::getLocales())
+                ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
         ];
 
         if (NovaPageManager::draftEnabled()) {
             $fields[] = PublishedField::make('State', 'published');
-            
-            if ((!isset($this->draft_parent_id) 
-                && !isset($this->preview_token)
-                && !($request instanceof ResourceDetailRequest) )
-                || isset($this->childDraft) 
+
+            if ((!isset($this->draft_parent_id)
+                    && !isset($this->preview_token)
+                    && !($request instanceof ResourceDetailRequest))
+                || isset($this->childDraft)
             ) {
                 $fields[] = DraftButton::make('Draft');
             }
