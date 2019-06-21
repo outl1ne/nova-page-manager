@@ -99,7 +99,7 @@ if (!function_exists('nova_get_page')) {
     function nova_get_page($pageId, $previewToken = null)
     {
         if (empty($pageId)) return null;
-        
+
 
         $page = Page::where(function ($query) use ($previewToken, $pageId) {
             $query->where('id', $pageId)->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
@@ -133,11 +133,11 @@ if (!function_exists('nova_get_page_by_slug')) {
     function nova_get_page_by_slug($slug, $previewToken = null)
     {
         if (empty($slug)) return null;
-        
+
         $page = Page::where('slug', $slug)->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
             $query->where('preview_token', $previewToken);
         })->firstOrFail();
-        
+
         if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
             return null;
         }
@@ -225,7 +225,10 @@ if (!function_exists('nova_resolve_template_model_data')) {
             if (isset($panel)) {
                 foreach (((array)$panel->data) as $key => $panelField) {
                     if ($panelField instanceof Laravel\Nova\Fields\Heading) continue;
-                    $value = nova_resolve_template_field_value($panelField, $fieldValue->{$panelField->attribute}, $templateModel);
+                    $value = null;
+                    if (isset($fieldValue->{$panelField->attribute})) {
+                        $value = nova_resolve_template_field_value($panelField, $fieldValue->{$panelField->attribute}, $templateModel);
+                    }
                     $resolvedData[$fieldAttribute][$panelField->attribute] = $value;
                 }
             }
