@@ -125,6 +125,25 @@ if (!function_exists('nova_get_page')) {
 }
 
 // ------------------------------
+// nova_format_page
+// ------------------------------
+
+if (!function_exists('nova_format_page')) {
+    function nova_format_page($page)
+    {
+        return [
+            'locale' => $page->locale ?: null,
+            'id' => $page->id ?: null,
+            'name' => $page->name ?: null,
+            'slug' => $page->slug ?: null,
+            'data' => nova_resolve_template_model_data($page),
+            'template' => $page->template ?: null,
+        ];
+    }
+}
+
+
+// ------------------------------
 // nova_get_page_by_slug
 // ------------------------------
 
@@ -193,6 +212,8 @@ if (!function_exists('nova_resolve_template_field_value')) {
 if (!function_exists('nova_resolve_template_model_data')) {
     function nova_resolve_template_model_data(TemplateModel $templateModel)
     {
+        if (!isset($templateModel) || !isset($templateModel->template) || !isset($templateModel->data)) return null;
+
         // Find the Template class for the model
         foreach (NovaPageManager::getTemplates() as $tmpl) {
             if ($tmpl::$name === $templateModel->template) $templateClass = $tmpl;
