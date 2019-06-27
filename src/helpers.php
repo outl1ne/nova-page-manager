@@ -247,9 +247,16 @@ if (!function_exists('nova_resolve_template_model_data')) {
                 foreach (((array)$panel->data) as $key => $panelField) {
                     if ($panelField instanceof Laravel\Nova\Fields\Heading) continue;
                     $value = null;
+                    
+                    if ($panelField->component === 'nova-flexible-content') {
+                        $resolvedData[$fieldAttribute][$panelField->attribute] = nova_resolve_flexible_fields_data($panelField, $fieldValue->{$panelField->attribute}, $templateModel);
+                        continue;
+                    }
+
                     if (isset($fieldValue->{$panelField->attribute})) {
                         $value = nova_resolve_template_field_value($panelField, $fieldValue->{$panelField->attribute}, $templateModel);
                     }
+
                     $resolvedData[$fieldAttribute][$panelField->attribute] = $value;
                 }
             }
