@@ -5,6 +5,8 @@ use OptimistDigital\NovaPageManager\Models\Region;
 use Illuminate\Support\Collection;
 use OptimistDigital\NovaPageManager\Models\TemplateModel;
 use OptimistDigital\NovaPageManager\NovaPageManager;
+use Laravel\Nova\Panel;
+use Laravel\Nova\Fields\Heading;
 
 // ------------------------------
 // nova_get_pages_structure
@@ -196,10 +198,10 @@ if (!function_exists('nova_get_page_by_slug')) {
 // ------------------------------
 
 if (!function_exists('nova_resolve_template_field_value')) {
-    function nova_resolve_template_field_value($field, $fieldValue, $templateModel)
+    function nova_resolve_template_field_value($field, $fieldValue)
     {
         return method_exists($field, 'resolveResponseValue')
-            ? $field->resolveResponseValue($fieldValue, $templateModel)
+            ? $field->resolveResponseValue($fieldValue)
             : $fieldValue;
     }
 }
@@ -225,89 +227,64 @@ if (!function_exists('nova_resolve_template_model_data')) {
         // Get the template's fields
         $fields = collect((new $templateClass($templateModel))->fields(request()));
 
+        return nova_resolve_fields_data($fields, $templateModel->data);
+    }
+}
+
+
+// ------------------------------
+// nova_resolve_fields_data
+// ------------------------------
+
+if (!function_exists('nova_resolve_fields_data')) {
+    function nova_resolve_fields_data(Collection $fields, $data)
+    {
         $resolvedData = [];
-        foreach (((array)$templateModel->data) as $fieldAttribute => $fieldValue) {
-            $field = $fields->where('attribute', $fieldAttribute)->first();
-            $panel = $fields->where('component', 'panel')->first(function ($value, $key) use ($fieldAttribute) {
-                return nova_page_manager_sanitize_panel_name($value->name) === $fieldAttribute;
+
+        foreach (((array)$data) as $fieldAttribute => $fieldValue) {
+
+            $field = $fields->first(function ($value, $key) use ($fieldAttribute) {
+                return (
+                    ((isset($value->attribute) && $value->attribute === $fieldAttribute)) || // Normal or flexible field
+                    ((isset($value->component)) && ($value->component === 'panel') && (nova_page_manager_sanitize_panel_name($value->name) === $fieldAttribute)) // Panel
+                );
             });
 
-            if (!isset($field) && !isset($panel)) continue;
+            if (!$field || $field instanceof Heading) {
+                continue;
+            } else if ($field instanceof Panel) {
+                $panelAttributeName = nova_page_manager_sanitize_panel_name($field->name);
+                $resolvedData[$panelAttributeName] = nova_resolve_fields_data(collect($field->data), $data->{$panelAttributeName});
+            } else if (isset($field->component) && $field->component === 'nova-flexible-content') {
+                $resolvedData[$fieldAttribute] = collect($fieldValue)->map(function ($fieldVal) use ($field) {
+                    $accessProtectedProperty = function ($object, $property) {
+                        $reflection = new ReflectionClass($object);
+                        $_property = $reflection->getProperty($property);
+                        $_property->setAccessible(true);
+                        return $_property->getValue($object);
+                    };
 
-            if (isset($field)) {
-                if ($field->component === 'nova-flexible-content') {
-                    $resolvedData[$fieldAttribute] = nova_resolve_flexible_fields_data($field, $fieldValue, $templateModel);
-                    continue;
-                }
+                    $flexibleLayouts = $accessProtectedProperty($field, 'layouts');
 
-                $resolvedData[$fieldAttribute] = nova_resolve_template_field_value($field, $fieldValue, $templateModel);
-            }
+                    $layout = $flexibleLayouts->first(function($flexibleLayout) use ($fieldVal, $accessProtectedProperty) {
+                        $layoutName = $accessProtectedProperty($flexibleLayout, 'name');
+                        return $fieldVal->layout === $layoutName;
+                    });
 
-            if (isset($panel)) {
-                foreach (((array)$panel->data) as $key => $panelField) {
-                    if ($panelField instanceof Laravel\Nova\Fields\Heading) continue;
-                    $value = null;
-                    
-                    if ($panelField->component === 'nova-flexible-content') {
-                        $resolvedData[$fieldAttribute][$panelField->attribute] = nova_resolve_flexible_fields_data($panelField, $fieldValue->{$panelField->attribute}, $templateModel);
-                        continue;
-                    }
-
-                    if (isset($fieldValue->{$panelField->attribute})) {
-                        $value = nova_resolve_template_field_value($panelField, $fieldValue->{$panelField->attribute}, $templateModel);
-                    }
-
-                    $resolvedData[$fieldAttribute][$panelField->attribute] = $value;
-                }
+                    return [
+                        'layout' => $accessProtectedProperty($layout, 'name'),
+                        'attributes' => nova_resolve_fields_data($accessProtectedProperty($layout, 'fields'), $fieldVal->attributes)
+                    ];
+                })->toArray();
+            } else {
+                $resolvedData[$field->attribute] = nova_resolve_template_field_value($field, $data->{$field->attribute});
             }
         }
+
         return $resolvedData;
     }
 }
 
-
-// ------------------------------
-// nova_resolve_flexible_fields_data
-// ------------------------------
-
-if (!function_exists('nova_resolve_flexible_fields_data')) {
-    function nova_resolve_flexible_fields_data($field, $flexibleFieldValue, $templateModel)
-    {
-        // Accessing protected property helper
-        $accessProtectedProperty = function ($object, $property) {
-            $reflection = new ReflectionClass($object);
-            $_property = $reflection->getProperty($property);
-            $_property->setAccessible(true);
-            return $_property->getValue($object);
-        };
-
-        $flexibleLayouts = $accessProtectedProperty($field, 'layouts');
-
-        $resolvedData = [];
-        foreach ($flexibleFieldValue as $layoutValue) {
-            foreach ($flexibleLayouts as $layout) {
-                $layoutName = $accessProtectedProperty($layout, 'name');
-                if ($layoutName !== $layoutValue->layout) continue;
-
-                $layoutFields = $accessProtectedProperty($layout, 'fields');
-
-                $resolvedLayoutData = [
-                    'layout' => $layoutName,
-                    'attributes' => [],
-                ];
-
-                foreach ($layoutValue->attributes as $fieldAttribute => $fieldValue) {
-                    $subField = $layoutFields->where('attribute', $fieldAttribute)->first();
-                    if (!isset($subField)) continue;
-                    $resolvedLayoutData['attributes'][$fieldAttribute] = nova_resolve_template_field_value($subField, $fieldValue, $templateModel);
-                }
-
-                $resolvedData[] = $resolvedLayoutData;
-            }
-        }
-        return $resolvedData;
-    }
-}
 
 // ------------------------------
 // nova_page_manager_sanitize_panel_name
