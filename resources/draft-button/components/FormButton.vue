@@ -5,7 +5,9 @@
       type="button"
       class="ml-3 btn btn-default btn-primary"
       v-on:click="createDraft"
-    >Create draft</button>
+    >
+      Create draft
+    </button>
 
     <input name="draft" v-model="draft" type="hidden">
   </div>
@@ -16,7 +18,7 @@ import { FormField, HandlesValidationErrors } from 'laravel-nova';
 
 export default {
   mixins: [FormField, HandlesValidationErrors],
-  props: ['resourceName', 'resourceId', 'resource', 'field'],
+  props: ['resourceName', 'resource', 'field'],
 
   data() {
     return {
@@ -53,7 +55,7 @@ export default {
 
   computed: {
     isExisting() {
-      return this.resourceId !== null && this.resourceId !== undefined;
+      return this.field.isExisting;
     },
 
     actionButton() {
