@@ -49,8 +49,10 @@ abstract class TemplateResource extends Resource
                     $sanitizedPanel = nova_page_manager_sanitize_panel_name($field->panel);
                     $field->attribute = 'data->' . $sanitizedPanel . '->' . $field->attribute;
                 }
-            } else if ($field instanceof \Laravel\Nova\Fields\Heading) {
-                return $field->hideFromDetail();
+            } else {
+                if ($field instanceof \Laravel\Nova\Fields\Heading) {
+                    return $field->hideFromDetail();
+                }
             }
 
             if (method_exists($field, 'hideFromIndex')) {
