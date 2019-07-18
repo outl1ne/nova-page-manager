@@ -198,10 +198,10 @@ if (!function_exists('nova_get_page_by_slug')) {
 // ------------------------------
 
 if (!function_exists('nova_resolve_template_field_value')) {
-    function nova_resolve_template_field_value($field, $fieldValue)
+    function nova_resolve_template_field_value($field, $fieldValue, $templateModel)
     {
         return method_exists($field, 'resolveResponseValue')
-            ? $field->resolveResponseValue($fieldValue)
+            ? $field->resolveResponseValue($fieldValue, $templateModel)
             : $fieldValue;
     }
 }
@@ -227,7 +227,7 @@ if (!function_exists('nova_resolve_template_model_data')) {
         // Get the template's fields
         $fields = collect((new $templateClass($templateModel))->fields(request()));
 
-        return nova_resolve_fields_data($fields, $templateModel->data);
+        return nova_resolve_fields_data($fields, $templateModel->data, $templateModel);
     }
 }
 
@@ -237,11 +237,11 @@ if (!function_exists('nova_resolve_template_model_data')) {
 // ------------------------------
 
 if (!function_exists('nova_resolve_fields_data')) {
-    function nova_resolve_fields_data(Collection $fields, $data)
+    function nova_resolve_fields_data(Collection $fields, $data, $templateModel)
     {
         $resolvedData = [];
 
-        foreach (((array)$data) as $fieldAttribute => $fieldValue) {
+        foreach (((array) $data) as $fieldAttribute => $fieldValue) {
 
             $field = $fields->first(function ($value, $key) use ($fieldAttribute) {
                 return (
@@ -254,9 +254,9 @@ if (!function_exists('nova_resolve_fields_data')) {
                 continue;
             } else if ($field instanceof Panel) {
                 $panelAttributeName = nova_page_manager_sanitize_panel_name($field->name);
-                $resolvedData[$panelAttributeName] = nova_resolve_fields_data(collect($field->data), $data->{$panelAttributeName});
+                $resolvedData[$panelAttributeName] = nova_resolve_fields_data(collect($field->data), $data->{$panelAttributeName}, $templateModel);
             } else if (isset($field->component) && $field->component === 'nova-flexible-content') {
-                $resolvedData[$fieldAttribute] = collect($fieldValue)->map(function ($fieldVal) use ($field) {
+                $resolvedData[$fieldAttribute] = collect($fieldValue)->map(function ($fieldVal) use ($field, $templateModel) {
                     $accessProtectedProperty = function ($object, $property) {
                         $reflection = new ReflectionClass($object);
                         $_property = $reflection->getProperty($property);
@@ -266,18 +266,18 @@ if (!function_exists('nova_resolve_fields_data')) {
 
                     $flexibleLayouts = $accessProtectedProperty($field, 'layouts');
 
-                    $layout = $flexibleLayouts->first(function($flexibleLayout) use ($fieldVal, $accessProtectedProperty) {
+                    $layout = $flexibleLayouts->first(function ($flexibleLayout) use ($fieldVal, $accessProtectedProperty) {
                         $layoutName = $accessProtectedProperty($flexibleLayout, 'name');
                         return $fieldVal->layout === $layoutName;
                     });
 
                     return [
                         'layout' => $accessProtectedProperty($layout, 'name'),
-                        'attributes' => nova_resolve_fields_data($accessProtectedProperty($layout, 'fields'), $fieldVal->attributes)
+                        'attributes' => nova_resolve_fields_data($accessProtectedProperty($layout, 'fields'), $fieldVal->attributes, $templateModel)
                     ];
                 })->toArray();
             } else {
-                $resolvedData[$field->attribute] = nova_resolve_template_field_value($field, $data->{$field->attribute});
+                $resolvedData[$field->attribute] = nova_resolve_template_field_value($field, $data->{$field->attribute}, $templateModel);
             }
         }
 
