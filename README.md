@@ -2,6 +2,12 @@
 
 This [Laravel Nova](https://nova.laravel.com) package allows you to create and manage pages and regions. The package is geared towards headless CMS's.
 
+## Requirements
+
+- Laravel Nova <= 2.0.7
+
+Laravel Nova 2.0.8 and later breaks the Nova Page Manager package in an unfixable way.
+
 ## Features
 
 - Pages and Regions management
