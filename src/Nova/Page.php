@@ -52,15 +52,13 @@ class Page extends TemplateResource
         ];
 
         if (NovaPageManager::draftEnabled()) {
-            $fields[] = PublishedField::make('State', 'published');
-
-            if ((!isset($this->draft_parent_id)
-                    && !isset($this->preview_token)
-                    && !($request instanceof ResourceDetailRequest))
-                || isset($this->childDraft)
-            ) {
+            $isDraft = (isset($this->draft_parent_id) || (!isset($this->draft_parent_id) && !$this->published && isset($this->id)));
+            
+            if (!(!$isDraft && ($request instanceof ResourceDetailRequest)) || isset($this->childDraft)) {
                 $fields[] = DraftButton::make('Draft');
             }
+
+            $fields[] = PublishedField::make('State', 'published');
         }
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
