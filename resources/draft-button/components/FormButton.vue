@@ -1,15 +1,14 @@
 <template>
   <div>
     <button
-      ref="draftButton"
+      ref="createDraftButton"
       type="button"
       class="ml-3 btn btn-default btn-primary"
       v-on:click="createDraft"
-    >
-      Create draft
-    </button>
+      v-if="!field.isDraft"
+    >Create draft</button>
 
-    <input name="draft" v-model="draft" type="hidden">
+    <input name="draft" v-model="draft" type="hidden" />
   </div>
 </template>
 
@@ -18,16 +17,19 @@ import { FormField, HandlesValidationErrors } from 'laravel-nova';
 
 export default {
   mixins: [FormField, HandlesValidationErrors],
-  props: ['resourceName', 'resource', 'field'],
+  props: ['resource', 'resourceId', 'field'],
 
   data() {
     return {
       draft: void 0,
+      pageId: this.resourceId,
     };
   },
 
   mounted() {
-    this.actionButton.parentNode.append(this.$refs.draftButton);
+    if (!this.field.isDraft) {
+      this.actionButton.parentNode.append(this.$refs.createDraftButton);
+    }
   },
 
   beforeMount() {
@@ -54,14 +56,10 @@ export default {
   },
 
   computed: {
-    isExisting() {
-      return this.field.isExisting;
-    },
-
     actionButton() {
       return document
         .querySelector('.content')
-        .querySelector(`[dusk="${this.isExisting ? 'update-button' : 'create-button'}"]`);
+        .querySelector(`[dusk="${!!this.resourceId ? 'update-button' : 'create-button'}"]`);
     },
   },
 };

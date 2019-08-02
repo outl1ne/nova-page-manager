@@ -38,8 +38,7 @@ class DraftButton extends Field
 
         $this->withMeta([
             'childDraft' => $resource->childDraft,
-            'isDraft' => isset($resource->draft_parent_id),
-            'isExisting' => isset($resource->id),
+            'isDraft' => (isset($resource->draft_parent_id) || (!isset($resource->draft_parent_id) && !$resource->published && isset($resource->id))),
         ]);
     }
 }
