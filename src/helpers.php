@@ -293,6 +293,7 @@ if (!function_exists('nova_resolve_fields_data')) {
 if (!function_exists('nova_page_manager_sanitize_panel_name')) {
     function nova_page_manager_sanitize_panel_name($name)
     {
-        return str_replace(' ', '_', strtolower($name));
+        $removedSpecialChars = preg_replace("/[^A-Za-z0-9 ]/", '', $name);
+        return preg_replace("/\s\s+/", '_', $removedSpecialChars);
     }
 }
