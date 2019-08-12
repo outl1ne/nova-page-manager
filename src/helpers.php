@@ -295,7 +295,6 @@ if (!function_exists('nova_page_manager_sanitize_panel_name')) {
     {
         $removedSpecialChars = preg_replace("/[^A-Za-z0-9 ]/", '', $name);
         $snakeCase = preg_replace("/\s+/", '_', $removedSpecialChars);
-
         return strtolower($snakeCase);
     }
 }
