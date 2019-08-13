@@ -6,7 +6,7 @@ This [Laravel Nova](https://nova.laravel.com) package allows you to create and m
 
 - Laravel Nova <= 2.0.7 || >= 2.0.10
 
-Laravel Nova 2.0.8 and later breaks the Nova Page Manager package in an unfixable way.
+Laravel Nova 2.0.8 and 2.0.9 are breaking for Nova Page Manager.
 
 ## Features
 
