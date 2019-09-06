@@ -93,6 +93,41 @@ if (!function_exists('nova_get_regions')) {
 
 
 // ------------------------------
+// nova_format_page
+// ------------------------------
+
+if (!function_exists('nova_format_page')) {
+    function nova_format_page($page)
+    {
+        $template = collect(NovaPageManager::getPageTemplates())->first(function ($template) use ($page) {
+            return $template::$name === $page->template;
+        });
+
+        if (!isset($template)) return null;
+
+        $pageData = [
+            'locale' => $page->locale ?: null,
+            'id' => $page->id ?: null,
+            'name' => $page->name ?: null,
+            'slug' => $page->slug ?: null,
+            'data' => nova_resolve_template_model_data($page),
+            'template' => $page->template ?: null,
+        ];
+
+        if ($template::$seo) {
+            $pageData['seo'] = [
+                'title' => $page->seo_title,
+                'description' => $page->seo_description,
+                'image' => $page->seo_image,
+            ];
+        }
+
+        return $pageData;
+    }
+}
+
+
+// ------------------------------
 // nova_get_page
 // ------------------------------
 
@@ -101,7 +136,6 @@ if (!function_exists('nova_get_page')) {
     function nova_get_page($pageId, $previewToken = null)
     {
         if (empty($pageId)) return null;
-
 
         $page = Page::where(function ($query) use ($previewToken, $pageId) {
             $query->where('id', $pageId)->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
@@ -115,32 +149,7 @@ if (!function_exists('nova_get_page')) {
             return null;
         }
 
-        return [
-            'locale' => $page->locale,
-            'id' => $page->id,
-            'name' => $page->name,
-            'slug' => $page->slug,
-            'data' => nova_resolve_template_model_data($page),
-            'template' => $page->template,
-        ];
-    }
-}
-
-// ------------------------------
-// nova_format_page
-// ------------------------------
-
-if (!function_exists('nova_format_page')) {
-    function nova_format_page($page)
-    {
-        return [
-            'locale' => $page->locale ?: null,
-            'id' => $page->id ?: null,
-            'name' => $page->name ?: null,
-            'slug' => $page->slug ?: null,
-            'data' => nova_resolve_template_model_data($page),
-            'template' => $page->template ?: null,
-        ];
+        return nova_format_page($page);
     }
 }
 
@@ -163,32 +172,7 @@ if (!function_exists('nova_get_page_by_slug')) {
             return null;
         }
 
-        $data = [
-            'locale' => $page->locale,
-            'id' => $page->id,
-            'name' => $page->name,
-            'slug' => $page->slug,
-            'data' => nova_resolve_template_model_data($page),
-            'template' => $page->template,
-        ];
-
-        // If SEO is enabled, return SEO fields as well
-        $template = collect(NovaPageManager::getPageTemplates())->first(function ($template) use ($page) {
-            return $template::$name === $page->template;
-        });
-
-        // Fail silently in case template was deleted
-        if (!isset($template)) return null;
-
-        if ($template::$seo) {
-            $data['seo'] = [
-                'title' => $page->seo_title,
-                'description' => $page->seo_description,
-                'image' => $page->seo_image,
-            ];
-        }
-
-        return $data;
+        return nova_format_page($page);
     }
 }
 

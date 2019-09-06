@@ -53,7 +53,7 @@ class Page extends TemplateResource
 
         if (NovaPageManager::draftEnabled()) {
             $isDraft = (isset($this->draft_parent_id) || (!isset($this->draft_parent_id) && !$this->published && isset($this->id)));
-            
+
             if (!(!$isDraft && ($request instanceof ResourceDetailRequest)) || isset($this->childDraft)) {
                 $fields[] = DraftButton::make('Draft');
             }
