@@ -30,6 +30,7 @@ if (!function_exists('nova_get_pages_structure')) {
                     'id' => $_pages->pluck('id', 'locale'),
                     'name' => $_pages->pluck('name', 'locale'),
                     'slug' => $_pages->pluck('slug', 'locale'),
+                    'path' => $_pages->pluck('path', 'locale'),
                     'template' => $page->template,
                 ];
 
