@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.6] - 2019-10-15
+
+### Changed
+
+- Added `path` attribute to `Page` models (which displays the path with parent slugs appended)
+
 ## [1.9.5] - 2019-09-06
 
 ### Changed
@@ -244,6 +250,7 @@ php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServi
 - Programmatically created templates for pages and regions
 - Multilanguage support
 
+[1.9.6]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.5...1.9.6
 [1.9.5]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.4...1.9.5
 [1.9.4]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.3...1.9.4
 [1.9.3]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.2...1.9.3
