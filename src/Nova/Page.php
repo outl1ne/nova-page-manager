@@ -38,13 +38,26 @@ class Page extends TemplateResource
             Text::make('Slug', 'slug')
                 ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
                 ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale")
-                ->hideFromDetail(),
+                ->onlyOnForms(),
             Text::make('Slug', function () {
                 $previewToken = $this->childDraft ? $this->childDraft->preview_token : $this->preview_token;
                 $previewPart = $previewToken ? '?preview=' . $previewToken : '';
-                return $this->slug . $previewPart;
-            })->onlyOnDetail(),
-            ParentField::make('Parent', 'parent_id'),
+                $getPagePreviewUrlFn = NovaPageManager::getPagePreviewUrlFn();
+                $path = $this->resource->path;
+                $frontendLink = isset($getPagePreviewUrlFn) ? call_user_func($getPagePreviewUrlFn, $this->resource) . $previewPart : null;
+
+
+                if (isset($frontendLink)) {
+                    return <<<HTML
+                        <div class='whitespace-no-wrap'>
+                            <span class='bg-40 text-sm py-1 px-2 rounded-lg'>$path</span>
+                            <a target='_blank' href='$frontendLink' class='text-sm py-1 px-2 text-primary no-underline dim font-bold'>View</a>
+                        </div>
+                    HTML;
+                }
+                return "<span class='bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap'>$path</span>";
+            })->asHtml()->exceptOnForms(),
+            ParentField::make('Parent', 'parent_id')->hideFromIndex(),
             TemplateField::make('Template', 'template'),
             LocaleField::make('Locale', 'locale', 'locale_parent_id')
                 ->locales(NovaPageManager::getLocales())

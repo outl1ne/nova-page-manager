@@ -10,6 +10,7 @@ class NovaPageManager extends Tool
     private static $templates = [];
     private static $locales = [];
     private static $draftEnabled = false;
+    private static $getPageFrontendUrlFn;
 
     /**
      * Perform any tasks that need to happen when the tool is booted.
@@ -77,6 +78,16 @@ class NovaPageManager extends Tool
     public static function getRegionsTableName(): string
     {
         return config('nova-page-manager.table', 'nova_page_manager') . '_regions';
+    }
+
+    public static function pagePreviewUrl(\Closure $fn)
+    {
+        self::$getPageFrontendUrlFn = $fn;
+    }
+
+    public static function getPagePreviewUrlFn()
+    {
+        return self::$getPageFrontendUrlFn;
     }
 
     public static function draftEnabled(): bool

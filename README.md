@@ -143,14 +143,30 @@ Example:
 ```php
 // in app/Providers/NovaServiceProvider.php
 
+use \OptimistDigital\NovaPageManager\NovaPageManager;
+
 public function boot()
 {
-    \OptimistDigital\NovaPageManager\NovaPageManager::configure([
+    NovaPageManager::configure([
         'templates' => [],
         'locales' => [],
         'draft' => true
     ]);
 }
+```
+
+### Add links to front-end pages
+
+To display a link next to the slug that links to the actual page in the front-end you must pass a function that generates the URL to `NovaPageManager::pagePreviewUrl()`.
+
+As shown in this example:
+
+```php
+use \OptimistDigital\NovaPageManager\NovaPageManager;
+
+NovaPageManager::pagePreviewUrl(function (Page $page) {
+  return env('FRONTEND_URL') . $page->path;
+});
 ```
 
 ### Overwrite package resources
