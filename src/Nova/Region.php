@@ -16,6 +16,7 @@ class Region extends TemplateResource
     public static $title = 'name';
     public static $model = 'OptimistDigital\NovaPageManager\Models\Region';
     public static $displayInNavigation = false;
+    public static $search = ['name', 'template'];
 
     protected $type = 'region';
 
@@ -28,7 +29,7 @@ class Region extends TemplateResource
         $fields = [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
-            RegionField::make('Region'),
+            RegionField::make('Region')->sortable(),
             LocaleField::make('Locale', 'locale', 'locale_parent_id')
                 ->locales(NovaPageManager::getLocales())
                 ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),

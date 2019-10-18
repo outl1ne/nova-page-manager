@@ -22,6 +22,7 @@ class Page extends TemplateResource
     public static $title = 'name';
     public static $model = 'OptimistDigital\NovaPageManager\Models\Page';
     public static $displayInNavigation = false;
+    public static $search = ['name', 'slug', 'template'];
 
     protected $type = 'page';
 
@@ -58,7 +59,7 @@ class Page extends TemplateResource
                 return "<span class='bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap'>$path</span>";
             })->asHtml()->exceptOnForms(),
             ParentField::make('Parent', 'parent_id')->hideFromIndex(),
-            TemplateField::make('Template', 'template'),
+            TemplateField::make('Template', 'template')->sortable(),
             LocaleField::make('Locale', 'locale', 'locale_parent_id')
                 ->locales(NovaPageManager::getLocales())
                 ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
