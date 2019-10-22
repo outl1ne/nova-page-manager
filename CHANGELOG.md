@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [1.9.9] - 2019-10-22
+
+### Changed
+
+- Add `path` property to `nova_format_page()` result
+
 ## [1.9.8] - 2019-10-18
 
 ### Changed
@@ -262,6 +268,7 @@ php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServi
 - Programmatically created templates for pages and regions
 - Multilanguage support
 
+[1.9.9]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.8...1.9.9
 [1.9.8]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.7...1.9.8
 [1.9.7]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.6...1.9.7
 [1.9.6]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.5...1.9.6
