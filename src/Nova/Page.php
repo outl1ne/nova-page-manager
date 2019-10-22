@@ -40,7 +40,7 @@ class Page extends TemplateResource
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
             Text::make('Slug', 'slug')
-                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request-locale")
+                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
                 ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale")
                 ->onlyOnForms(),
             Text::make('Slug', function () use ($path, $pageUrl) {
