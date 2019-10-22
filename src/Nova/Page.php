@@ -106,6 +106,6 @@ HTML;
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->whereNull('draft_parent_id');
+        return $query->doesnthave('childDraft');
     }
 }

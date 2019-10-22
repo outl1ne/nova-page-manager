@@ -32,13 +32,6 @@ export default {
     }
   },
 
-  beforeMount() {
-    if (this.field.childDraft && this.field.childDraft.id) {
-      this.$router.replace(`/resources/pages/${this.field.childDraft.id}/edit`);
-      this.$nextTick(this.$parent.$parent.getFields); // ! Might break with new Laravel Nova versions
-    }
-  },
-
   methods: {
     fill(formData) {
       if (this.draft) {
