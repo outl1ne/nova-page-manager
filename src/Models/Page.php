@@ -76,6 +76,11 @@ class Page extends TemplateModel
         return $this->hasOne(Page::class, 'draft_parent_id', 'id');
     }
 
+    public function isDraft()
+    {
+        return isset($this->preview_token) ? true : false;
+    }
+
     public function getPathAttribute()
     {
         if (!isset($this->parent)) return $this->normalizePath($this->slug);

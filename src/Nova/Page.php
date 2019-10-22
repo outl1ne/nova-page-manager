@@ -33,31 +33,26 @@ class Page extends TemplateResource
         $templateClass = $this->getTemplateClass();
         $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
 
+        $pageUrl = NovaPageManager::getPageUrl($this->resource);
+        $path = $this->resource->path;
+
         $fields = [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
             Text::make('Slug', 'slug')
-                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
+                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request-locale")
                 ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale")
                 ->onlyOnForms(),
-            Text::make('Slug', function () {
-                $previewToken = $this->childDraft ? $this->childDraft->preview_token : $this->preview_token;
-                $previewPart = $previewToken ? '?preview=' . $previewToken : '';
-                $getPagePreviewUrlFn = NovaPageManager::getPagePreviewUrlFn();
-                $path = $this->resource->path;
-                $frontendLink = isset($getPagePreviewUrlFn) ? call_user_func($getPagePreviewUrlFn, $this->resource) . $previewPart : null;
-
-
-                if (isset($frontendLink)) {
+            Text::make('Slug', function () use ($path, $pageUrl) {
+                $text = $this->resource->isDraft() ? 'View draft' : 'View';
                     return <<<HTML
-                        <div class='whitespace-no-wrap'>
-                            <span class='bg-40 text-sm py-1 px-2 rounded-lg'>$path</span>
-                            <a target='_blank' href='$frontendLink' class='text-sm py-1 px-2 text-primary no-underline dim font-bold'>View</a>
+                        <div class="whitespace-no-wrap">
+                            <span class="bg-40 text-sm py-1 px-2 rounded-lg">$path</span>
+                            <a target="_blank" href=$pageUrl class="text-sm py-1 px-2 text-primary no-underline dim font-bold">$text</a>
                         </div>
-                    HTML;
-                }
-                return "<span class='bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap'>$path</span>";
+HTML;
             })->asHtml()->exceptOnForms(),
+
             ParentField::make('Parent', 'parent_id')->hideFromIndex(),
             TemplateField::make('Template', 'template')->sortable(),
             LocaleField::make('Locale', 'locale', 'locale_parent_id')
