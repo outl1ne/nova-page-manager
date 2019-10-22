@@ -111,6 +111,7 @@ if (!function_exists('nova_format_page')) {
             'id' => $page->id ?: null,
             'name' => $page->name ?: null,
             'slug' => $page->slug ?: null,
+            'path' => $page->path ?: null,
             'data' => nova_resolve_template_model_data($page),
             'template' => $page->template ?: null,
         ];
