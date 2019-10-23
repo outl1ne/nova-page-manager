@@ -25,23 +25,20 @@ Laravel Nova 2.0.8 and 2.0.9 are breaking for Nova Page Manager.
 
 ## Installation
 
-Install the package in a Laravel Nova project via Composer:
+Install the package in a Laravel Nova project via Composer and run migrations:
 
 ```bash
+# Install package
 composer require optimistdigital/nova-page-manager
+
+# Run automatically loaded migrations
+php artisan migrate
 ```
 
 Publish the `nova-page-manager` configuration file and edit it to your preference:
 
 ```bash
 php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServiceProvider" --tag="config"
-```
-
-Publish the database migration(s) and run migrate:
-
-```bash
-php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServiceProvider" --tag="migrations"
-php artisan migrate
 ```
 
 Register the tool with Nova in the `tools()` method of the `NovaServiceProvider`:
@@ -95,64 +92,49 @@ public function fields(Request $request): array
 
 ### Registering templates
 
-All your templates have to be registered using the `NovaPageManager::configure()` function, preferably in `NovaServiceProvider`'s `boot()` function.
-
-Example:
+All your templates have to be registered in the `config/nova-page-manager.php` config file.
 
 ```php
-// in app/Providers/NovaServiceProvider.php
+// in /config/nova-page-manager.php
 
-public function boot()
-{
-    \OptimistDigital\NovaPageManager\NovaPageManager::configure([
-        'templates' => [
-            \App\Nova\Templates\HomePageTemplate::class
-        ],
-        'locales' => []
-    ]);
-}
+// ...
+'templates' => [
+  \App\Nova\Templates\HomePageTemplate::class,
+],
+// ...
 ```
 
 ### Defining locales
 
-Locales can be defined similarly to how templates are registered. Pass the dictionary of languages to the `NovaPageManager::configure()` function.
-
-Example:
+Locales can be defined similarly to how templates are registered. The config accepts a dictionary of locales.
 
 ```php
-// in app/Providers/NovaServiceProvider.php
+// in /config/nova-page-manager.php
 
-public function boot()
-{
-    \OptimistDigital\NovaPageManager\NovaPageManager::configure([
-        'templates' => [],
-        'locales' => [
-            'en_US' => 'English',
-            'et_EE' => 'Estonian'
-        ]
-    ]);
-}
+// ...
+'locales' => [
+  'en' => 'English',
+  'et' => 'Estonian',
+],
+
+// OR
+
+'locales' => function () {
+  return Locale::all()->pluck('name', 'key');
+},
+// ...
 ```
 
-### Enabling page draft feature
+### Toggling page draft feature
 
-Draft feature allows you to create previews of pages before publishing them. By default this feature is disabled but can be turned on with `draft` setting in `NovaPageManager::configure()` function.
-
-Example:
+Draft feature allows you to create previews of pages before publishing them. By default this feature is disabled but can be enabled through the config.
 
 ```php
-// in app/Providers/NovaServiceProvider.php
+// in /config/nova-page-manager.php
 
-use \OptimistDigital\NovaPageManager\NovaPageManager;
-
-public function boot()
-{
-    NovaPageManager::configure([
-        'templates' => [],
-        'locales' => [],
-        'draft' => true
-    ]);
-}
+// ...
+'drafts_enabled' => true,
+// ...
 ```
 
 ### Overwrite package resources
