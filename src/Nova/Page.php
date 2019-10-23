@@ -113,6 +113,6 @@ class Page extends TemplateResource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->doesnthave('childDraft');
+        return $query->doesntHave('childDraft');
     }
 }
