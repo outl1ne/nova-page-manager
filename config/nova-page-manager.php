@@ -52,17 +52,17 @@ return [
   'region_resource' => null,
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Preview url
-    |--------------------------------------------------------------------------
-    |
-    | Sets page preview url
-    |
-    */
-    'page_url' => function(Page $page) {
-        $previewLink = $page->preview_token !== null ? '?preview=' . $page->preview_token : '';
-        return rtrim(config('app.url'), '/') . $page->path . $previewLink;
-    }
+  /*
+  |--------------------------------------------------------------------------
+  | Preview url
+  |--------------------------------------------------------------------------
+  |
+  | Sets page preview url
+  |
+  */
+  'page_url' => function(Page $page) {
+    $previewLink = $page->preview_token !== null ? '?preview=' . $page->preview_token : '';
+    return rtrim(config('app.url'), '/') . $page->path . $previewLink;
+  }
 
 ];
