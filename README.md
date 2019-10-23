@@ -137,6 +137,20 @@ Draft feature allows you to create previews of pages before publishing them. By 
 // ...
 ```
 
+### Add links to front-end pages
+
+To display a link to the actual page next to the slug, add or overwrite the closure in `config/nova-page-manager.php` for the key `page_url`.
+
+```php
+// in /config/nova-page-manager.php
+
+// ...
+'page_url' => function (Page $page) {
+  return env('FRONTEND_URL') . $page->path;
+},
+// ...
+```
+
 ### Overwrite package resources
 
 You can overwrite the package resources (Page & Region) by setting the config options in `nova-page-manager.php`.

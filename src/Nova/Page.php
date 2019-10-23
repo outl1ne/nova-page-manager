@@ -45,7 +45,7 @@ class Page extends TemplateResource
                 $previewPart = $previewToken ? '?preview=' . $previewToken : '';
                 $pagePath = $this->resource->path;
                 $pageBaseUrl = NovaPageManager::getPageUrl($this->resource);
-                $pageUrl = $pageBaseUrl . $previewPart;
+                $pageUrl = !empty($pageBaseUrl) ? $pageBaseUrl . $previewPart : null;
                 $buttonText = $this->resource->isDraft() ? 'View draft' : 'View';
 
                 if (empty($pageBaseUrl)) return <<<HTML
