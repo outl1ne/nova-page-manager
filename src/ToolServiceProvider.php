@@ -19,11 +19,15 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        // Load views
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-page-manager');
+
+        // Load migrations
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
-        ], 'migrations');
+        ], 'nova-page-manager-migrations');
 
         $this->publishes([
             __DIR__ . '/../config/nova-page-manager.php' => config_path('nova-page-manager.php'),
@@ -33,6 +37,7 @@ class ToolServiceProvider extends ServiceProvider
             $this->routes();
         });
 
+        // Register resources
         $pageResource = config('nova-page-manager.page_resource') ?: Page::class;
         $regionResource = config('nova-page-manager.region_resource') ?: Region::class;
 
@@ -41,6 +46,7 @@ class ToolServiceProvider extends ServiceProvider
             $regionResource,
         ]);
 
+        // Register commands
         if ($this->app->runningInConsole()) {
             $this->commands([
                 CreateTemplate::class
@@ -55,9 +61,7 @@ class ToolServiceProvider extends ServiceProvider
      */
     protected function routes()
     {
-        if ($this->app->routesAreCached()) {
-            return;
-        }
+        if ($this->app->routesAreCached()) return;
 
         Route::middleware(['nova', Authorize::class])
             ->prefix('nova-vendor/nova-page-manager')
