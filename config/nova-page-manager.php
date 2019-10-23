@@ -24,7 +24,7 @@ return [
     |
     */
 
-    'drafts_enabled' => true,
+    'drafts_enabled' => false,
 
 
     /*
@@ -50,7 +50,7 @@ return [
     |
     */
 
-    'locales' => ['en_US' => 'English'],
+    'locales' => ['en' => 'English'],
 
 
     /*
@@ -97,13 +97,15 @@ return [
     |--------------------------------------------------------------------------
     |
     | If a closure is specified, a link to the page is shown next to
-    | the page slug.
+    | the page slug. The closure accepts a Page model as a paramater.
     |
     | Set to `null` if the link should not be displayed.
     |
     */
 
     'page_url' => function (Page $page) {
-        return rtrim(config('app.url'), '/') . $page->path;
+        // For example:
+        // return env('FRONTEND_URL') . $page->path;
+        return null;
     }
 ];
