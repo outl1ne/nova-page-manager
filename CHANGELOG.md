@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.0.0] - 2019-10-23
 
+NB! This is a major release. Please consult [UPGRADING.md](UPGRADING.md) for an upgrading guide.
+
 ### Changed
 
 - Moved all configuration options from `NovaPageManager::configure()` to `config/nova-page-manager.php`.
