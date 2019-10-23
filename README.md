@@ -141,7 +141,7 @@ Draft feature allows you to create previews of pages before publishing them. By 
 
 You can overwrite the package resources (Page & Region) by setting the config options in `nova-page-manager.php`.
 
-Note: If you create your resources under `App\Nova` namespace, to avoid key duplication you must manually register all other resources in the `NovaServiceProvider`. See [Registering resources](https://nova.laravel.com/docs/2.0/resources/#registering-resources)
+Note: If you create your resources under `App\Nova` namespace, to avoid key duplication you must manually register all other resources in the `NovaServiceProvider`. See [registering resources](https://nova.laravel.com/docs/2.0/resources/#registering-resources) on Nova documentation.
 
 ## Helper functions
 
