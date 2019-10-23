@@ -15,6 +15,7 @@ NB! This is a major release. Please consult [UPGRADING.md](UPGRADING.md) for an 
 - Improved drafting feature (thanks to [@KasparRosin](https://github.com/KasparRosin))
 - Changed page link text from 'view' to 'view draft' when the page is a draft (thanks to [@KasparRosin](https://github.com/KasparRosin))
 - Fixed draft not updating all of the Page's fields when publishing (thanks to [@KasparRosin](https://github.com/KasparRosin))
+- Fixed "create & add another" continuously adding draft buttons to the UI (thanks to [@KasparRosin](https://github.com/KasparRosin))
 
 ## [1.9.9] - 2019-10-22
 
