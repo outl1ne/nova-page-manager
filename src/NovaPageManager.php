@@ -8,9 +8,6 @@ use OptimistDigital\NovaPageManager\Models\Page;
 
 class NovaPageManager extends Tool
 {
-    private static $templates = [];
-    private static $locales = [];
-
     /**
      * Perform any tasks that need to happen when the tool is booted.
      *
@@ -36,36 +33,39 @@ class NovaPageManager extends Tool
         return view('nova-page-manager::navigation');
     }
 
-    public static function configure(array $data = [])
+    public static function draftsEnabled(): bool
     {
-        self::$templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
-        self::$locales = isset($data['locales']) && is_array($data['locales']) ? $data['locales'] : ['en_US' => 'English'];
+        return config('nova-page-manager.drafts_enabled', true);
     }
 
     public static function getTemplates(): array
     {
-        return array_filter(self::$templates, function ($template) {
+        $templates = config('nova-page-manager.templates', []);
+        return array_filter($templates, function ($template) {
             return class_exists($template);
         });
     }
 
     public static function getPageTemplates(): array
     {
-        return array_filter(self::getTemplates(), function ($template) {
+        return array_filter(static::getTemplates(), function ($template) {
             return $template::$type === 'page';
         });
     }
 
     public static function getRegionTemplates(): array
     {
-        return array_filter(self::getTemplates(), function ($template) {
+        return array_filter(static::getTemplates(), function ($template) {
             return $template::$type === 'region';
         });
     }
 
     public static function getLocales(): array
     {
-        return self::$locales;
+        $localesConfig = config('nova-page-manager.locales', ['en_US' => 'English']);
+        if (is_callable($localesConfig)) return call_user_func($localesConfig);
+        if (is_array($localesConfig)) return $localesConfig;
+        return ['en_US' => 'English'];
     }
 
     public static function getPagesTableName(): string
@@ -81,14 +81,6 @@ class NovaPageManager extends Tool
     public static function getPageUrl(Page $page)
     {
         $getPageUrl = config('nova-page-manager.page_url');
-        if ($getPageUrl) {
-            return $getPageUrl($page);
-        }
-        return null;
-    }
-
-    public static function draftsEnabled(): bool
-    {
-        return config('nova-page-manager.drafts_enabled', true);
+        return isset($getPageUrl) ? call_user_func($getPageUrl, $page) : null;
     }
 }

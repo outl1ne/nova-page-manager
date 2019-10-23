@@ -33,9 +33,6 @@ class Page extends TemplateResource
         $templateClass = $this->getTemplateClass();
         $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
 
-        $pageUrl = NovaPageManager::getPageUrl($this->resource);
-        $path = $this->resource->path;
-
         $fields = [
             ID::make()->sortable(),
             Text::make('Name', 'name')->rules('required'),
@@ -43,14 +40,24 @@ class Page extends TemplateResource
                 ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
                 ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale")
                 ->onlyOnForms(),
-            Text::make('Slug', function () use ($path, $pageUrl) {
-                $text = $this->resource->isDraft() ? 'View draft' : 'View';
-                    return <<<HTML
-                        <div class="whitespace-no-wrap">
-                            <span class="bg-40 text-sm py-1 px-2 rounded-lg">$path</span>
-                            <a target="_blank" href=$pageUrl class="text-sm py-1 px-2 text-primary no-underline dim font-bold">$text</a>
-                        </div>
-HTML;
+            Text::make('Slug', function () {
+                $previewToken = $this->childDraft ? $this->childDraft->preview_token : $this->preview_token;
+                $previewPart = $previewToken ? '?preview=' . $previewToken : '';
+                $pagePath = $this->resource->path;
+                $pageBaseUrl = NovaPageManager::getPageUrl($this->resource);
+                $pageUrl = $pageBaseUrl . $previewPart;
+                $buttonText = $this->resource->isDraft() ? 'View draft' : 'View';
+
+                if (empty($pageBaseUrl)) return <<<HTML
+                    <span class="bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap">$pagePath</span>
+                HTML;
+
+                return <<<HTML
+                    <div class="whitespace-no-wrap">
+                        <span class="bg-40 text-sm py-1 px-2 rounded-lg">$pagePath</span>
+                        <a target="_blank" href="$pageUrl" class="text-sm py-1 px-2 text-primary no-underline dim font-bold">$buttonText</a>
+                    </div>
+                HTML;
             })->asHtml()->exceptOnForms(),
 
             ParentField::make('Parent', 'parent_id')->hideFromIndex(),
