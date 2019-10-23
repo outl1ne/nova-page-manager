@@ -29,11 +29,11 @@ export default {
 
   mounted() {
     if (!this.field.isDraft) {
-        const positionDraftButton = this.actionButton.parentNode.querySelector('[id=create-draft-button]');
-        if (positionDraftButton && positionDraftButton !== this.$refs.createDraftButton) {
-            this.actionButton.parentNode.removeChild(positionDraftButton);
-        }
-        this.actionButton.parentNode.append(this.$refs.createDraftButton);
+      const positionDraftButton = this.actionButton.parentNode.querySelector('[id=create-draft-button]');
+      if (positionDraftButton && positionDraftButton !== this.$refs.createDraftButton) {
+        this.actionButton.parentNode.removeChild(positionDraftButton);
+      }
+      this.actionButton.parentNode.append(this.$refs.createDraftButton);
     }
   },
 
