@@ -50,7 +50,7 @@ return [
     |
     */
 
-    'locales' => ['en_US' => 'English'],
+    'locales' => ['en' => 'English'],
 
 
     /*

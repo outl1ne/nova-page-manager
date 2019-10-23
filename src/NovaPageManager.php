@@ -62,10 +62,10 @@ class NovaPageManager extends Tool
 
     public static function getLocales(): array
     {
-        $localesConfig = config('nova-page-manager.locales', ['en_US' => 'English']);
+        $localesConfig = config('nova-page-manager.locales', ['en' => 'English']);
         if (is_callable($localesConfig)) return call_user_func($localesConfig);
         if (is_array($localesConfig)) return $localesConfig;
-        return ['en_US' => 'English'];
+        return ['en' => 'English'];
     }
 
     public static function getPagesTableName(): string
