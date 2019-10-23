@@ -35,7 +35,7 @@ class NovaPageManager extends Tool
 
     public static function draftsEnabled(): bool
     {
-        return config('nova-page-manager.drafts_enabled', true);
+        return config('nova-page-manager.drafts_enabled', false);
     }
 
     public static function getTemplates(): array

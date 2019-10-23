@@ -24,7 +24,7 @@ return [
     |
     */
 
-    'drafts_enabled' => true,
+    'drafts_enabled' => false,
 
 
     /*
