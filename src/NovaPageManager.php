@@ -10,7 +10,6 @@ class NovaPageManager extends Tool
 {
     private static $templates = [];
     private static $locales = [];
-    private static $draftEnabled = false;
 
     /**
      * Perform any tasks that need to happen when the tool is booted.
@@ -41,7 +40,6 @@ class NovaPageManager extends Tool
     {
         self::$templates = isset($data['templates']) && is_array($data['templates']) ? $data['templates'] : [];
         self::$locales = isset($data['locales']) && is_array($data['locales']) ? $data['locales'] : ['en_US' => 'English'];
-        self::$draftEnabled = isset($data['draft']) && $data['draft'] === true;
     }
 
     public static function getTemplates(): array
@@ -89,8 +87,8 @@ class NovaPageManager extends Tool
         return null;
     }
 
-    public static function draftEnabled(): bool
+    public static function draftsEnabled(): bool
     {
-        return self::$draftEnabled;
+        return config('nova-page-manager.drafts_enabled', true);
     }
 }

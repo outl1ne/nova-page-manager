@@ -60,7 +60,7 @@ HTML;
                 ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
         ];
 
-        if (NovaPageManager::draftEnabled()) {
+        if (NovaPageManager::draftsEnabled()) {
             $isDraft = (isset($this->draft_parent_id) || (!isset($this->draft_parent_id) && !$this->published && isset($this->id)));
 
             if (!(!$isDraft && ($request instanceof ResourceDetailRequest)) || isset($this->childDraft)) {

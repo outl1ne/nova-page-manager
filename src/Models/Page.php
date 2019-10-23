@@ -36,7 +36,7 @@ class Page extends TemplateModel
         });
 
         static::saving(function ($page) {
-            if (isset($page->draft) && NovaPageManager::draftEnabled()) {
+            if (isset($page->draft) && NovaPageManager::draftsEnabled()) {
                 unset($page['draft']);
                 return Page::createDraft($page);
             }

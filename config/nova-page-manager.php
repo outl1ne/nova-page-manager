@@ -18,6 +18,18 @@ return [
 
   /*
   |--------------------------------------------------------------------------
+  | Drafts enabled
+  |--------------------------------------------------------------------------
+  |
+  | If set to true, drafting capabilities will be available.
+  |
+  */
+
+  'drafts_enabled' => true,
+
+
+  /*
+  |--------------------------------------------------------------------------
   | Max locales shown on index
   |--------------------------------------------------------------------------
   |
@@ -38,6 +50,7 @@ return [
   | Add a custom implementation of the Page resource
   |
   */
+
   'page_resource' => null,
 
 
@@ -49,20 +62,24 @@ return [
   | Add a custom implementation of the Region resource
   |
   */
+
   'region_resource' => null,
 
 
   /*
   |--------------------------------------------------------------------------
-  | Preview url
+  | Page URL
   |--------------------------------------------------------------------------
   |
-  | Sets page preview url
+  | If a closure is specified, a link to the page is shown next to
+  | the page slug.
+  |
+  | Set to `null` if the link should not be displayed.
   |
   */
-  'page_url' => function(Page $page) {
-    $previewLink = $page->preview_token !== null ? '?preview=' . $page->preview_token : '';
-    return rtrim(config('app.url'), '/') . $page->path . $previewLink;
+
+  'page_url' => function (Page $page) {
+    return rtrim(config('app.url'), '/') . $page->path;
   }
 
 ];
