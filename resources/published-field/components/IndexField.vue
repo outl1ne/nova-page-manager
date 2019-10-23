@@ -11,7 +11,7 @@ export default {
 
   computed: {
     isPublished() {
-      return !!this.field.value || this.field.draftParent;
+      return !!this.field.value || !!this.field.draftParent;
     },
 
     isDraft() {
