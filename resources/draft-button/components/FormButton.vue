@@ -4,6 +4,7 @@
       ref="createDraftButton"
       type="button"
       class="ml-3 btn btn-default btn-primary"
+      id="create-draft-button"
       v-on:click="createDraft"
       v-if="!field.isDraft"
     >Create draft</button>
@@ -28,7 +29,11 @@ export default {
 
   mounted() {
     if (!this.field.isDraft) {
-      this.actionButton.parentNode.append(this.$refs.createDraftButton);
+        const positionDraftButton = this.actionButton.parentNode.querySelector('[id=create-draft-button]');
+        if (positionDraftButton && positionDraftButton !== this.$refs.createDraftButton) {
+            this.actionButton.parentNode.removeChild(positionDraftButton);
+        }
+        this.actionButton.parentNode.append(this.$refs.createDraftButton);
     }
   },
 

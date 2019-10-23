@@ -91,6 +91,7 @@ class Page extends TemplateModel
             $parentSlugs[] = $parent->slug;
             $parent = $parent->parent;
         }
+        $parentSlugs = array_reverse($parentSlugs);
         return $this->normalizePath(implode('/', $parentSlugs) . "/" . $this->slug);
     }
 
