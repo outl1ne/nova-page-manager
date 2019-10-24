@@ -122,6 +122,10 @@ Locales can be defined similarly to how templates are registered. The config acc
 'locales' => function () {
   return Locale::all()->pluck('name', 'key');
 },
+
+// if you wish to cache the configuration, pass a reference instead:
+
+'locales' => NovaPageManagerConfiguration::class . '::locales',
 // ...
 ```
 
@@ -148,6 +152,10 @@ To display a link to the actual page next to the slug, add or overwrite the clos
 'page_url' => function (Page $page) {
   return env('FRONTEND_URL') . $page->path;
 },
+
+// if you wish to cache the configuration, pass a reference instead:
+
+'page_url' => NovaPageManagerConfiguration::class . '::pageUrl',
 // ...
 ```
 
