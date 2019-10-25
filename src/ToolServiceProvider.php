@@ -9,6 +9,7 @@ use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
 use OptimistDigital\NovaPageManager\Nova\Page;
 use OptimistDigital\NovaPageManager\Nova\Region;
 use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
+use Illuminate\Support\Facades\Validator;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -52,6 +53,13 @@ class ToolServiceProvider extends ServiceProvider
                 CreateTemplate::class
             ]);
         }
+
+        // Custom validation
+        Validator::extend('alpha_dash_or_slash', function ($attribute, $value, $parameters, $validator) {
+            if (!is_string($value) && !is_numeric($value)) return false;
+            if ($value === '/') return true;
+            return preg_match('/^[\pL\pM\pN_-]+$/u', $value) > 0;
+        }, 'Field must be alphanumberic with dashes or underscores or a single slash.');
     }
 
     /**
