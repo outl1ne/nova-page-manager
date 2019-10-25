@@ -5,6 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.0.1] - 2019-10-25
+
+### Changed
+
+- Hide Pages' IDs
+- Order pages in such a way that its children are shown underneath it in Index view (by [@KasparRosin](https://github.com/KasparRosin))
+- Slug field now shows the parents' slugs in edit and create views (by [@KasparRosin](https://github.com/KasparRosin))
+- Slug field now only allows alphanumeric characters, dashes and underscores (by [@KasparRosin](https://github.com/KasparRosin))
+
 ## [2.0.0] - 2019-10-23
 
 NB! This is a major release. Please consult [UPGRADING.md](UPGRADING.md) for an upgrading guide.
@@ -280,6 +289,7 @@ php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServi
 - Programmatically created templates for pages and regions
 - Multilanguage support
 
+[2.0.1]: https://github.com/optimistdigital/nova-page-manager/compare/2.0.0...2.0.1
 [2.0.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.9...2.0.0
 [1.9.9]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.8...1.9.9
 [1.9.8]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.7...1.9.8
