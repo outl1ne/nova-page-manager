@@ -58,7 +58,6 @@ class Page extends TemplateResource
                 $pageUrl = !empty($pageBaseUrl) ? $pageBaseUrl . $previewPart : null;
                 $buttonText = $this->resource->isDraft() ? 'View draft' : 'View';
 
-
                 if (empty($pageBaseUrl)) return <<<HTML
                     <span class="bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap">$pagePath</span>
                 HTML;
@@ -124,10 +123,11 @@ class Page extends TemplateResource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->selectRaw("nova_page_manager_pages.*, CONCAT(COALESCE(CONCAT(CONCAT(COALESCE(CONCAT(grandparents.name, '/'), ''), parents.name), '/'), ''), nova_page_manager_pages.name) AS hierarchy_order")
+        return $query->selectRaw("nova_page_manager_pages.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE(nova_page_manager_pages.name, '')) AS hierarchy_order")
             ->doesntHave('childDraft')
-            ->leftJoin('nova_page_manager_pages AS parents', 'parents.id', '=', 'nova_page_manager_pages.parent_id')
-            ->leftJoin('nova_page_manager_pages AS grandparents', 'grandparents.id', '=', 'parents.parent_id')
+            ->leftJoin('nova_page_manager_pages AS p1', 'p1.id', '=', 'nova_page_manager_pages.parent_id')
+            ->leftJoin('nova_page_manager_pages AS p2', 'p2.id', '=', 'p1.parent_id')
+            ->leftJoin('nova_page_manager_pages AS p3', 'p3.id', '=', 'p2.parent_id')
             ->orderByRaw('hierarchy_order');
     }
 
