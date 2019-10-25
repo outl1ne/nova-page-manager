@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ResourceDetailRequest;
+use OptimistDigital\NovaPageManager\Nova\Fields\PrefixField;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
@@ -44,10 +45,11 @@ class Page extends TemplateResource
                 return str_repeat('— ', count($parentPaths)) . $name;
             })->rules('required')->onlyOnIndex(),
             Text::make('Name', 'name')->rules('required')->hideFromIndex(),
-            Text::make('Slug', 'slug')
+            PrefixField::make('Slug', 'slug')
                 ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
                 ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale")
-                ->onlyOnForms(),
+                ->onlyOnForms()
+                ->parentSlug($this->resource->path),
             Text::make('Slug', function () {
                 $previewToken = $this->childDraft ? $this->childDraft->preview_token : $this->preview_token;
                 $previewPart = $previewToken ? '?preview=' . $previewToken : '';
