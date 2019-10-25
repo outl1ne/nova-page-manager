@@ -91,7 +91,7 @@ abstract class TemplateResource extends Resource
     {
         return [
             (new LocaleFilter('locale'))->locales(NovaPageManager::getLocales()),
-            new LocaleChildrenFilter('locale_parent_id'),
+            new LocaleChildrenFilter($this->resource->getTable() . '.locale_parent_id'),
         ];
     }
 }

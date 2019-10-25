@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ResourceDetailRequest;
+use OptimistDigital\NovaPageManager\Nova\Fields\PrefixField;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
@@ -35,11 +36,20 @@ class Page extends TemplateResource
 
         $fields = [
             ID::make()->sortable(),
-            Text::make('Name', 'name')->rules('required'),
-            Text::make('Slug', 'slug')
-                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale")
-                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale")
-                ->onlyOnForms(),
+            Text::make('Name', function () {
+                $pagePath = $this->resource->path;
+                $name = $this->resource->name;
+                $parentPaths = (explode('/', $pagePath));
+                array_shift($parentPaths);
+                array_pop($parentPaths);
+                return str_repeat('— ', count($parentPaths)) . $name;
+            })->rules('required')->onlyOnIndex(),
+            Text::make('Name', 'name')->rules('required')->hideFromIndex(),
+            PrefixField::make('Slug', 'slug')
+                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale", 'alpha_num')
+                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale", 'alpha_num')
+                ->onlyOnForms()
+                ->parentSlug($this->resource->path),
             Text::make('Slug', function () {
                 $previewToken = $this->childDraft ? $this->childDraft->preview_token : $this->preview_token;
                 $previewPart = $previewToken ? '?preview=' . $previewToken : '';
@@ -47,6 +57,7 @@ class Page extends TemplateResource
                 $pageBaseUrl = NovaPageManager::getPageUrl($this->resource);
                 $pageUrl = !empty($pageBaseUrl) ? $pageBaseUrl . $previewPart : null;
                 $buttonText = $this->resource->isDraft() ? 'View draft' : 'View';
+
 
                 if (empty($pageBaseUrl)) return <<<HTML
                     <span class="bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap">$pagePath</span>
@@ -113,6 +124,26 @@ class Page extends TemplateResource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->doesntHave('childDraft');
+        return $query->selectRaw("nova_page_manager_pages.*, CONCAT(COALESCE(CONCAT(CONCAT(COALESCE(CONCAT(grandparents.name, '/'), ''), parents.name), '/'), ''), nova_page_manager_pages.name) AS hierarchy_order")
+            ->doesntHave('childDraft')
+            ->leftJoin('nova_page_manager_pages AS parents', 'parents.id', '=', 'nova_page_manager_pages.parent_id')
+            ->leftJoin('nova_page_manager_pages AS grandparents', 'grandparents.id', '=', 'parents.parent_id')
+            ->orderByRaw('hierarchy_order');
+    }
+
+    /**
+     * Apply any applicable orderings to the query.
+     *
+     * @param  \Illuminate\Database\Eloquent\Builder  $query
+     * @param  array  $orderings
+     * @return \Illuminate\Database\Eloquent\Builder
+     */
+    protected static function applyOrderings($query, array $orderings)
+    {
+        if (empty($orderings)) {
+            return $query;
+        }
+
+        return parent::applyOrderings($query, $orderings);
     }
 }

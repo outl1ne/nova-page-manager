@@ -21,6 +21,7 @@ class NovaPageManager extends Tool
         Nova::script('nova-region-field', __DIR__ . '/../dist/js/region-field.js');
         Nova::script('nova-published-field', __DIR__ . '/../dist/js/published-field.js');
         Nova::script('nova-draft-button', __DIR__ . '/../dist/js/draft-button.js');
+        Nova::script('nova-prefix-field', __DIR__.'/../dist/js/prefix-field.js');
     }
 
     /**
