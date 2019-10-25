@@ -35,7 +35,6 @@ class Page extends TemplateResource
         $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
 
         $fields = [
-            ID::make()->sortable(),
             Text::make('Name', function () {
                 $pagePath = $this->resource->path;
                 $name = $this->resource->name;
