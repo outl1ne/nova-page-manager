@@ -90,7 +90,7 @@ abstract class TemplateResource extends Resource
     public function filters(Request $request)
     {
         return [
-            (new LocaleFilter('locale'))->locales(NovaPageManager::getLocales()),
+            (new LocaleFilter($this->resource->getTable() . '.locale'))->locales(NovaPageManager::getLocales()),
             new LocaleChildrenFilter($this->resource->getTable() . '.locale_parent_id'),
         ];
     }
