@@ -57,16 +57,12 @@ class Page extends TemplateResource
                 $pageUrl = !empty($pageBaseUrl) ? $pageBaseUrl . $previewPart : null;
                 $buttonText = $this->resource->isDraft() ? 'View draft' : 'View';
 
-                if (empty($pageBaseUrl)) return <<<HTML
-                    <span class="bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap">$pagePath</span>
-                HTML;
+                if (empty($pageBaseUrl)) return "<span class='bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap'>$pagePath</span>";
 
-                return <<<HTML
-                    <div class="whitespace-no-wrap">
-                        <span class="bg-40 text-sm py-1 px-2 rounded-lg">$pagePath</span>
-                        <a target="_blank" href="$pageUrl" class="text-sm py-1 px-2 text-primary no-underline dim font-bold">$buttonText</a>
-                    </div>
-                HTML;
+                return "<div class='whitespace-no-wrap'>
+                            <span class='bg-40 text-sm py-1 px-2 rounded-lg'>$pagePath</span>
+                            <a target='_blank' href='$pageUrl' class='text-sm py-1 px-2 text-primary no-underline dim font-bold'>$buttonText</a>
+                        </div>";
             })->asHtml()->exceptOnForms(),
 
             ParentField::make('Parent', 'parent_id')->hideFromIndex(),
