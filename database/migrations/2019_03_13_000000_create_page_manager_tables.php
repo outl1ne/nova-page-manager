@@ -20,7 +20,7 @@ class CreatePageManagerTables extends Migration
             $table->timestamps();
             $table->enum('type', ['page', 'region']);
             $table->string('name');
-            $table->string('slug')->default('')->unique();
+            $table->string('slug')->default('')->unique('nova_page_manager_slug_unique');
             $table->string('locale');
             $table->string('template');
             $table->string('seo_title')->nullable();
@@ -29,7 +29,7 @@ class CreatePageManagerTables extends Migration
             $table->bigInteger('parent_id')->nullable();
             $table->json('data')->nullable();
 
-            $table->unique(['parent_id', 'locale']);
+            $table->unique(['parent_id', 'locale'], 'nova_page_manager_parent_id_locale_unique');
         });
     }
 

@@ -28,7 +28,7 @@ class CreateRegionAndPagesTables extends Migration
             $table->bigInteger('locale_parent_id')->nullable();
             $table->json('data')->nullable();
 
-            $table->unique(['locale', 'template']);
+            $table->unique(['locale', 'template'], 'nova_page_manager_locale_template');
         });
 
         // Move all regions from original table to new regions table
