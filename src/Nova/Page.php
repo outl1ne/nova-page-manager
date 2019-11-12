@@ -33,6 +33,7 @@ class Page extends TemplateResource
         $templateClass = $this->getTemplateClass();
         $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
         $locales = NovaPageManager::getLocales();
+        $hasManyDifferentLocales = Page::select('locale')->distinct()->get()->count() > 1;
 
         $fields = [
             Text::make('Name', function () {
@@ -70,7 +71,7 @@ class Page extends TemplateResource
         ];
 
 
-        if (class_exists('\OptimistDigital\NovaLang\NovaLang')) {
+        if (NovaPageManager::hasNovaLang()) {
             $fields[] = \OptimistDigital\NovaLang\NovaLangField\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
         } else {
             $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')->locales($locales)->onlyOnForms();
@@ -79,7 +80,7 @@ class Page extends TemplateResource
         if (count($locales) > 1)
             $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
                 ->locales($locales)->exceptOnForms();
-        else {
+        else if ($hasManyDifferentLocales) {
             $fields[] = Text::make('Locale', 'locale')->exceptOnForms();
         }
 
@@ -129,17 +130,18 @@ class Page extends TemplateResource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        $column = config('nova-page-manager.table'.'_pages.locale', 'nova_page_manager_pages.locale');
-        $query->selectRaw("nova_page_manager_pages.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE(nova_page_manager_pages.name, '')) AS hierarchy_order")
+        $table = NovaPageManager::getPagesTableName();
+        $localeColumn = $table . '.locale';
+        $query->selectRaw("{$table}.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE({$table}.name, '')) AS hierarchy_order")
             ->doesntHave('childDraft')
-            ->leftJoin('nova_page_manager_pages AS p1', 'p1.id', '=', 'nova_page_manager_pages.parent_id')
-            ->leftJoin('nova_page_manager_pages AS p2', 'p2.id', '=', 'p1.parent_id')
-            ->leftJoin('nova_page_manager_pages AS p3', 'p3.id', '=', 'p2.parent_id')
+            ->leftJoin("{$table} AS p1", 'p1.id', '=', "{$table}.parent_id")
+            ->leftJoin("{$table} AS p2", 'p2.id', '=', 'p1.parent_id')
+            ->leftJoin("{$table} AS p3", 'p3.id', '=', 'p2.parent_id')
             ->orderByRaw('hierarchy_order');
-        if (class_exists('\OptimistDigital\NovaLang\NovaLang'))
+        if (NovaPageManager::hasNovaLang())
             $query
-            ->where($column, nova_lang_get_active_locale())
-            ->orWhereNotIn($column, array_keys(nova_lang_get_all_locales()));;
+            ->where($localeColumn, nova_lang_get_active_locale())
+            ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));;
         return $query;
     }
 
