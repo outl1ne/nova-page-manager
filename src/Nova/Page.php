@@ -74,13 +74,16 @@ class Page extends TemplateResource
         if (NovaPageManager::hasNovaLang()) {
             $fields[] = \OptimistDigital\NovaLang\NovaLangField\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
         } else {
-            $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')->locales($locales)->onlyOnForms();
+            $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
+                ->locales($locales)
+                ->onlyOnForms();
         }
 
-        if (count($locales) > 1)
+        if (count($locales) > 1) {
             $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
-                ->locales($locales)->exceptOnForms();
-        else if ($hasManyDifferentLocales) {
+                ->locales($locales)
+                ->exceptOnForms();
+        } else if ($hasManyDifferentLocales) {
             $fields[] = Text::make('Locale', 'locale')->exceptOnForms();
         }
 
@@ -132,16 +135,20 @@ class Page extends TemplateResource
     {
         $table = NovaPageManager::getPagesTableName();
         $localeColumn = $table . '.locale';
+
         $query->selectRaw("{$table}.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE({$table}.name, '')) AS hierarchy_order")
             ->doesntHave('childDraft')
             ->leftJoin("{$table} AS p1", 'p1.id', '=', "{$table}.parent_id")
             ->leftJoin("{$table} AS p2", 'p2.id', '=', 'p1.parent_id')
             ->leftJoin("{$table} AS p3", 'p3.id', '=', 'p2.parent_id')
             ->orderByRaw('hierarchy_order');
-        if (NovaPageManager::hasNovaLang())
+
+        if (NovaPageManager::hasNovaLang()) {
             $query
-            ->where($localeColumn, nova_lang_get_active_locale())
-            ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));;
+                ->where($localeColumn, nova_lang_get_active_locale())
+                ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));
+        }
+
         return $query;
     }
 
