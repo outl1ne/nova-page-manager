@@ -85,7 +85,6 @@ class NovaPageManager extends Tool
         return isset($getPageUrl) ? call_user_func($getPageUrl, $page) : null;
     }
 
-
     public static function hasNovaLang(): bool
     {
         return class_exists('\OptimistDigital\NovaLang\NovaLang');

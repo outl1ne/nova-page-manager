@@ -82,7 +82,8 @@ class Page extends TemplateResource
         if (count($locales) > 1) {
             $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
                 ->locales($locales)
-                ->exceptOnForms();
+                ->exceptOnForms()
+                ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4));
         } else if ($hasManyDifferentLocales) {
             $fields[] = Text::make('Locale', 'locale')->exceptOnForms();
         }
