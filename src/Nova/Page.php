@@ -5,7 +5,6 @@ namespace OptimistDigital\NovaPageManager\Nova;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Heading;
-use Laravel\Nova\Fields\ID;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -33,6 +32,8 @@ class Page extends TemplateResource
         $tableName = NovaPageManager::getPagesTableName();
         $templateClass = $this->getTemplateClass();
         $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
+        $locales = NovaPageManager::getLocales();
+        $hasManyDifferentLocales = Page::select('locale')->distinct()->get()->count() > 1;
 
         $fields = [
             Text::make('Name', function () {
@@ -67,10 +68,21 @@ class Page extends TemplateResource
 
             ParentField::make('Parent', 'parent_id')->hideFromIndex(),
             TemplateField::make('Template', 'template')->sortable(),
-            LocaleField::make('Locale', 'locale', 'locale_parent_id')
-                ->locales(NovaPageManager::getLocales())
-                ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
         ];
+
+
+        if (NovaPageManager::hasNovaLang()) {
+            $fields[] = \OptimistDigital\NovaLang\NovaLangField\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
+        } else {
+            $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')->locales($locales)->onlyOnForms();
+        }
+
+        if (count($locales) > 1)
+            $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
+                ->locales($locales)->exceptOnForms();
+        else if ($hasManyDifferentLocales) {
+            $fields[] = Text::make('Locale', 'locale')->exceptOnForms();
+        }
 
         if (NovaPageManager::draftsEnabled()) {
             $isDraft = (isset($this->draft_parent_id) || (!isset($this->draft_parent_id) && !$this->published && isset($this->id)));
@@ -118,12 +130,19 @@ class Page extends TemplateResource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->selectRaw("nova_page_manager_pages.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE(nova_page_manager_pages.name, '')) AS hierarchy_order")
+        $table = NovaPageManager::getPagesTableName();
+        $localeColumn = $table . '.locale';
+        $query->selectRaw("{$table}.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE({$table}.name, '')) AS hierarchy_order")
             ->doesntHave('childDraft')
-            ->leftJoin('nova_page_manager_pages AS p1', 'p1.id', '=', 'nova_page_manager_pages.parent_id')
-            ->leftJoin('nova_page_manager_pages AS p2', 'p2.id', '=', 'p1.parent_id')
-            ->leftJoin('nova_page_manager_pages AS p3', 'p3.id', '=', 'p2.parent_id')
+            ->leftJoin("{$table} AS p1", 'p1.id', '=', "{$table}.parent_id")
+            ->leftJoin("{$table} AS p2", 'p2.id', '=', 'p1.parent_id')
+            ->leftJoin("{$table} AS p3", 'p3.id', '=', 'p2.parent_id')
             ->orderByRaw('hierarchy_order');
+        if (NovaPageManager::hasNovaLang())
+            $query
+            ->where($localeColumn, nova_lang_get_active_locale())
+            ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));;
+        return $query;
     }
 
     /**

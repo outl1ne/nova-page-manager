@@ -3,10 +3,10 @@
 namespace OptimistDigital\NovaPageManager\Nova;
 
 use Laravel\Nova\Resource;
+use OptimistDigital\NovaLocaleField\Filters\LocaleChildrenFilter;
+use OptimistDigital\NovaLocaleField\Filters\LocaleFilter;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use Illuminate\Http\Request;
-use OptimistDigital\NovaLocaleField\Filters\LocaleFilter;
-use OptimistDigital\NovaLocaleField\Filters\LocaleChildrenFilter;
 
 abstract class TemplateResource extends Resource
 {
@@ -89,6 +89,9 @@ abstract class TemplateResource extends Resource
 
     public function filters(Request $request)
     {
+        if (NovaPageManager::hasNovaLang()) {
+            return [];
+        }
         return [
             (new LocaleFilter($this->resource->getTable() . '.locale'))->locales(NovaPageManager::getLocales()),
             new LocaleChildrenFilter($this->resource->getTable() . '.locale_parent_id'),
