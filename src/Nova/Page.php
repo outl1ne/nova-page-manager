@@ -118,12 +118,14 @@ class Page extends TemplateResource
 
     public static function indexQuery(NovaRequest $request, $query)
     {
-        return $query->selectRaw("nova_page_manager_pages.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE(nova_page_manager_pages.name, '')) AS hierarchy_order")
-            ->doesntHave('childDraft')
-            ->leftJoin('nova_page_manager_pages AS p1', 'p1.id', '=', 'nova_page_manager_pages.parent_id')
-            ->leftJoin('nova_page_manager_pages AS p2', 'p2.id', '=', 'p1.parent_id')
-            ->leftJoin('nova_page_manager_pages AS p3', 'p3.id', '=', 'p2.parent_id')
-            ->orderByRaw('hierarchy_order');
+        $pages_table = NovaPageManager::getPagesTableName();
+
+        return $query->selectRaw("{$pages_table}.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE({$pages_table}.name, '')) AS hierarchy_order")
+                     ->doesntHave('childDraft')
+                     ->leftJoin("{$pages_table} AS p1", 'p1.id', '=', "{$pages_table}.parent_id")
+                     ->leftJoin("{$pages_table} AS p2", 'p2.id', '=', 'p1.parent_id')
+                     ->leftJoin("{$pages_table} AS p3", 'p3.id', '=', 'p2.parent_id')
+                     ->orderByRaw('hierarchy_order');
     }
 
     /**
