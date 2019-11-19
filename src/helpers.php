@@ -168,7 +168,8 @@ if (!function_exists('nova_get_page_by_slug')) {
 
         $page = Page::where('slug', $slug)->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
             $query->where('preview_token', $previewToken);
-        })->firstOrFail();
+        })->orWhere(DB::raw("CONCAT(locale, '/', slug)"), $slug)
+            ->firstOrFail();
 
         if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
             return null;
