@@ -84,6 +84,11 @@ public static $name = 'about-us';
 // This boolean decides whether or not to display them
 public static $seo = false;
 
+// If you want to have multiple views with different
+// templates, you can set two templates to have the
+// same 'view' string and use it instead for matching
+public static $view = null;
+
 // Return all fields here, just as you would inside a resource
 public function fields(Request $request): array
 {
