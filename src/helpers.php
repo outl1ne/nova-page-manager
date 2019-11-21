@@ -114,6 +114,7 @@ if (!function_exists('nova_format_page')) {
             'path' => $page->path ?: null,
             'data' => nova_resolve_template_model_data($page),
             'template' => $page->template ?: null,
+            'view' => $template::$view ?: null,
         ];
 
         if ($template::$seo) {
