@@ -46,8 +46,8 @@ class Page extends TemplateResource
             })->rules('required')->onlyOnIndex(),
             Text::make('Name', 'name')->rules('required')->hideFromIndex(),
             PrefixField::make('Slug', 'slug')
-                ->creationRules('required', "unique:{$tableName},slug,NULL,id,parent_id,{$this->resource->parent_id},locale,$request->locale", 'alpha_dash_or_slash')
-                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,parent_id,{$this->resource->parent_id},published,{{published}},locale,$request->locale", 'alpha_dash_or_slash')
+                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale,parent_id," . ($this->resource->parent_id === null ? 'NULL' : $this->resource->parent_id), 'alpha_dash_or_slash')
+                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{{published}},locale,$request->locale,parent_id," . ($this->resource->parent_id === null ? 'NULL' : $this->resource->parent_id), 'alpha_dash_or_slash')
                 ->onlyOnForms()
                 ->parentSlug($this->resource->path),
             Text::make('Slug', function () {
