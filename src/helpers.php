@@ -320,13 +320,11 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
 
             $parent = $page;
             if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
-                dd('broken');
                 return null;
             }
         }
 
         if (empty($page)) return null;
-
-        return nova_format_page($page);
+        return $page;
     }
 }
