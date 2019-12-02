@@ -112,6 +112,7 @@ if (!function_exists('nova_format_page')) {
             'name' => $page->name ?: null,
             'slug' => $page->slug ?: null,
             'path' => $page->path ?: null,
+            'parent_id' => $page->parent_id ?: null,
             'data' => nova_resolve_template_model_data($page),
             'template' => $page->template ?: null,
             'view' => $template::$view ?: null,
@@ -232,7 +233,7 @@ if (!function_exists('nova_resolve_fields_data')) {
     {
         $resolvedData = [];
 
-        foreach (((array) $data) as $fieldAttribute => $fieldValue) {
+        foreach (((array)$data) as $fieldAttribute => $fieldValue) {
 
             $field = $fields->first(function ($value, $key) use ($fieldAttribute) {
                 return (
@@ -287,5 +288,45 @@ if (!function_exists('nova_page_manager_sanitize_panel_name')) {
         $removedSpecialChars = preg_replace("/[^A-Za-z0-9 ]/", '', $name);
         $snakeCase = preg_replace("/\s+/", '_', $removedSpecialChars);
         return strtolower($snakeCase);
+    }
+}
+
+// ------------------------------
+// nova_page_manager_get_page_by_path
+// ------------------------------
+
+if (!function_exists('nova_page_manager_get_page_by_path')) {
+    function nova_page_manager_get_page_by_path($path, $previewToken = null, $locale = null)
+    {
+        if (empty($path)) return null;
+        $slugs = array_values(array_filter(explode('/', $path), 'strlen'));
+        if (empty($slugs)) $slugs = ['/'];
+
+        $parent = nova_get_page_by_slug($slugs[0], $previewToken);
+        $isParent = $parent['parent_id'] == null;
+        while (!$isParent) {
+            $parent = nova_get_page($parent['parent_id']);
+            $isParent = $parent['parent_id'] == null;
+        }
+
+        $page = null;
+        for ($i = 0; $i < count($slugs); $i++) {
+            $query = Page::where('slug', $slugs[$i])
+                ->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
+                    $query->where('preview_token', $previewToken);
+                });
+            if (isset($locale)) $query->where('locale', $locale);
+            $page = $query->firstOrFail();
+
+            $parent = $page;
+            if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
+                dd('broken');
+                return null;
+            }
+        }
+
+        if (empty($page)) return null;
+
+        return nova_format_page($page);
     }
 }
