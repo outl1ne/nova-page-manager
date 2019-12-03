@@ -1,7 +1,5 @@
 <?php
 
-use OptimistDigital\NovaPageManager\Models\Page;
-
 return [
     /*
     |--------------------------------------------------------------------------
@@ -101,11 +99,12 @@ return [
     |
     | Set to `null` if the link should not be displayed.
     |
+    | Closure example:
+    | function (Page $page) {
+    |   return env('FRONTEND_URL') . '/' . $page->path;
+    | }
+    |
     */
 
-    'page_url' => function (Page $page) {
-        // For example:
-        // return env('FRONTEND_URL') . $page->path;
-        return null;
-    }
+    'page_url' => null,
 ];
