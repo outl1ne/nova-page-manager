@@ -312,18 +312,20 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
         $page = null;
         for ($i = 0; $i < count($slugs); $i++) {
             $query = Page::where('slug', $slugs[$i])
+                ->where(function ($query) use ($parent) {
+                    $query->where('parent_id', $parent['id'])
+                        ->orWhereNull('parent_id');
+                })
                 ->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
                     $query->where('preview_token', $previewToken);
                 });
+
             if (isset($locale)) $query->where('locale', $locale);
             $page = $query->firstOrFail();
-
             $parent = $page;
-            if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
-                return null;
-            }
-        }
+        };
 
+        if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) return null;
         if (empty($page)) return null;
         return $page;
     }
