@@ -9,12 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added `nova_page_manager_get_page_by_path($path, $previewToken = null, $locale = null)` helper function
+- Added `nova_page_manager_get_page_by_path($path, $previewToken = null, $locale = null)` helper function (by [@KasparRosin](https://github.com/KasparRosin))
 
 ### Changed
 
 - Made default config serializable
-- Improved slug validation (multiple pages can have the same slug as long as they have a different parent now)
+- Improved slug validation (multiple pages can have the same slug as long as they have a different parent now) (by [@KasparRosin](https://github.com/KasparRosin))
 
 ## [2.1.1] - 2019-11-21
 
