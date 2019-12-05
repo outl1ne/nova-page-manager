@@ -32,7 +32,7 @@ class MakeSlugLocalePairUnique extends Migration
         $pagesTableName = $tableName.'_pages';
 
         Schema::table($pagesTableName, function ($table) {
-            $table->dropUnique(['locale', 'slug'], 'nova_page_manager_locale_slug_unique');
+            $table->dropUnique('nova_page_manager_locale_slug_unique');
             $table->unique('slug', 'nova_page_manager_slug_unique');
         });
     }
