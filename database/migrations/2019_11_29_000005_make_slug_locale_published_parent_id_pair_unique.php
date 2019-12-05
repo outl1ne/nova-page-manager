@@ -14,8 +14,8 @@ class MakeSlugLocalePublishedParentidPairUnique extends Migration
     public function up()
     {
         $pagesTableName = NovaPageManager::getPagesTableName();
-        dump($pagesTableName);
-        Schema::table($pagesTableName, function ($table) use ($pagesTableName) {
+
+        Schema::table($pagesTableName, function ($table) {
             $table->dropUnique('nova_page_manager_locale_slug_published_unique');
             $table->unique(['locale', 'slug', 'published', 'parent_id'], 'nova_page_manager_locale_slug_published_parent_id_unique');
         });
@@ -30,10 +30,9 @@ class MakeSlugLocalePublishedParentidPairUnique extends Migration
     {
         $pagesTableName = NovaPageManager::getPagesTableName();
 
-        Schema::table($pagesTableName, function ($table) use ($pagesTableName) {
+        Schema::table($pagesTableName, function ($table) {
             $table->dropUnique('nova_page_manager_locale_slug_published_parent_id_unique');
             $table->unique(['locale', 'slug', 'published'], 'nova_page_manager_locale_slug_published_unique');
         });
     }
-
 }
