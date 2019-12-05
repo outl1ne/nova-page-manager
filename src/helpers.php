@@ -233,7 +233,7 @@ if (!function_exists('nova_resolve_fields_data')) {
     {
         $resolvedData = [];
 
-        foreach (((array)$data) as $fieldAttribute => $fieldValue) {
+        foreach (((array) $data) as $fieldAttribute => $fieldValue) {
 
             $field = $fields->first(function ($value, $key) use ($fieldAttribute) {
                 return (
@@ -306,14 +306,15 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
         $isParent = $parent['parent_id'] == null;
         while (!$isParent) {
             $parent = nova_get_page($parent['parent_id']);
-            $isParent = $parent['parent_id'] == null;
+            $isParent = $parent['parent_id'] === null;
         }
 
         $page = null;
-        for ($i = 0; $i < count($slugs); $i++) {
-            $query = Page::where('slug', $slugs[$i])
+        foreach ($slugs as $slug) {
+            $query = Page::where('slug', $slug)
                 ->where(function ($query) use ($parent) {
-                    $query->where('parent_id', $parent['id'])
+                    $query
+                        ->where('parent_id', $parent['id'])
                         ->orWhereNull('parent_id');
                 })
                 ->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
@@ -323,7 +324,7 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
             if (isset($locale)) $query->where('locale', $locale);
             $page = $query->firstOrFail();
             $parent = $page;
-        };
+        }
 
         if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) return null;
         if (empty($page)) return null;
