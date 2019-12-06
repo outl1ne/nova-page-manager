@@ -23,9 +23,10 @@ class AddDraftFieldsToPage extends Migration
             $table->dropUnique('nova_page_manager_locale_slug_unique');
             $table->unique(['locale', 'slug', 'published'], 'nova_page_manager_locale_slug_published_unique');
 
-            $table->index('locale_parent_id', 'nova_page_manager_pages_locale_parent_id_index');
+            $table->index('locale_parent_id', 'nova_page_manager_locale_parent_id_workaround_index'); // WORKAROUND FOR: Cannot drop index needed in a foreign key constraint
             $table->dropUnique('nova_page_manager_locale_parent_id_locale_unique');
             $table->unique(['locale_parent_id', 'locale', 'published'], 'nova_page_manager_locale_parent_id_locale_published_unique');
+            $table->dropIndex('nova_page_manager_locale_parent_id_workaround_index'); // WORKAROUND FOR: Cannot drop index needed in a foreign key constraint
         });
     }
 
@@ -46,9 +47,10 @@ class AddDraftFieldsToPage extends Migration
             $table->dropUnique('nova_page_manager_locale_slug_published_unique');
             $table->unique(['locale', 'slug'], 'nova_page_manager_locale_slug_unique');
 
-            $table->dropIndex('nova_page_manager_pages_locale_parent_id_index');
+            $table->index('locale_parent_id', 'nova_page_manager_locale_parent_id_workaround_index'); // WORKAROUND FOR: Cannot drop index needed in a foreign key constraint
             $table->dropUnique('nova_page_manager_locale_parent_id_locale_published_unique');
             $table->unique(['locale_parent_id', 'locale'], 'nova_page_manager_locale_parent_id_locale_unique');
+            $table->dropIndex('nova_page_manager_locale_parent_id_workaround_index'); // WORKAROUND FOR: Cannot drop index needed in a foreign key constraint
         });
     }
 }
