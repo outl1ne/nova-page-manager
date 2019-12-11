@@ -35,11 +35,13 @@ class Page extends TemplateModel
             }
         });
 
-        static::saving(function ($page) {
+        static::saving(function (Page $page) {
             if (isset($page->draft) && NovaPageManager::draftsEnabled()) {
                 unset($page['draft']);
                 return Page::createDraft($page);
             }
+
+            $page->slug = strtolower($page->slug);
 
             return true;
         });
