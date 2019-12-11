@@ -3,7 +3,7 @@ Nova.booting((Vue, router, store) => {
     {
       name: 'nova-page-manager',
       path: '/nova-page-manager',
-      component: require('./components/Tool'),
+      component: require('./components/Tool').default,
     },
   ]);
 });
