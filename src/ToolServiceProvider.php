@@ -60,10 +60,6 @@ class ToolServiceProvider extends ServiceProvider
             if ($value === '/') return true;
             return preg_match('/^[\pL\pM\pN_-]+$/u', $value) > 0;
         }, 'Field must be alphanumeric with dashes or underscores or a single slash.');
-
-        Validator::extend('lowercase_string', function ($attribute, $value, $parameters, $validator) {
-            return ($value === strtolower($value));
-        }, 'Field must be lowercase');
     }
 
     /**

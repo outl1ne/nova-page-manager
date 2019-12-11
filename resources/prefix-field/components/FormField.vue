@@ -35,12 +35,16 @@ export default {
     },
 
     fill(formData) {
-      formData.append(this.field.attribute, this.value || '');
+      formData.append(this.field.attribute, this.getSlug(this.value) || '');
     },
 
     handleChange(value) {
       this.value = value;
     },
+
+    getSlug(text) {
+      return text.toString().toLowerCase();
+    }
   },
 };
 </script>
