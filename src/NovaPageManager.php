@@ -15,13 +15,7 @@ class NovaPageManager extends Tool
      */
     public function boot()
     {
-        Nova::script('nova-page-manager', __DIR__ . '/../dist/js/page-manager-tool.js');
-        Nova::script('nova-template-field', __DIR__ . '/../dist/js/template-field.js');
-        Nova::script('nova-parent-field', __DIR__ . '/../dist/js/parent-field.js');
-        Nova::script('nova-region-field', __DIR__ . '/../dist/js/region-field.js');
-        Nova::script('nova-published-field', __DIR__ . '/../dist/js/published-field.js');
-        Nova::script('nova-draft-button', __DIR__ . '/../dist/js/draft-button.js');
-        Nova::script('nova-prefix-field', __DIR__ . '/../dist/js/prefix-field.js');
+        Nova::script('nova-page-manager-script', __DIR__ . '/../dist/js/nova-page-manager-resources.js');
     }
 
     /**

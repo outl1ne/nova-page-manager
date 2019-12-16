@@ -1,9 +1,3 @@
 {
-    "/js/draft-button.js": "/js/draft-button.js",
-    "/js/page-manager-tool.js": "/js/page-manager-tool.js",
-    "/js/parent-field.js": "/js/parent-field.js",
-    "/js/prefix-field.js": "/js/prefix-field.js",
-    "/js/published-field.js": "/js/published-field.js",
-    "/js/region-field.js": "/js/region-field.js",
-    "/js/template-field.js": "/js/template-field.js"
+    "/js/nova-page-manager-resources.js": "/js/nova-page-manager-resources.js"
 }
