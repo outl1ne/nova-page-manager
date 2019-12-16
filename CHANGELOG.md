@@ -5,6 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [2.3.0] - 2019-12-16
+
+### Changed
+
+- Reduced number of scripts the page manager tool loads to 1 (by [@KasparRosin](https://github.com/KasparRosin))
+- Updated nova-locale-field dependency to 2.0.0
+
 ## [2.2.2] - 2019-12-11
 
 ### Changed
@@ -339,6 +346,7 @@ php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServi
 - Programmatically created templates for pages and regions
 - Multilanguage support
 
+[2.3.0]: https://github.com/optimistdigital/nova-page-manager/compare/2.2.2...2.3.0
 [2.2.2]: https://github.com/optimistdigital/nova-page-manager/compare/2.2.1...2.2.2
 [2.2.1]: https://github.com/optimistdigital/nova-page-manager/compare/2.2.0...2.2.1
 [2.2.0]: https://github.com/optimistdigital/nova-page-manager/compare/2.1.1...2.2.0
