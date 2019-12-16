@@ -6,7 +6,6 @@ use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 use OptimistDigital\NovaLocaleField\Filters\LocaleFilter;
-use OptimistDigital\NovaLocaleField\Filters\LocaleChildrenFilter;
 
 abstract class TemplateResource extends Resource
 {
@@ -93,7 +92,6 @@ abstract class TemplateResource extends Resource
 
         return [
             (new LocaleFilter($this->resource->getTable() . '.locale'))->locales(NovaPageManager::getLocales()),
-            new LocaleChildrenFilter($this->resource->getTable() . '.locale_parent_id'),
         ];
     }
 }
