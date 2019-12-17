@@ -60,6 +60,45 @@ if (!function_exists('nova_get_pages_structure')) {
 }
 
 // ------------------------------
+// nova_get_pages_structure
+// ------------------------------
+
+if (!function_exists('nova_get_pages_structure_flat')) {
+    function nova_get_pages_structure_flat($previewToken = null)
+    {
+        $formatPages = function (Collection $pages) use (&$formatPages, $previewToken) {
+            $data = [];
+            $pages->each(function ($page) use (&$data, &$formatPages, $previewToken) {
+                $localeChildren = Page::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
+                    $query->where('published', true)->orWhere('preview_token', $previewToken);
+                })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
+                    $query->where('preview_token', $previewToken);
+                })->get();
+
+                $_pages = collect([$page, $localeChildren])->flatten();
+                $_data = [
+                    'id' => $_pages->pluck('id', 'locale'),
+                    'name' => $_pages->pluck('name', 'locale'),
+                    'path' => $_pages->pluck('path', 'locale'),
+                    'template' => $page->template,
+                ];
+
+                $data[] = $_data;
+            });
+            return $data;
+        };
+
+        $pages = Page::where(function ($query) use ($previewToken) {
+            $query->where('published', true)->orWhere('preview_token', $previewToken);
+        })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
+            $query->where('preview_token', $previewToken);
+        })->get();
+
+        return $formatPages($pages);
+    }
+}
+
+// ------------------------------
 // nova_get_regions
 // ------------------------------
 
