@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
 use OptimistDigital\NovaLocaleField\LocaleField;
+use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
 use OptimistDigital\NovaPageManager\Nova\Fields\PrefixField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
 use OptimistDigital\NovaPageManager\NovaPageManager;
