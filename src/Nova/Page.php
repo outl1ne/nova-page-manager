@@ -88,16 +88,6 @@ class Page extends TemplateResource
             $fields[] = Text::make('Locale', 'locale')->exceptOnForms();
         }
 
-        if (NovaPageManager::draftsEnabled()) {
-            $isDraft = (isset($this->draft_parent_id) || (!isset($this->draft_parent_id) && !$this->published && isset($this->id)));
-
-            if (!(!$isDraft && ($request instanceof ResourceDetailRequest)) || isset($this->childDraft)) {
-                $fields[] = DraftButton::make('Draft');
-            }
-
-            $fields[] = PublishedField::make('State', 'published');
-        }
-
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
 
         if (count($templateFieldsAndPanels['fields']) > 0) {
