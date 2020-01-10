@@ -139,7 +139,7 @@ Locales can be defined similarly to how templates are registered. The config acc
 
 ### Enabling page draft feature
 
-Draft feature allows you to create previews of pages before publishing them. By default this feature is not installed, but you can install it with the following command.
+Draft feature allows you to create previews of pages before publishing them. By default this feature is not installed, but you can install [nova-drafts](https://github.com/optimistdigital/nova-drafts) with the following command.
 
 ```bash
 composer require optimistdigital/nova-drafts
