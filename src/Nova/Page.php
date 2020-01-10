@@ -86,7 +86,7 @@ class Page extends TemplateResource
         }
 
         if (NovaPageManager::hasNovaDrafts()) {
-            $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make('State', 'published');
+            $fields[] = \OptimistDigital\NovaDrafts\PublishedField::make('State', 'published');
             $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make('Draft');
         }
 
