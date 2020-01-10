@@ -34,10 +34,6 @@ class ToolServiceProvider extends ServiceProvider
             __DIR__ . '/../config/nova-page-manager.php' => config_path('nova-page-manager.php'),
         ], 'config');
 
-        $this->app->booted(function () {
-            $this->routes();
-        });
-
         // Register resources
         $pageResource = config('nova-page-manager.page_resource') ?: Page::class;
         $regionResource = config('nova-page-manager.region_resource') ?: Region::class;
@@ -60,19 +56,5 @@ class ToolServiceProvider extends ServiceProvider
             if ($value === '/') return true;
             return preg_match('/^[\pL\pM\pN_-]+$/u', $value) > 0;
         }, 'Field must be alphanumeric with dashes or underscores or a single slash.');
-    }
-
-    /**
-     * Register the tool's routes.
-     *
-     * @return void
-     */
-    protected function routes()
-    {
-        if ($this->app->routesAreCached()) return;
-
-        Route::middleware(['nova', Authorize::class])
-            ->prefix('nova-vendor/nova-page-manager')
-            ->group(__DIR__ . '/../routes/api.php');
     }
 }
