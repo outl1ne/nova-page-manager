@@ -3,7 +3,6 @@
 namespace OptimistDigital\NovaPageManager\Models;
 
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use Illuminate\Support\Str;
 
 class Page extends TemplateModel
 {
@@ -54,7 +53,7 @@ class Page extends TemplateModel
     public function getPathAttribute()
     {
         if (!isset($this->parent)) return $this->normalizePath($this->slug);
-        
+
         $parentSlugs = [];
         $parent = $this->parent;
         while (isset($parent)) {

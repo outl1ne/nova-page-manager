@@ -2,14 +2,13 @@
 
 namespace OptimistDigital\NovaPageManager;
 
-use Laravel\Nova\Nova;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use Laravel\Nova\Nova;
+use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
 use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
 use OptimistDigital\NovaPageManager\Nova\Page;
 use OptimistDigital\NovaPageManager\Nova\Region;
-use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
-use Illuminate\Support\Facades\Validator;
 
 class ToolServiceProvider extends ServiceProvider
 {
