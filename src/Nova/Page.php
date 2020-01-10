@@ -3,19 +3,15 @@
 namespace OptimistDigital\NovaPageManager\Nova;
 
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Heading;
+use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Panel;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Http\Requests\ResourceDetailRequest;
-use OptimistDigital\NovaPageManager\Nova\Fields\PrefixField;
-use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
-use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
-use OptimistDigital\NovaPageManager\Nova\Fields\PublishedField;
-use OptimistDigital\NovaPageManager\Nova\Fields\DraftButton;
+use Laravel\Nova\Panel;
 use OptimistDigital\NovaLocaleField\LocaleField;
+use OptimistDigital\NovaPageManager\Nova\Fields\PrefixField;
+use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class Page extends TemplateResource
 {
