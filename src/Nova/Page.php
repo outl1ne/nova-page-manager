@@ -84,6 +84,11 @@ class Page extends TemplateResource
             $fields[] = Text::make('Locale', 'locale')->exceptOnForms();
         }
 
+        if (NovaPageManager::hasNovaDrafts()) {
+            $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make('State', 'published');
+            $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make('Draft');
+        }
+
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
 
         if (count($templateFieldsAndPanels['fields']) > 0) {
