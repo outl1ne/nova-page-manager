@@ -149,6 +149,24 @@ Draft feature allows you to create previews of pages before publishing them. By 
 // ...
 ```
 
+### Modify page path
+
+To add a locale prefix to page paths or to modify page paths for any other reason on the `Page` model, supply a callback to `page_path` in the config.
+
+```php
+// in /config/nova-page-manager.php
+
+// ...
+'page_path' => function (Page $page) {
+  return "{$page->locale}/{$page->path}";
+},
+
+// if you wish to cache the configuration, pass a reference instead:
+
+'page_path' => NovaPageManagerConfiguration::class . '::pageUrl',
+// ...
+```
+
 ### Add links to front-end pages
 
 To display a link to the actual page next to the slug, add or overwrite the closure in `config/nova-page-manager.php` for the key `page_url`.

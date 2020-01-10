@@ -79,6 +79,12 @@ class NovaPageManager extends Tool
         return isset($getPageUrl) ? call_user_func($getPageUrl, $page) : null;
     }
 
+    public static function getPagePath(Page $page, $path)
+    {
+        $getPagePath = config('nova-page-manager.page_path');
+        return isset($getPagePath) ? call_user_func($getPagePath, $page, $path) : $path;
+    }
+
     public static function hasNovaLang(): bool
     {
         return class_exists('\OptimistDigital\NovaLang\NovaLang');

@@ -85,7 +85,7 @@ class Page extends TemplateModel
 
     public function getPathAttribute()
     {
-        if (!isset($this->parent)) return $this->normalizePath($this->slug);
+        if (!isset($this->parent)) return NovaPageManager::getPagePath($this, $this->normalizePath($this->slug));
 
         $parentSlugs = [];
         $parent = $this->parent;
@@ -94,7 +94,10 @@ class Page extends TemplateModel
             $parent = $parent->parent;
         }
         $parentSlugs = array_reverse($parentSlugs);
-        return $this->normalizePath(implode('/', $parentSlugs) . "/" . $this->slug);
+
+        $normalizedPath = $this->normalizePath(implode('/', $parentSlugs) . "/" . $this->slug);
+
+        return NovaPageManager::getPagePath($this, $normalizedPath);
     }
 
     protected function normalizePath($path)

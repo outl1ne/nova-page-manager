@@ -107,4 +107,24 @@ return [
     */
 
     'page_url' => null,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Page path
+    |--------------------------------------------------------------------------
+    |
+    | If a closure is specified, you can modify the page path before
+    | it's finalized.
+    |
+    | The closure will be called with parameters (Page $page, $path).
+    |
+    | An example usecase is when you want to add a locale prefix to non-default
+    | locale pages.
+    |
+    | Set to `null` if you do not wish to modify page paths.
+    |
+    */
+
+    'page_path' => null,
 ];
