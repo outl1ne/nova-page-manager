@@ -27,8 +27,12 @@ class ToolServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         $this->publishes([
-            __DIR__.'/../database/migrations' => base_path('database/migrations'),
+            __DIR__.'/../database/migrations/2019_03_13_000000_create_page_manager_tables.php' => base_path('database/migrations/2019_03_13_000000_create_page_manager_tables.php'),
         ], 'migrations');
+
+        $this->publishes([
+            __DIR__ . '/../database/migrations' => database_path('migrations'),
+        ], 'nova-page-manager-migrations');
 
         $this->publishes([
             __DIR__ . '/../config/nova-page-manager.php' => config_path('nova-page-manager.php'),
