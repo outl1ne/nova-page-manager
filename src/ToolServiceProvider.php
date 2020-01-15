@@ -27,7 +27,7 @@ class ToolServiceProvider extends ServiceProvider
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
 
         $this->publishes([
-            __DIR__.'/../../migrations' => base_path('database/migrations'),
+            __DIR__.'/../database/migrations' => base_path('database/migrations'),
         ], 'migrations');
 
         $this->publishes([
