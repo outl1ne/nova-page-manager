@@ -13,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - From now on, to have drafts, you must install `nova-drafts`:
   - `composer require optimistdigital/nova-drafts`
   - After the install, the drafts will be enabled automatically.
+- Update Node packages and dist files
 
 ## [2.3.2] - 2020-01-10
 
