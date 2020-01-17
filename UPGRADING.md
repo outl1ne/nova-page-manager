@@ -1,3 +1,13 @@
+# Upgrading from Nova Page Manager 2.0 to 3.0
+
+Changed the way drafts are toggled - there's no longer a flag `drafts_enabled` in the config. You can safely remove that entry from the configuration file.
+
+From 3.0 onwards, to have drafts, you must install `nova-drafts`. After the install, the drafts will be available automatically.
+
+```bash
+composer require optimistdigital/nova-drafts
+```
+
 # Upgrading from Nova Page Manager 1.0 to 2.0
 
 ## Migrations
