@@ -1,9 +1,9 @@
 <template>
-    <panel-item :field="field">
-        <template slot="value">
-            {{ displayValue }}
-        </template>
-    </panel-item>
+  <panel-item :field="field">
+    <template slot="value">
+      {{ displayValue }}
+    </template>
+  </panel-item>
 </template>
 
 <script>

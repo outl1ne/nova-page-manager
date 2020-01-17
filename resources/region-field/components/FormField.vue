@@ -1,11 +1,22 @@
 <template>
   <default-field :field="field" :errors="errors">
     <template slot="field">
-      <select name="region" class="w-full form-control form-input form-input-bordered" v-model="region" v-if="canEditRegion">
+      <select
+        name="region"
+        class="w-full form-control form-input form-input-bordered"
+        v-model="region"
+        v-if="canEditRegion"
+      >
         <option value="">Choose a region</option>
         <option :value="region" v-for="region in field.regions" :key="region">{{ region }}</option>
       </select>
-      <input v-else class="w-full form-control form-input form-input-bordered" type="text" :disabled="true" :value="region">
+      <input
+        v-else
+        class="w-full form-control form-input form-input-bordered"
+        type="text"
+        :disabled="true"
+        :value="region"
+      />
     </template>
   </default-field>
 </template>
