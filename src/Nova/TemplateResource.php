@@ -2,10 +2,10 @@
 
 namespace OptimistDigital\NovaPageManager\Nova;
 
-use Laravel\Nova\Resource;
 use Illuminate\Http\Request;
-use OptimistDigital\NovaPageManager\NovaPageManager;
+use Laravel\Nova\Resource;
 use OptimistDigital\NovaLocaleField\Filters\LocaleFilter;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 abstract class TemplateResource extends Resource
 {

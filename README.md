@@ -137,16 +137,12 @@ Locales can be defined similarly to how templates are registered. The config acc
 // ...
 ```
 
-### Toggling page draft feature
+### Enabling page draft feature
 
-Draft feature allows you to create previews of pages before publishing them. By default this feature is disabled but can be enabled through the config.
+Draft feature allows you to create previews of pages before publishing them. By default this feature is not installed, but you can install [nova-drafts](https://github.com/optimistdigital/nova-drafts) with the following command.
 
-```php
-// in /config/nova-page-manager.php
-
-// ...
-'drafts_enabled' => true,
-// ...
+```bash
+composer require optimistdigital/nova-drafts
 ```
 
 ### Modify page path

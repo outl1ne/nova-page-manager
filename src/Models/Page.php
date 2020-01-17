@@ -3,7 +3,6 @@
 namespace OptimistDigital\NovaPageManager\Models;
 
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use Illuminate\Support\Str;
 
 class Page extends TemplateModel
 {
@@ -34,41 +33,9 @@ class Page extends TemplateModel
                 });
             }
         });
-
-        static::saving(function (Page $page) {
-            if (isset($page->draft) && NovaPageManager::draftsEnabled()) {
-                unset($page['draft']);
-                return Page::createDraft($page);
-            }
-
-            $page->slug = strtolower($page->slug);
-
-            return true;
-        });
-    }
-
-    private static function createDraft($pageData)
-    {
-        if (isset($pageData->id)) {
-            $newPage = $pageData->replicate();
-            $newPage->published = false;
-            $newPage->draft_parent_id = $pageData->id;
-            $newPage->preview_token = Str::random(20);
-            $newPage->save();
-            return false;
-        }
-
-        $pageData->published = false;
-        $pageData->preview_token = Str::random(20);
-        return true;
     }
 
     public function parent()
-    {
-        return $this->belongsTo(Page::class);
-    }
-
-    public function draftParent()
     {
         return $this->belongsTo(Page::class);
     }

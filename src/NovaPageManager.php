@@ -28,9 +28,9 @@ class NovaPageManager extends Tool
         return view('nova-page-manager::navigation');
     }
 
-    public static function draftsEnabled(): bool
+    public static function hasNovaDrafts()
     {
-        return config('nova-page-manager.drafts_enabled', false);
+        return class_exists('\OptimistDigital\NovaDrafts\DraftButton') || class_exists('\OptimistDigital\NovaDrafts\PublishedField');
     }
 
     public static function getTemplates(): array
