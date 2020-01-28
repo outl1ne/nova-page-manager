@@ -2,14 +2,15 @@
 
 namespace OptimistDigital\NovaPageManager\Nova;
 
-use Laravel\Nova\Fields\Text;
 use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\ID;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
+use OptimistDigital\NovaLocaleField\LocaleField;
 use OptimistDigital\NovaPageManager\Nova\Fields\RegionField;
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaLocaleField\LocaleField;
-use Laravel\Nova\Fields\Heading;
 
 class Region extends TemplateResource
 {
@@ -42,6 +43,9 @@ class Region extends TemplateResource
             ));
         }
 
+        if (NovaPageManager::hasNovaLang())
+            $fields[] = \OptimistDigital\NovaLang\NovaLangField\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
+
         if (count($templateFieldsAndPanels['panels']) > 0) {
             $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
         }
@@ -52,5 +56,17 @@ class Region extends TemplateResource
     public function title()
     {
         return $this->name;
+    }
+
+    public static function indexQuery(NovaRequest $request, $query)
+    {
+        if (NovaPageManager::hasNovaLang()) {
+            $localeColumn = NovaPageManager::getRegionsTableName() . '.locale';
+            $query
+                ->where($localeColumn, nova_lang_get_active_locale())
+                ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));
+        }
+
+        return $query;
     }
 }
