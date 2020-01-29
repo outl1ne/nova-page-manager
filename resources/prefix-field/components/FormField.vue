@@ -4,7 +4,8 @@
       <div class="flex align-items-center">
         <input
           v-if="field.path"
-          class="mt-1 text-gray form-control form-input-bordered bg-20 rounded-r-none pr-0 border-r-0"
+          class="mt-1 text-gray form-control form-input-bordered bg-20 rounded-r-none px-2 border-r-0"
+          style="min-width: 0;"
           :value="field.path"
           disabled
           readonly
