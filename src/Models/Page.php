@@ -45,6 +45,11 @@ class Page extends TemplateModel
         return $this->hasOne(Page::class, 'draft_parent_id', 'id');
     }
 
+    public function localeParent()
+    {
+        return $this->belongsTo(Page::class);
+    }
+
     public function isDraft()
     {
         return isset($this->preview_token) ? true : false;
@@ -52,12 +57,20 @@ class Page extends TemplateModel
 
     public function getPathAttribute()
     {
-        if (!isset($this->parent)) return NovaPageManager::getPagePath($this, $this->normalizePath($this->slug));
+        $localeParent = $this->localeParent;
+        $isLocaleChild = $localeParent !== null;
+        $pathFinderPage = $isLocaleChild ? $localeParent : $this;
+        if (!isset($pathFinderPage->parent)) return NovaPageManager::getPagePath($this, $this->normalizePath($this->slug));
 
         $parentSlugs = [];
-        $parent = $this->parent;
+        $parent = $pathFinderPage->parent;
         while (isset($parent)) {
-            $parentSlugs[] = $parent->slug;
+            if ($isLocaleChild) {
+                $localizedPage = Page::where('locale_parent_id', $parent->id)->where('locale', $this->locale)->first();
+                $parentSlugs[] = $localizedPage !== null ? $localizedPage->slug : $parent->slug;
+            } else {
+                $parentSlugs[] = $parent->slug;
+            }
             $parent = $parent->parent;
         }
         $parentSlugs = array_reverse($parentSlugs);
