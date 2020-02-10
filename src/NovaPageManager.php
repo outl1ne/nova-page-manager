@@ -89,4 +89,14 @@ class NovaPageManager extends Tool
     {
         return class_exists('\OptimistDigital\NovaLang\NovaLang');
     }
+
+    public static function pagesEnabled(): bool
+    {
+        return config('nova-page-manager.page_resource') !== false;
+    }
+
+    public static function regionsEnabled(): bool
+    {
+        return config('nova-page-manager.region_resource') !== false;
+    }
 }

@@ -58,7 +58,10 @@ return [
     | Overwrite the page resource with a custom implementation
     |--------------------------------------------------------------------------
     |
-    | Add a custom implementation of the Page resource
+    | Add a custom implementation of the Page resource.
+    |
+    | Return false if you want to disable the Page resource
+    | and hide it from the sidebar.
     |
     */
 
@@ -70,7 +73,10 @@ return [
     | Overwrite the region resource with a custom implementation
     |--------------------------------------------------------------------------
     |
-    | Add a custom implementation of the Region resource
+    | Add a custom implementation of the Region resource.
+    |
+    | Return false if you want to disable the Region resource
+    | and hide it from the sidebar.
     |
     */
 

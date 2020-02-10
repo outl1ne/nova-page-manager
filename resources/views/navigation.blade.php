@@ -8,31 +8,25 @@
 </h3>
 
 <ul class="list-reset mb-8">
-    <li class="leading-wide mb-4 text-sm">
-        <router-link
-            :to="{
-                name: 'index',
-                params: {
-                    resourceName: 'pages'
-                }
-            }"
-            class="text-white ml-8 no-underline dim"
-        >
-            Pages
-        </router-link>
-    </li>
+    @if(\OptimistDigital\NovaPageManager\NovaPageManager::pagesEnabled())
+        <li class="leading-wide mb-4 text-sm">
+            <router-link
+                :to="{ name: 'index', params: { resourceName: 'pages' } }"
+                class="text-white ml-8 no-underline dim"
+            >
+                Pages
+            </router-link>
+        </li>
+    @endif
 
-    <li class="leading-wide mb-4 text-sm">
-        <router-link
-            :to="{
-                name: 'index',
-                params: {
-                    resourceName: 'regions'
-                }
-            }"
-            class="text-white ml-8 no-underline dim"
-        >
-            Regions
-        </router-link>
-    </li>
+    @if(\OptimistDigital\NovaPageManager\NovaPageManager::regionsEnabled())
+        <li class="leading-wide mb-4 text-sm">
+            <router-link
+                :to="{ name: 'index', params: { resourceName: 'regions' } }"
+                class="text-white ml-8 no-underline dim"
+            >
+                Regions
+            </router-link>
+        </li>
+    @endif
 </ul>
