@@ -27,10 +27,6 @@ trait ResolveResponseCallback
      */
     public function resolveResponseValue($value)
     {
-        if (method_exists(get_parent_class($this), 'resolveResponseValue')) {
-            $value = parent::resolveResponseValue($value);
-        }
-
         if ($this->resolveResponseCallback && is_callable($this->resolveResponseCallback)) {
             $value = call_user_func($this->resolveResponseCallback, $value);
         }
