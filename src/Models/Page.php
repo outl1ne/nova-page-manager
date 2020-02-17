@@ -82,7 +82,7 @@ class Page extends TemplateModel
 
     protected function normalizePath($path)
     {
-        if ($path[0] !== '/') $path = "/$path";
+        if (isset($path[0]) && $path[0] !== '/') $path = "/$path";
         if (strlen($path) > 1 && substr($path, -1) === '/') $path = substr($path, 0, -1);
         return preg_replace('/[\/]+/', '/', $path);
     }
