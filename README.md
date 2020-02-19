@@ -187,6 +187,22 @@ You can overwrite the package resources (Page & Region) by setting the config op
 
 Note: If you create your resources under `App\Nova` namespace, to avoid key duplication you must manually register all other resources in the `NovaServiceProvider`. See [registering resources](https://nova.laravel.com/docs/2.0/resources/#registering-resources) on Nova documentation.
 
+## Modifying Field values
+
+All fields have a registered macro `resolveResponseUsing(callable $resolveResponseCallback)` which allows you to modify the field's value before it is returned through the Page Manager's API (ie `nova_get_page()`).
+
+The signature for the callback is: `function ($value, $templateModel) { ... }`.
+
+For example:
+
+```
+Multiselect::make('Products')
+  ->options(Product::all()->pluck('name', 'id'))
+  ->resolveResponseUsing(function ($value, $templateModel) {
+      return Product::findMany($value);
+  }),
+```
+
 ## Helper functions
 
 ### nova_get_pages_structure(\$previewToken)
@@ -305,7 +321,7 @@ Example response for querying page with slug `/home` and preview token `L1SVNKDz
 }
 ```
 
-### nova_get_page_by_path($slug, $previewToken, $locale)
+### nova_get_page_by_path($slug, $previewToken, \$locale)
 
 The helper function `nova_get_page_by_path($slug, $previewToken, $locale)` finds and returns the page with the given path and all of it's parents. Preview token and locale are optional. Preview token is used to query draft pages when draft feature is enabled.
 
@@ -333,7 +349,7 @@ Example response for querying page with slug `/home/about` and preview token `L1
   "parent_id": 1,
   "template": "about-page",
   "preview_token": "L1SVNKDzBNVkBq8EQSna",
-  "path": "/home/about",
+  "path": "/home/about"
 }
 ```
 
