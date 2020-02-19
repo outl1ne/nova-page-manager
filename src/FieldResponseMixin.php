@@ -14,7 +14,6 @@ class FieldResponseMixin
     {
         return function (callable $resolveResponseCallback) {
             $this->{'resolveResponseCallback'} = $resolveResponseCallback;
-
             return $this;
         };
     }
@@ -28,17 +27,15 @@ class FieldResponseMixin
     public function resolveResponseValue()
     {
         return function ($value, $templateModel) {
-            if (!isset($this->resolveResponseCallback)) return $value;
-
             if (method_exists($this, 'resolveResponseValue')) {
                 $value = $this->resolveResponseValue($value, $templateModel);
             }
 
-            if (is_callable($this->resolveResponseCallback)) {
+            if (isset($this->resolveResponseCallback) && is_callable($this->resolveResponseCallback)) {
                 $value = call_user_func($this->resolveResponseCallback, $value);
             }
-    
+
             return $value;
         };
-    }    
+    }
 }
