@@ -231,9 +231,13 @@ if (!function_exists('nova_get_page_by_slug')) {
 if (!function_exists('nova_resolve_template_field_value')) {
     function nova_resolve_template_field_value($field, $fieldValue, $templateModel)
     {
-        return method_exists($field, 'resolveResponseValue')
-            ? $field->resolveResponseValue($fieldValue, $templateModel)
-            : $fieldValue;
+        if ($field::hasMacro('resolveResponseValue')) {
+            return $field->__call('resolveResponseValue', [$fieldValue, $templateModel]);
+        } elseif (method_exists($field, 'resolveResponseValue')) {
+            return $field->resolveResponseValue($fieldValue, $templateModel);
+        } else {
+            return $fieldValue;
+        }
     }
 }
 
