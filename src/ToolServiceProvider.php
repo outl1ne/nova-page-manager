@@ -2,13 +2,15 @@
 
 namespace OptimistDigital\NovaPageManager;
 
-use Illuminate\Support\Facades\Validator;
-use Illuminate\Support\ServiceProvider;
 use Laravel\Nova\Nova;
-use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
-use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
+use Laravel\Nova\Fields\Field;
+use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\Validator;
 use OptimistDigital\NovaPageManager\Nova\Page;
 use OptimistDigital\NovaPageManager\Nova\Region;
+use OptimistDigital\NovaPageManager\FieldResponseMixin;
+use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
+use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
 
 class ToolServiceProvider extends ServiceProvider
 {
@@ -55,5 +57,7 @@ class ToolServiceProvider extends ServiceProvider
             if ($value === '/') return true;
             return preg_match('/^[\pL\pM\pN_-]+$/u', $value) > 0;
         }, 'Field must be alphanumeric with dashes or underscores or a single slash.');
+
+        Field::mixin(new FieldResponseMixin);
     }
 }
