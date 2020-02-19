@@ -137,9 +137,10 @@ class Page extends TemplateResource
             ->orderByRaw('hierarchy_order');
 
         if (NovaPageManager::hasNovaLang()) {
-            $query
-                ->where($localeColumn, nova_lang_get_active_locale())
-                ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));
+            $query->where(function ($subQuery) use ($localeColumn) {
+                $subQuery->where($localeColumn, nova_lang_get_active_locale())
+                    ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));
+            });
         }
 
         return $query;
