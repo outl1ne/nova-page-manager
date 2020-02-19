@@ -62,9 +62,10 @@ class Region extends TemplateResource
     {
         if (NovaPageManager::hasNovaLang()) {
             $localeColumn = NovaPageManager::getRegionsTableName() . '.locale';
-            $query
-                ->where($localeColumn, nova_lang_get_active_locale())
-                ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));
+            $query->where(function ($subQuery) use ($localeColumn) {
+                $subQuery->where($localeColumn, nova_lang_get_active_locale())
+                    ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));
+            });
         }
 
         return $query;
