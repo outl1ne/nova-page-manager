@@ -14,12 +14,12 @@
     "cross-env": "^7.0.0",
     "laravel-mix": "^5.0.1",
     "prettier": "^1.19.1",
-    "sass": "^1.25.0",
+    "sass": "^1.26.1",
     "sass-loader": "^8.0.2",
     "vue-template-compiler": "^2.6.11"
   },
   "dependencies": {
-    "laravel-nova": "^1.0.11",
+    "laravel-nova": "^1.2.0",
     "vue": "^2.6.11"
   }
 }
