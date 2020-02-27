@@ -88,6 +88,7 @@ class Page extends TemplateResource
         if (NovaPageManager::hasNovaDrafts()) {
             $fields[] = \OptimistDigital\NovaDrafts\PublishedField::make('State', 'published');
             $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make('Draft');
+            $fields[] = \OptimistDigital\NovaDrafts\UnpublishButton::make('Unpublish');
         }
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());

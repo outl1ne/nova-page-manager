@@ -19,9 +19,10 @@ if (!function_exists('nova_get_pages_structure')) {
             $data = [];
             $pages->each(function ($page) use (&$data, &$formatPages, $previewToken) {
                 $localeChildren = Page::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
-                    $query->where('published', true)->orWhere('preview_token', $previewToken);
+                    $query->where('published', true);
+                    if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
                 })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-                    $query->where('preview_token', $previewToken);
+                    if (!empty($previewToken)) $query->where('preview_token', $previewToken);
                 })->get();
 
                 $_pages = collect([$page, $localeChildren])->flatten();
@@ -35,9 +36,10 @@ if (!function_exists('nova_get_pages_structure')) {
                 ];
 
                 $children = Page::where('parent_id', $page->id)->where(function ($query) use ($previewToken) {
-                    $query->where('published', true)->orWhere('preview_token', $previewToken);
+                    $query->where('published', true);
+                    if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
                 })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-                    $query->where('preview_token', $previewToken);
+                    if (!empty($previewToken)) $query->where('preview_token', $previewToken);
                 })->get();
 
                 if ($children->count() > 0) {
@@ -50,9 +52,10 @@ if (!function_exists('nova_get_pages_structure')) {
         };
 
         $parentPages = Page::whereNull('parent_id')->whereNull('locale_parent_id')->where(function ($query) use ($previewToken) {
-            $query->where('published', true)->orWhere('preview_token', $previewToken);
+            $query->where('published', true);
+            if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
         })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-            $query->where('preview_token', $previewToken);
+            if (!empty($previewToken)) $query->where('preview_token', $previewToken);
         })->get();
 
         return $formatPages($parentPages);
@@ -70,9 +73,10 @@ if (!function_exists('nova_get_pages_structure_flat')) {
             $data = [];
             $pages->each(function ($page) use (&$data, &$formatPages, $previewToken) {
                 $localeChildren = Page::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
-                    $query->where('published', true)->orWhere('preview_token', $previewToken);
+                    $query->where('published', true);
+                    if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
                 })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-                    $query->where('preview_token', $previewToken);
+                    if (!empty($previewToken)) $query->where('preview_token', $previewToken);
                 })->get();
 
                 $_pages = collect([$page, $localeChildren])->flatten();
@@ -89,9 +93,10 @@ if (!function_exists('nova_get_pages_structure_flat')) {
         };
 
         $pages = Page::where(function ($query) use ($previewToken) {
-            $query->where('published', true)->orWhere('preview_token', $previewToken);
+            $query->where('published', true);
+            if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
         })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-            $query->where('preview_token', $previewToken);
+            if (!empty($previewToken)) $query->where('preview_token', $previewToken);
         })->get();
 
         return $formatPages($pages);
@@ -182,10 +187,11 @@ if (!function_exists('nova_get_page')) {
 
         $page = Page::where(function ($query) use ($previewToken, $pageId) {
             $query->where('id', $pageId)->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-                $query->where('preview_token', $previewToken);
+                if (!empty($previewToken)) $query->where('preview_token', $previewToken);
             });
         })->orWhere(function ($query) use ($previewToken, $pageId) {
-            $query->where('preview_token', $previewToken)->where('draft_parent_id', $pageId);
+            $query->where('draft_parent_id', $pageId);
+            if (!empty($previewToken)) $query->where('preview_token', $previewToken);
         })->firstOrFail();
 
         if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
@@ -209,7 +215,7 @@ if (!function_exists('nova_get_page_by_slug')) {
 
         $page = Page::where('slug', $slug)
             ->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-                $query->where('preview_token', $previewToken);
+                if (!empty($previewToken)) $query->where('preview_token', $previewToken);
             })
             ->orWhere(DB::raw("REPLACE(CONCAT(locale, '/', slug), '//', '/')"), $slug)
             ->orWhere(DB::raw("REPLACE(CONCAT(locale, '/', slug), '//', '/')"), $slug . '/')
@@ -361,7 +367,7 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
                         ->orWhereNull('parent_id');
                 })
                 ->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-                    $query->where('preview_token', $previewToken);
+                    if (!empty($previewToken)) $query->where('preview_token', $previewToken);
                 });
 
             if (isset($locale)) $query->where('locale', $locale);

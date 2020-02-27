@@ -24,7 +24,7 @@
   "require": {
     "php": ">=7.1.0",
     "laravel/nova": "^2.9",
-    "optimistdigital/nova-locale-field": "^2.0.0",
+    "optimistdigital/nova-locale-field": "^2.0.1",
     "doctrine/dbal": "^2.9"
   },
   "autoload": {
