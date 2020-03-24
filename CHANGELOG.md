@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.1.3] - 2020-03-24
 
-### Added
+### Changed
 
 - Fix query bug in `nova_get_pages_structure_flat()` that caused duplicate entries
+- Update packages
 
 ## [3.1.2] - 2020-03-05
 
