@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.3] - 2020-03-24
+
+### Added
+
+- Fix query bug in `nova_get_pages_structure_flat()` that caused duplicate entries
+
 ## [3.1.2] - 2020-03-05
 
 ### Added
@@ -416,58 +422,3 @@ php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServi
 - Page and region management
 - Programmatically created templates for pages and regions
 - Multilanguage support
-
-[3.1.2]: https://github.com/optimistdigital/nova-page-manager/compare/3.1.1...3.1.2
-[3.1.1]: https://github.com/optimistdigital/nova-page-manager/compare/3.1.0...3.1.1
-[3.1.0]: https://github.com/optimistdigital/nova-page-manager/compare/3.0.4...3.1.0
-[3.0.4]: https://github.com/optimistdigital/nova-page-manager/compare/3.0.3...3.0.4
-[3.0.3]: https://github.com/optimistdigital/nova-page-manager/compare/3.0.2...3.0.3
-[3.0.2]: https://github.com/optimistdigital/nova-page-manager/compare/3.0.1...3.0.2
-[3.0.1]: https://github.com/optimistdigital/nova-page-manager/compare/3.0.0...3.0.1
-[3.0.0]: https://github.com/optimistdigital/nova-page-manager/compare/2.3.2...3.0.0
-[2.3.2]: https://github.com/optimistdigital/nova-page-manager/compare/2.3.1...2.3.2
-[2.3.1]: https://github.com/optimistdigital/nova-page-manager/compare/2.3.0...2.3.1
-[2.3.0]: https://github.com/optimistdigital/nova-page-manager/compare/2.2.2...2.3.0
-[2.2.2]: https://github.com/optimistdigital/nova-page-manager/compare/2.2.1...2.2.2
-[2.2.1]: https://github.com/optimistdigital/nova-page-manager/compare/2.2.0...2.2.1
-[2.2.0]: https://github.com/optimistdigital/nova-page-manager/compare/2.1.1...2.2.0
-[2.1.1]: https://github.com/optimistdigital/nova-page-manager/compare/2.1.0...2.1.1
-[2.1.0]: https://github.com/optimistdigital/nova-page-manager/compare/2.0.3...2.1.0
-[2.0.3]: https://github.com/optimistdigital/nova-page-manager/compare/2.0.2...2.0.3
-[2.0.2]: https://github.com/optimistdigital/nova-page-manager/compare/2.0.1...2.0.2
-[2.0.1]: https://github.com/optimistdigital/nova-page-manager/compare/2.0.0...2.0.1
-[2.0.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.9...2.0.0
-[1.9.9]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.8...1.9.9
-[1.9.8]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.7...1.9.8
-[1.9.7]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.6...1.9.7
-[1.9.6]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.5...1.9.6
-[1.9.5]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.4...1.9.5
-[1.9.4]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.3...1.9.4
-[1.9.3]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.2...1.9.3
-[1.9.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.1...1.9.2
-[1.9.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.9.0...1.9.1
-[1.9.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.8.2...1.9.0
-[1.8.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.8.1...1.8.2
-[1.8.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.8.0...1.8.1
-[1.8.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.4...1.8.0
-[1.7.4]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.3...1.7.4
-[1.7.3]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.2...1.7.3
-[1.7.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.1...1.7.2
-[1.7.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.7.0...1.7.1
-[1.7.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.6.1...1.7.0
-[1.6.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.6.0...1.6.1
-[1.6.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.5.2...1.6.0
-[1.5.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.5.1...1.5.2
-[1.5.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.5.0...1.5.1
-[1.5.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.4.0...1.5.0
-[1.4.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.3.1...1.4.0
-[1.3.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.3.0...1.3.1
-[1.3.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.3...1.3.0
-[1.2.3]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.2...1.2.3
-[1.2.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.1...1.2.2
-[1.2.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.2.0...1.2.1
-[1.2.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.1.0...1.2.0
-[1.1.0]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.2...1.1.0
-[1.0.2]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.1...1.0.2
-[1.0.1]: https://github.com/optimistdigital/nova-page-manager/compare/1.0.0...1.0.1
-[1.0.0]: https://github.com/optimistdigital/nova-page-manager/releases/tag/1.0.0
