@@ -97,7 +97,7 @@ if (!function_exists('nova_get_pages_structure_flat')) {
             if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
         })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
             if (!empty($previewToken)) $query->where('preview_token', $previewToken);
-        })->get();
+        })->whereNull('locale_parent_id')->get();
 
         return $formatPages($pages);
     }
