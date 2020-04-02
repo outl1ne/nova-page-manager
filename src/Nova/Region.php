@@ -37,10 +37,7 @@ class Region extends TemplateResource
         ];
 
         if (count($templateFieldsAndPanels['fields']) > 0) {
-            $fields[] = new Panel('Region data', array_merge(
-                [Heading::make('Region data')->hideFromDetail()],
-                $templateFieldsAndPanels['fields']
-            ));
+            $fields[] = new Panel('Region data', $templateFieldsAndPanels['fields']);
         }
 
         if (NovaPageManager::hasNovaLang())

@@ -94,13 +94,7 @@ class Page extends TemplateResource
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
 
         if (count($templateFieldsAndPanels['fields']) > 0) {
-            $fields[] = new Panel(
-                'Page data',
-                array_merge(
-                    [Heading::make('Page data')->hideFromDetail()],
-                    $templateFieldsAndPanels['fields']
-                )
-            );
+            $fields[] = new Panel('Page data', $templateFieldsAndPanels['fields']);
         }
 
         if (count($templateFieldsAndPanels['panels']) > 0) {
@@ -113,7 +107,6 @@ class Page extends TemplateResource
     protected function getSeoFields()
     {
         return [
-            Heading::make('SEO')->hideFromIndex()->hideWhenCreating()->hideFromDetail(),
             Text::make('SEO Title', 'seo_title')->hideFromIndex()->hideWhenCreating(),
             Text::make('SEO Description', 'seo_description')->hideFromIndex()->hideWhenCreating(),
             Image::make('SEO Image', 'seo_image')->hideFromIndex()->hideWhenCreating()
