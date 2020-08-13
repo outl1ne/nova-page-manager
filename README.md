@@ -145,6 +145,10 @@ Draft feature allows you to create previews of pages before publishing them. By 
 composer require optimistdigital/nova-drafts
 ```
 
+### Overriding SEO fields
+
+The default SEO fields can be overridden using the configuration file. The configuration file contains the key `seo_fields` which accepts an array (or a callable which returns an array) of fields.
+
 ### Modify page path
 
 To add a locale prefix to page paths or to modify page paths for any other reason on the `Page` model, supply a callback to `page_path` in the config.
