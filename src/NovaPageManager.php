@@ -75,7 +75,7 @@ class NovaPageManager extends Tool
 
     public static function getCustomSeoFields() : array
     {
-        $seoFields = config('nova-page-manager.seo-fields', null);
+        $seoFields = config('nova-page-manager.seo_fields', null);
         if (is_callable($seoFields)) return call_user_func($seoFields);
         if (is_array($seoFields)) return $seoFields;
         return [];
