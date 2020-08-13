@@ -87,7 +87,7 @@ return [
     | Overwrite seo fields with a custom implementation
     |--------------------------------------------------------------------------
     |
-    | Add a custom implementation of Seo fields.
+    | Add a custom implementation of seo fields.
     |
     | When $seo is assigned as true in template class this custom array of
     | fields will be displayed in resource view instead of the default one.
