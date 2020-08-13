@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.1.6] - 2020-08-13
+
+### Added
+
+- Added customizable SEO fields (by [@KasparRosin](https://github.com/KasparRosin))
+
+### Changed
+
+- Fixed a case where customized table name was not respected in a migration (by [@kakajansh](https://github.com/kakajansh))
+- Updated packages
+
 ## [3.1.5] - 2020-04-07
 
 ### Changed
