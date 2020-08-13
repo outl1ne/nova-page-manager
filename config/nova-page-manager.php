@@ -82,6 +82,20 @@ return [
 
     'region_resource' => null,
 
+    /*
+    |--------------------------------------------------------------------------
+    | Overwrite seo fields with a custom implementation
+    |--------------------------------------------------------------------------
+    |
+    | Add a custom implementation of Seo fields.
+    |
+    | When $seo is assigned as true in template class this custom array of
+    | fields will be displayed in resource view instead of the default one.
+    |
+    */
+
+    'seo_fields' => null,
+
 
     /*
     |--------------------------------------------------------------------------

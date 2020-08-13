@@ -106,6 +106,9 @@ class Page extends TemplateResource
 
     protected function getSeoFields()
     {
+        $customSeoFields = NovaPageManager::getCustomSeoFields();
+        if (!empty($customSeoFields)) return $customSeoFields;
+
         return [
             Text::make('SEO Title', 'seo_title')->hideFromIndex()->hideWhenCreating(),
             Text::make('SEO Description', 'seo_description')->hideFromIndex()->hideWhenCreating(),

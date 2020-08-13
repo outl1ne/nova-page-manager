@@ -73,6 +73,14 @@ class NovaPageManager extends Tool
         return config('nova-page-manager.table', 'nova_page_manager') . '_regions';
     }
 
+    public static function getCustomSeoFields() : array
+    {
+        $seoFields = config('nova-page-manager.seo-fields', null);
+        if (is_callable($seoFields)) return call_user_func($seoFields);
+        if (is_array($seoFields)) return $seoFields;
+        return [];
+    }
+
     public static function getPageUrl(Page $page)
     {
         $getPageUrl = config('nova-page-manager.page_url');
