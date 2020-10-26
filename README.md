@@ -325,9 +325,9 @@ Example response for querying page with slug `/home` and preview token `L1SVNKDz
 }
 ```
 
-### nova_get_page_by_path($slug, $previewToken, \$locale)
+### nova_page_manager_get_page_by_path($slug, $previewToken, \$locale)
 
-The helper function `nova_get_page_by_path($slug, $previewToken, $locale)` finds and returns the page with the given path and all of it's parents. Preview token and locale are optional. Preview token is used to query draft pages when draft feature is enabled.
+The helper function `nova_page_manager_get_page_by_path($slug, $previewToken, $locale)` finds and returns the page with the given path and all of it's parents. Preview token and locale are optional. Preview token is used to query draft pages when draft feature is enabled.
 
 Example response for querying page with slug `/home/about` and preview token `L1SVNKDzBNVkBq8EQSna` (`nova_get_page("home/about", "L1SVNKDzBNVkBq8EQSna")`):
 
