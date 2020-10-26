@@ -308,7 +308,7 @@ Example response for querying page with ID `3` (`nova_get_page(3)`):
 
 The helper function `nova_get_page_by_slug($slug, $previewToken)` finds and returns the page with the given slug. Preview token is optional and used to query draft pages when draft feature is enabled.
 
-Example response for querying page with slug `/home` and preview token `L1SVNKDzBNVkBq8EQSna` (`nova_get_page("home", "L1SVNKDzBNVkBq8EQSna")`):
+Example response for querying page with slug `/home` and preview token `L1SVNKDzBNVkBq8EQSna` (`nova_get_page_by_slug("home", "L1SVNKDzBNVkBq8EQSna")`):
 
 ```json
 {
@@ -329,7 +329,7 @@ Example response for querying page with slug `/home` and preview token `L1SVNKDz
 
 The helper function `nova_page_manager_get_page_by_path($slug, $previewToken, $locale)` finds and returns the page with the given path and all of it's parents. Preview token and locale are optional. Preview token is used to query draft pages when draft feature is enabled.
 
-Example response for querying page with slug `/home/about` and preview token `L1SVNKDzBNVkBq8EQSna` (`nova_get_page("home/about", "L1SVNKDzBNVkBq8EQSna")`):
+Example response for querying page with slug `/home/about` and preview token `L1SVNKDzBNVkBq8EQSna` (`nova_page_manager_get_page_by_path("home/about", "L1SVNKDzBNVkBq8EQSna")`):
 
 ```json
 {
