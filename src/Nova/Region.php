@@ -41,7 +41,7 @@ class Region extends TemplateResource
         }
 
         if (NovaPageManager::hasNovaLang())
-            $fields[] = \OptimistDigital\NovaLang\NovaLangField\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
+            $fields[] = \OptimistDigital\NovaLang\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
 
         if (count($templateFieldsAndPanels['panels']) > 0) {
             $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
