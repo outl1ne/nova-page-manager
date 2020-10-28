@@ -1,7 +1,7 @@
 <?php
 
+use Exception;
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 
@@ -15,16 +15,22 @@ class MakeSlugLocalePublishedParentidPairUnique extends Migration
     public function up()
     {
         $pagesTableName = NovaPageManager::getPagesTableName();
-        $key = DB::select(
-            DB::raw("SHOW KEYS
-            FROM $pagesTableName
-            WHERE Key_name LIKE 'nova_page_manager_pages%'
-            AND Key_name LIKE '%locale_slug_published_unique'")
-        );
-        $indexValue = empty($key) ? 'nova_page_manager' : 'nova_page_manager_pages';
 
-        Schema::table($pagesTableName, function ($table) use ($indexValue) {
-            $table->dropUnique("{$indexValue}_locale_slug_published_unique");
+        try {
+            Schema::table($pagesTableName, function ($table) {
+                $table->dropUnique("nova_page_manager_locale_slug_published_unique");
+            });
+        } catch (Exception $e) {
+        }
+
+        try {
+            Schema::table($pagesTableName, function ($table) {
+                $table->dropUnique("nova_page_manager_pages_locale_slug_published_unique");
+            });
+        } catch (Exception $e) {
+        }
+
+        Schema::table($pagesTableName, function ($table) {
             $table->unique(['locale', 'slug', 'published', 'parent_id'], 'nova_page_manager_locale_slug_published_parent_id_unique');
         });
     }
