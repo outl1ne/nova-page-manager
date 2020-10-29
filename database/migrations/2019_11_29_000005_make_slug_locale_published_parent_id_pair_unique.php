@@ -3,6 +3,9 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Support\Facades\Schema;
 use OptimistDigital\NovaPageManager\NovaPageManager;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class MakeSlugLocalePublishedParentidPairUnique extends Migration
 {
@@ -15,21 +18,15 @@ class MakeSlugLocalePublishedParentidPairUnique extends Migration
     {
         $pagesTableName = NovaPageManager::getPagesTableName();
 
-        try {
-            Schema::table($pagesTableName, function ($table) {
-                $table->dropUnique("nova_page_manager_locale_slug_published_unique");
+        Schema::table($pagesTableName, function (Blueprint $table) use ($pagesTableName) {
+            $keys = DB::connection()->getDoctrineSchemaManager()->listTableIndexes($pagesTableName);
+            $keys = array_keys($keys);
+            $uniqueKey = array_filter($keys, function ($key) {
+                return Str::contains($key, 'locale_slug_published_unique');
             });
-        } catch (Exception $e) {
-        }
+            $uniqueKey = $uniqueKey[0] ?? null;
+            if ($uniqueKey) $table->dropUnique($uniqueKey);
 
-        try {
-            Schema::table($pagesTableName, function ($table) {
-                $table->dropUnique("nova_page_manager_pages_locale_slug_published_unique");
-            });
-        } catch (Exception $e) {
-        }
-
-        Schema::table($pagesTableName, function ($table) {
             $table->unique(['locale', 'slug', 'published', 'parent_id'], 'nova_page_manager_locale_slug_published_parent_id_unique');
         });
     }
