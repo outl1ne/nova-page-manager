@@ -41,9 +41,6 @@ class AddDraftFieldsToPage extends Migration
 
         Schema::table($pagesTableName, function ($table) use ($pagesTableName) {
             $table->dropForeign($pagesTableName . '_draft_parent_id_foreign');
-            $table->dropColumn('draft_parent_id');
-            $table->dropColumn('published');
-            $table->dropColumn('preview_token');
             $table->dropUnique('nova_page_manager_locale_slug_published_unique');
             $table->unique(['locale', 'slug'], 'nova_page_manager_locale_slug_unique');
 
@@ -51,6 +48,10 @@ class AddDraftFieldsToPage extends Migration
             $table->dropUnique('nova_page_manager_locale_parent_id_locale_published_unique');
             $table->unique(['locale_parent_id', 'locale'], 'nova_page_manager_locale_parent_id_locale_unique');
             $table->dropIndex('nova_page_manager_locale_parent_id_workaround_index'); // WORKAROUND FOR: Cannot drop index needed in a foreign key constraint
+
+            $table->dropColumn('draft_parent_id');
+            $table->dropColumn('published');
+            $table->dropColumn('preview_token');
         });
     }
 }
