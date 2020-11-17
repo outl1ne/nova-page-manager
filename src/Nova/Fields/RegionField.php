@@ -29,7 +29,8 @@ class RegionField extends Field
 
         $regionsTableName = NovaPageManager::getRegionsTableName();
         $locale = request()->get('locale');
-        $this->rules('required', "unique:$regionsTableName,template,{{resourceId}},id,locale,$locale");
+        $this->creationRules('required', "unique:$regionsTableName,template,NULL,id,locale,$locale");
+        $this->updateRules('required', "unique:$regionsTableName,template,{{resourceId}},id,locale,$locale");
     }
 
     public function getAvailableRegions(Region $region = null): array
