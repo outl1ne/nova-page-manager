@@ -84,7 +84,7 @@ if (!function_exists('nova_get_pages_structure_flat')) {
                     'id' => $_pages->pluck('id', 'locale'),
                     'name' => $_pages->pluck('name', 'locale'),
                     'path' => $_pages->pluck('path', 'locale'),
-                    'parent' => $_pages->pluck('parent_id', 'locale'),
+                    'parent_id' => $_pages->pluck('parent_id', 'locale'),
                     'template' => $page->template,
                 ];
 
