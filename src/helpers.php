@@ -283,6 +283,17 @@ if (!function_exists('nova_resolve_fields_data')) {
     {
         $resolvedData = [];
 
+        $fields = $fields->map(function ($field) use ($data) {
+            if ($field->component === 'nova-dependency-container') {
+                $field->resolveForDisplay($data, null);
+
+                // Are all satisfied?
+                $allDepsSatisfied = empty(collect($field->meta['dependencies'])->firstWhere('satisfied', '!=', true));
+                if ($allDepsSatisfied) return $field->meta['fields'];
+            }
+            return $field;
+        })->flatten(1)->filter();
+
         foreach (((array) $data) as $fieldAttribute => $fieldValue) {
 
             $field = $fields->first(function ($value, $key) use ($fieldAttribute) {

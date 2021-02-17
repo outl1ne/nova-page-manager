@@ -52,6 +52,19 @@ abstract class TemplateResource extends Resource
                 if ($field instanceof \Laravel\Nova\Fields\Heading) {
                     return $field->hideFromDetail();
                 }
+
+                if ($field->component === 'nova-dependency-container') {
+                    $field->meta['fields'] = collect($field->meta['fields'])->map(function ($field) {
+                        $field->attribute = 'data->' . $field->attribute;
+                        return $field;
+                    })->toArray();
+
+                    $field->meta['dependencies'] = collect($field->meta['dependencies'])->map(function ($dep) {
+                        $dep['field'] = 'data->' . $dep['field'];
+                        $dep['property'] = 'data->' . $dep['property'];
+                        return $dep;
+                    })->toArray();
+                }
             }
 
             if (method_exists($field, 'hideFromIndex')) {
