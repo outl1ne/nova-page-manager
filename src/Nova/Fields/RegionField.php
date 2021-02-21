@@ -4,7 +4,6 @@ namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaPageManager\Models\Region;
 
 class RegionField extends Field
 {
@@ -24,7 +23,7 @@ class RegionField extends Field
         $this->withMeta([
             'asHtml' => true,
             'regions' => $regions,
-            'existingRegions' => Region::whereNull('locale_parent_id')->get()->pluck('template', 'id'),
+            'existingRegions' => NovaPageManager::getRegionModel()::whereNull('locale_parent_id')->get()->pluck('template', 'id'),
         ]);
 
         $regionsTableName = NovaPageManager::getRegionsTableName();
@@ -33,7 +32,7 @@ class RegionField extends Field
         $this->updateRules('required', "unique:$regionsTableName,template,{{resourceId}},id,locale,$locale");
     }
 
-    public function getAvailableRegions(Region $region = null): array
+    public function getAvailableRegions($region = null): array
     {
         if (isset($region) && isset($region->id) && isset($region->template)) {
             return [$region->template];
@@ -41,7 +40,7 @@ class RegionField extends Field
 
         return collect(NovaPageManager::getRegionTemplates())
             ->filter(function ($template) {
-                return !Region::where('template', $template::$name)->exists();
+                return !NovaPageManager::getRegionModel()::where('template', $template::$name)->exists();
             })
             ->map(function ($template) {
                 return $template::$name;

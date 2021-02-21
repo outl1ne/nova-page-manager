@@ -1,7 +1,5 @@
 <?php
 
-use OptimistDigital\NovaPageManager\Models\Page;
-use OptimistDigital\NovaPageManager\Models\Region;
 use Illuminate\Support\Collection;
 use OptimistDigital\NovaPageManager\Models\TemplateModel;
 use OptimistDigital\NovaPageManager\NovaPageManager;
@@ -18,7 +16,7 @@ if (!function_exists('nova_get_pages_structure')) {
         $formatPages = function (Collection $pages) use (&$formatPages, $previewToken) {
             $data = [];
             $pages->each(function ($page) use (&$data, &$formatPages, $previewToken) {
-                $localeChildren = Page::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
+                $localeChildren = NovaPageManager::getPageModel()::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
                     $query->where('published', true);
                     if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
                 })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
@@ -35,7 +33,7 @@ if (!function_exists('nova_get_pages_structure')) {
                     'template' => $page->template,
                 ];
 
-                $children = Page::where('parent_id', $page->id)->where(function ($query) use ($previewToken) {
+                $children = NovaPageManager::getPageModel()::where('parent_id', $page->id)->where(function ($query) use ($previewToken) {
                     $query->where('published', true);
                     if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
                 })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
@@ -51,7 +49,7 @@ if (!function_exists('nova_get_pages_structure')) {
             return $data;
         };
 
-        $parentPages = Page::whereNull('parent_id')->whereNull('locale_parent_id')->where(function ($query) use ($previewToken) {
+        $parentPages = NovaPageManager::getPageModel()::whereNull('parent_id')->whereNull('locale_parent_id')->where(function ($query) use ($previewToken) {
             $query->where('published', true);
             if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
         })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
@@ -72,7 +70,7 @@ if (!function_exists('nova_get_pages_structure_flat')) {
         $formatPages = function (Collection $pages) use (&$formatPages, $previewToken) {
             $data = [];
             $pages->each(function ($page) use (&$data, &$formatPages, $previewToken) {
-                $localeChildren = Page::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
+                $localeChildren = NovaPageManager::getPageModel()::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
                     $query->where('published', true);
                     if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
                 })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
@@ -93,7 +91,7 @@ if (!function_exists('nova_get_pages_structure_flat')) {
             return $data;
         };
 
-        $pages = Page::where(function ($query) use ($previewToken) {
+        $pages = NovaPageManager::getPageModel()::where(function ($query) use ($previewToken) {
             $query->where('published', true);
             if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
         })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
@@ -114,7 +112,7 @@ if (!function_exists('nova_get_regions')) {
         $formatRegions = function (Collection $regions) {
             $data = [];
             $regions->each(function ($region) use (&$data) {
-                $localeChildren = Region::where('locale_parent_id', $region->id)->get();
+                $localeChildren = NovaPageManager::getRegionModel()::where('locale_parent_id', $region->id)->get();
                 $_regions = collect([$region, $localeChildren])->flatten();
                 $data[] = [
                     'locales' => $_regions->pluck('locale'),
@@ -132,7 +130,7 @@ if (!function_exists('nova_get_regions')) {
             return $data;
         };
 
-        $parentRegions = Region::whereNull('locale_parent_id')->get();
+        $parentRegions = NovaPageManager::getRegionModel()::whereNull('locale_parent_id')->get();
         return $formatRegions($parentRegions);
     }
 }
@@ -186,7 +184,7 @@ if (!function_exists('nova_get_page')) {
     {
         if (empty($pageId)) return null;
 
-        $page = Page::where(function ($query) use ($previewToken, $pageId) {
+        $page = NovaPageManager::getPageModel()::where(function ($query) use ($previewToken, $pageId) {
             $query->where('id', $pageId)->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
                 if (!empty($previewToken)) $query->where('preview_token', $previewToken);
             });
@@ -214,7 +212,7 @@ if (!function_exists('nova_get_page_by_slug')) {
     {
         if (empty($slug)) return null;
 
-        $page = Page::where('slug', $slug)
+        $page = NovaPageManager::getPageModel()::where('slug', $slug)
             ->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
                 if (!empty($previewToken)) $query->where('preview_token', $previewToken);
             })
@@ -372,7 +370,7 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
 
         $page = null;
         foreach ($slugs as $slug) {
-            $query = Page::where('slug', $slug)
+            $query = NovaPageManager::getPageModel()::where('slug', $slug)
                 ->where(function ($query) use ($parent) {
                     $query
                         ->where('parent_id', $parent['id'])

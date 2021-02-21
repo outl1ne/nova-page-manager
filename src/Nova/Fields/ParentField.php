@@ -68,7 +68,7 @@ class ParentField extends Field
 
         $parent = null;
         if (isset($resource->parent_id)) {
-            $parentPage = Page::find($resource->parent_id);
+            $parentPage = NovaPageManager::getPageModel()::find($resource->parent_id);
             $parent = [
                 'name' => $parentPage->name,
                 'slug' => $parentPage->slug,
@@ -89,19 +89,19 @@ class ParentField extends Field
 
         // All parent's parents
         if (isset($page->parent_id)) {
-            $_current = Page::find($page->parent_id);
+            $_current = NovaPageManager::getPageModel()::find($page->parent_id);
             while (isset($_current->parent_id)) {
-                $_current = Page::find($_current->parent_id);
+                $_current = NovaPageManager::getPageModel()::find($_current->parent_id);
                 $childrenAndParents[] = $_current;
             }
         }
 
         // All children
-        $childPages = Page::where('parent_id', $page->id)->get();
+        $childPages = NovaPageManager::getPageModel()::where('parent_id', $page->id)->get();
 
         while (sizeof($childPages) > 0) {
             $childrenAndParents = array_merge($childrenAndParents, $childPages->toArray());
-            $childPages = Page::whereIn('parent_id', $childPages->map(function ($childPage) {
+            $childPages = NovaPageManager::getPageModel()::whereIn('parent_id', $childPages->map(function ($childPage) {
                 return $childPage->id;
             }))->get();
         }

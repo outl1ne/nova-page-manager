@@ -4,8 +4,6 @@ namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
 use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaPageManager\Models\Page;
-use OptimistDigital\NovaPageManager\Models\Region;
 
 class TemplateField extends Field
 {
@@ -29,7 +27,7 @@ class TemplateField extends Field
                         'value' => $template::$name
                     ];
                 }),
-            'resourceTemplates' => collect(Page::all(), Region::all())->flatten()->pluck('template', 'id')
+            'resourceTemplates' => collect(NovaPageManager::getRegionModel()::all(), NovaPageManager::getRegionModel()::all())->flatten()->pluck('template', 'id')
         ]);
 
         $templates = array_map(function ($template) {
