@@ -285,7 +285,10 @@ if (!function_exists('nova_resolve_fields_data')) {
 
         $fields = $fields->map(function ($field) use ($data) {
             if ($field->component === 'nova-dependency-container') {
-                $field->resolveForDisplay($data, null);
+                try {
+                    $field->resolveForDisplay($data, null);
+                } catch (Throwable $e) {
+                }
 
                 // Are all satisfied?
                 $allDepsSatisfied = empty(collect($field->meta['dependencies'])->firstWhere('satisfied', '!=', true));
