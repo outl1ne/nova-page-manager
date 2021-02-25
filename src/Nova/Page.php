@@ -30,7 +30,7 @@ class Page extends TemplateResource
         $templateClass = $this->getTemplateClass();
         $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
         $locales = NovaPageManager::getLocales();
-        $hasManyDifferentLocales = Page::select('locale')->distinct()->get()->count() > 1;
+        $hasManyDifferentLocales = NovaPageManager::getPageModel()::select('locale')->distinct()->get()->count() > 1;
 
         $fields = [
             Text::make('Name', function () {

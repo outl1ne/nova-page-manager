@@ -70,6 +70,18 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Overwrite the page model with a custom implementation
+    |--------------------------------------------------------------------------
+    |
+    | Add a custom implementation of the Page model.
+    |
+    */
+
+    'page_model' => OptimistDigital\NovaPageManager\Models\Page::class,
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Overwrite the region resource with a custom implementation
     |--------------------------------------------------------------------------
     |
@@ -81,6 +93,18 @@ return [
     */
 
     'region_resource' => null,
+
+
+    /*
+    |--------------------------------------------------------------------------
+    | Overwrite the region model with a custom implementation
+    |--------------------------------------------------------------------------
+    |
+    | Add a custom implementation of the Region model.
+    |
+    */
+
+    'region_model' => OptimistDigital\NovaPageManager\Models\Region::class,
 
     /*
     |--------------------------------------------------------------------------
