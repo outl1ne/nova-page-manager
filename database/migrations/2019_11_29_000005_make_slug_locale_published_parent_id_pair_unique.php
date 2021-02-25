@@ -19,14 +19,7 @@ class MakeSlugLocalePublishedParentidPairUnique extends Migration
         $pagesTableName = NovaPageManager::getPagesTableName();
 
         Schema::table($pagesTableName, function (Blueprint $table) use ($pagesTableName) {
-            $keys = DB::connection()->getDoctrineSchemaManager()->listTableIndexes($pagesTableName);
-            $keys = array_keys($keys);
-            $uniqueKey = array_filter($keys, function ($key) {
-                return Str::contains($key, 'locale_slug_published_unique');
-            });
-            $uniqueKey = $uniqueKey[0] ?? null;
-            if ($uniqueKey) $table->dropUnique($uniqueKey);
-
+            $table->dropUnique('nova_page_manager_locale_slug_published_unique');
             $table->unique(['locale', 'slug', 'published', 'parent_id'], 'nova_page_manager_locale_slug_published_parent_id_unique');
         });
     }
