@@ -27,7 +27,7 @@ class TemplateField extends Field
                         'value' => $template::$name
                     ];
                 }),
-            'resourceTemplates' => collect(NovaPageManager::getRegionModel()::all(), NovaPageManager::getRegionModel()::all())->flatten()->pluck('template', 'id')
+            'resourceTemplates' => collect(NovaPageManager::getPageModel()::all(), NovaPageManager::getRegionModel()::all())->flatten()->pluck('template', 'id')
         ]);
 
         $templates = array_map(function ($template) {
