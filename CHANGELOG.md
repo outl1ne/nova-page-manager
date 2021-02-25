@@ -9,11 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fixed pages with multiple `NovaDependencyContainer`s crashing.
-- Made Page and Region models configurable (thanks to [@Landish](https://github.com/Landish))
-- Made `Slug` field act more like Nova's own `Slug` field
-- Removed legacy migration code to fix migrations refresh
-- Updated packages
+- Fix pages with multiple `NovaDependencyContainer`s crashing.
+- Make Page and Region models configurable (thanks to [@Landish](https://github.com/Landish))
+- MAke `Slug` field act more like Nova's own `Slug` field
+- Remove legacy migration code to fix migrations refresh
+- Update packages
 
 ## [3.2.5] - 2021-02-18
 
