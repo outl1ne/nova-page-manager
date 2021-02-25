@@ -2,7 +2,9 @@
 
 namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
+use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Field;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class PrefixField extends Field
 {
@@ -23,5 +25,24 @@ class PrefixField extends Field
         return $this->withMeta([
             'path' => $pathParent,
         ]);
+    }
+
+    public function jsonSerialize()
+    {
+        $request = app(NovaRequest::class);
+
+        $showCustomizeButton = false;
+
+        if ($request->isUpdateOrUpdateAttachedRequest()) {
+            $this->readonly();
+            $showCustomizeButton = true;
+        }
+
+        return array_merge([
+            'updating' => $request->isUpdateOrUpdateAttachedRequest(),
+            'from' => 'name',
+            'separator' => '-',
+            'showCustomizeButton' => $showCustomizeButton,
+        ], parent::jsonSerialize());
     }
 }

@@ -5,7 +5,7 @@
         <input
           v-if="field.path"
           class="mt-1 text-gray form-control form-input-bordered bg-20 rounded-r-none px-2 border-r-0"
-          style="min-width: 0;"
+          style="min-width: 0"
           :value="field.path"
           disabled
           readonly
@@ -17,7 +17,18 @@
           :class="inputClasses"
           :placeholder="field.name"
           v-model="value"
+          :disabled="isReadonly"
+          ref="theInput"
         />
+
+        <button
+          class="btn btn-link rounded px-1 py-1 inline-flex text-sm text-primary ml-1 mt-2"
+          v-if="field.showCustomizeButton"
+          type="button"
+          @click="toggleCustomizeClick"
+        >
+          {{ __('Customize') }}
+        </button>
       </div>
     </template>
   </default-field>
@@ -25,17 +36,19 @@
 
 <script>
 import { FormField, HandlesValidationErrors } from 'laravel-nova';
+import lowerCase from 'lodash/lowerCase';
+import slug from 'slugify';
 
 export default {
   mixins: [FormField, HandlesValidationErrors],
   props: ['resourceName', 'resourceId', 'field'],
-  computed: {
-    inputClasses() {
-      const inputClasses = [...this.errorClasses];
-      if (this.field.path) inputClasses.push('rounded-l-none');
-      return inputClasses;
-    },
+
+  mounted() {
+    if (this.shouldRegisterInitialListener) {
+      this.registerChangeListener();
+    }
   },
+
   methods: {
     setInitialValue() {
       this.value = this.field.value || '';
@@ -47,6 +60,57 @@ export default {
 
     handleChange(value) {
       this.value = value;
+    },
+
+    changeListener(value) {
+      return (value) => {
+        this.value = slugify(value, this.field.separator);
+      };
+    },
+
+    registerChangeListener() {
+      Nova.$on(this.eventName, (value) => {
+        this.value = this.slugify(value, this.field.separator);
+      });
+    },
+
+    toggleCustomizeClick() {
+      if (this.field.readonly) {
+        Nova.$off(this.eventName);
+        this.field.readonly = false;
+        this.field.extraAttributes.readonly = false;
+        this.field.showCustomizeButton = false;
+        this.$refs.theInput.focus();
+        return;
+      }
+
+      this.registerChangeListener();
+      this.field.readonly = true;
+      this.field.extraAttributes.readonly = true;
+    },
+
+    slugify(value, separator = '-') {
+      return slug(lowerCase(value), separator);
+    },
+  },
+
+  computed: {
+    inputClasses() {
+      const inputClasses = [...this.errorClasses];
+      if (this.field.path) inputClasses.push('rounded-l-none');
+      return inputClasses;
+    },
+
+    shouldRegisterInitialListener() {
+      return !this.field.updating;
+    },
+
+    eventName() {
+      return `${this.field.from}-change`;
+    },
+
+    extraAttributes() {
+      return this.field.extraAttributes || {};
     },
   },
 };

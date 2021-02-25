@@ -4,6 +4,7 @@ namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
 use OptimistDigital\NovaPageManager\Models\Page;
+use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class ParentField extends Field
 {
