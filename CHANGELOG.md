@@ -5,11 +5,15 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.2.6] - 2021-02-25
+## [3.3.0] - 2021-02-25
 
 ### Changed
 
 - Fixed pages with multiple `NovaDependencyContainer`s crashing.
+- Made Page and Region models configurable (thanks to [@Landish](https://github.com/Landish))
+- Made `Slug` field act more like Nova's own `Slug` field
+- Removed legacy migration code to fix migrations refresh
+- Updated packages
 
 ## [3.2.5] - 2021-02-18
 
