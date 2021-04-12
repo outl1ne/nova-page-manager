@@ -29,8 +29,8 @@ export default {
       return this.field.canHaveParent && !getParameterByName('localeParentId');
     },
     options() {
-      const ids = Object.keys(this.field.options).filter(id => id !== this.resourceId);
-      return ids.map(id => ({
+      const ids = Object.keys(this.field.options).filter((id) => id !== this.resourceId);
+      return ids.map((id) => ({
         value: id,
         label: this.field.options[id],
       }));

@@ -8,9 +8,9 @@
         :disabled="hasParentResourceTemplate"
       >
         <option value="">Choose a template</option>
-        <option :value="template.value" v-for="template in field.templates" :key="template.value">{{
-          template.label
-        }}</option>
+        <option :value="template.value" v-for="template in field.templates" :key="template.value">
+          {{ template.label }}
+        </option>
       </select>
     </template>
   </default-field>
