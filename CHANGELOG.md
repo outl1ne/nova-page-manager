@@ -13,14 +13,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Takes `$template, $previewToken, $locale` as parameters.
   - More information in [README.md](README.md)
 
-### Changed
-
-- Fix pages with multiple `NovaDependencyContainer`s crashing.
-- Make Page and Region models configurable (thanks to [@Landish](https://github.com/Landish))
-- Make `Slug` field act more like Nova's own `Slug` field
-- Remove legacy migration code to fix migrations refresh
-- Update packages
-
 ## [3.3.0] - 2021-02-25
 
 ### Changed
