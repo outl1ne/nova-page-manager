@@ -393,3 +393,36 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
         return $page;
     }
 }
+
+// ------------------------------
+// nova_page_manager_get_page_by_template
+// ------------------------------
+
+if (!function_exists('nova_page_manager_get_page_by_template')) {
+    function nova_page_manager_get_page_by_template($template, $locale = null, $previewToken = null)
+    {
+        if (empty($template)) return [];
+
+        $pageQuery = NovaPageManager::getPageModel()::where('template', $template);
+        if (!empty($locale)) $pageQuery->where('locale', $locale);
+        if (!empty($previewToken)) $pageQuery->where('preview_token', $previewToken);
+
+        $page = $pageQuery->first();
+        if (!$page) return [];
+
+        if (!empty($locale)) return nova_format_page($page);
+
+        $localeChildren = NovaPageManager::getPageModel()::where('template', $template)->where('locale_parent_id', $page->id)->get();
+        $pages = collect([$page, $localeChildren])->flatten()->map(fn ($_page) => nova_format_page($_page));
+
+        return collect([
+            'locales' => $pages->pluck('locale'),
+            'id' => $pages->pluck('id', 'locale'),
+            'name' => $pages->pluck('name', 'locale'),
+            'slug' => $pages->pluck('slug', 'locale'),
+            'path' => $pages->pluck('path', 'locale'),
+            'parent_id' => $pages->pluck('parent_id', 'locale'),
+            'template' => $page->template,
+        ]);
+    }
+}
