@@ -5,6 +5,22 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [3.4.0] - 2021-04-12
+
+### Added
+
+- Added new `nova_page_manager_get_page_by_template()` function.
+  - Takes `$template, $previewToken, $locale` as parameters.
+  - More information in [README.md](README.md)
+
+### Changed
+
+- Fix pages with multiple `NovaDependencyContainer`s crashing.
+- Make Page and Region models configurable (thanks to [@Landish](https://github.com/Landish))
+- Make `Slug` field act more like Nova's own `Slug` field
+- Remove legacy migration code to fix migrations refresh
+- Update packages
+
 ## [3.3.0] - 2021-02-25
 
 ### Changed

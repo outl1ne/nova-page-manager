@@ -357,9 +357,44 @@ Example response for querying page with slug `/home/about` and preview token `L1
 }
 ```
 
+### nova_page_manager_get_page_by_template($slug, $previewToken, \$locale)
+
+This helper function finds and returns the first page with the given template. If optional parameter `$locale` is not defined, the function will return page structure with locale children. Otherwise only returns single page (similarly to `nova_get_page()`);
+
+```json
+{
+  "locale": {
+    "0": "en",
+    "1": "ru"
+  },
+  "id": {
+    "en": 1,
+    "ru": 2
+  },
+  "name": {
+    "en": "Home En",
+    "ru": "Home Ru"
+  },
+  "slug": {
+    "en": "/",
+    "ru": "/ru"
+  },
+  "path": {
+    "en": "/",
+    "ru": "/ru"
+  },
+  "parent_id": {
+    "en": null,
+    "ru": null
+  },
+  "template": "home-page"
+}
+```
+
 ## Credits
 
 - [Tarvo Reinpalu](https://github.com/Tarpsvo)
+- [Kaspar Rosin](https://github.com/KasparRosin)
 
 ## License
 
