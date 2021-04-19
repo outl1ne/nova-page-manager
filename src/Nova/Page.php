@@ -7,6 +7,7 @@ use Laravel\Nova\Fields\Heading;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Laravel\Nova\Http\Requests\ResourceIndexRequest;
 use Laravel\Nova\Panel;
 use OptimistDigital\NovaLocaleField\LocaleField;
 use OptimistDigital\NovaPageManager\Nova\Fields\ParentField;
@@ -28,7 +29,7 @@ class Page extends TemplateResource
         // Get base data
         $tableName = NovaPageManager::getPagesTableName();
         $templateClass = $this->getTemplateClass();
-        $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
+        $templateFieldsAndPanels = get_class($request) === ResourceIndexRequest::class ? [] : $this->getTemplateFieldsAndPanels();
         $locales = NovaPageManager::getLocales();
         $hasManyDifferentLocales = NovaPageManager::getPageModel()::select('locale')->distinct()->get()->count() > 1;
 
@@ -93,12 +94,14 @@ class Page extends TemplateResource
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
 
-        if (count($templateFieldsAndPanels['fields']) > 0) {
-            $fields[] = new Panel('Page data', $templateFieldsAndPanels['fields']);
-        }
+        if (!empty($templateFieldsAndPanels)) {
+            if (count($templateFieldsAndPanels['fields']) > 0) {
+                $fields[] = new Panel('Page data', $templateFieldsAndPanels['fields']);
+            }
 
-        if (count($templateFieldsAndPanels['panels']) > 0) {
-            $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
+            if (count($templateFieldsAndPanels['panels']) > 0) {
+                $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
+            }
         }
 
         return $fields;
