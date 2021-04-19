@@ -18,11 +18,24 @@ use OptimistDigital\NovaPageManager\NovaPageManager;
 class Page extends TemplateResource
 {
     public static $title = 'name';
-    public static $model = 'OptimistDigital\NovaPageManager\Models\Page';
+    public static $model = null;
     public static $displayInNavigation = false;
     public static $search = ['name', 'slug', 'template'];
 
     protected $type = 'page';
+
+    public function __construct($resource)
+    {
+        self::$model = NovaPageManager::getPageModel();
+        parent::__construct($resource);
+    }
+
+    public static function newModel()
+    {
+        $model = empty(self::$model) ? NovaPageManager::getPageModel() : self::$model;
+
+        return new $model;
+    }
 
     public function fields(Request $request)
     {

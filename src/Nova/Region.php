@@ -15,11 +15,25 @@ use OptimistDigital\NovaPageManager\NovaPageManager;
 class Region extends TemplateResource
 {
     public static $title = 'name';
-    public static $model = 'OptimistDigital\NovaPageManager\Models\Region';
+    public static $model = null;
     public static $displayInNavigation = false;
     public static $search = ['name', 'template'];
 
     protected $type = 'region';
+
+    public function __construct($resource)
+    {
+        self::$model = NovaPageManager::getRegionModel();
+        parent::__construct($resource);
+    }
+
+    public static function newModel()
+    {
+        $model = empty(self::$model) ? NovaPageManager::getRegionModel() : self::$model;
+
+        return new $model;
+    }
+
 
     public function fields(Request $request)
     {

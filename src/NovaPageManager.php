@@ -68,7 +68,8 @@ class NovaPageManager extends Tool
         return config('nova-page-manager.table', 'nova_page_manager') . '_pages';
     }
 
-    public static function getPageModel(): string {
+    public static function getPageModel(): string
+    {
         return config('nova-page-manager.page_model', \OptimistDigital\NovaPageManager\Models\Page::class);
     }
 
@@ -77,11 +78,12 @@ class NovaPageManager extends Tool
         return config('nova-page-manager.table', 'nova_page_manager') . '_regions';
     }
 
-    public static function getRegionModel(): string {
+    public static function getRegionModel(): string
+    {
         return config('nova-page-manager.region_model', \OptimistDigital\NovaPageManager\Models\Region::class);
     }
 
-    public static function getCustomSeoFields() : array
+    public static function getCustomSeoFields(): array
     {
         $seoFields = config('nova-page-manager.seo_fields', null);
         if (is_callable($seoFields)) return call_user_func($seoFields);
