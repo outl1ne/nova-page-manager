@@ -7,11 +7,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [3.5.0] - 2021-04-12
 
-### Added
+### Changed
 
-- Added new `nova_page_manager_get_page_by_template()` function.
-  - Takes `$template, $previewToken, $locale` as parameters.
-  - More information in [README.md](README.md)
+- Page manager no longer loads template fields in Index view
+- Fixed slug validation that was breaking in psql
+- Resource models are now correctly loaded from config
 
 ## [3.4.0] - 2021-04-12
 
