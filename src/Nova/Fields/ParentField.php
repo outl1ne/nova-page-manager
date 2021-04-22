@@ -29,12 +29,11 @@ class ParentField extends Field
 
         $options = [];
 
-        Page
-            ::whereNull('locale_parent_id')
+        NovaPageManager::getPageModel()::whereNull('locale_parent_id')
             ->where('published', true)
             ->get()
             ->each(function ($page) use (&$options) {
-                $options[$page->id] = $page->name . ' (' . $page->slug . ')';
+                $options[$page->id] = $page->name . ' (' . trim($page->path, '/') . ')';
             });
 
         $this->withMeta([
