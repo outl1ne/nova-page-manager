@@ -37,7 +37,9 @@ class AddChildParentRelationships extends Migration
 
         Schema::table($tableName, function (Blueprint $table) use ($tableName) {
             $table->dropUnique('nova_page_manager_parent_id_locale_unique');
+        });
 
+        Schema::table($tableName, function (Blueprint $table) use ($tableName) {
             // Rename "parent_id" to "locale_parent_id"
             $table->renameColumn('parent_id', 'locale_parent_id');
         });
