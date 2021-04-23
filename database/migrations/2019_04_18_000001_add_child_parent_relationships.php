@@ -18,7 +18,7 @@ class AddChildParentRelationships extends Migration
 
         // Make "type" enum column into string
         Schema::table($tableName, function (Blueprint $table) {
-            $table->string('type_temp', 50);
+            $table->string('type_temp', 50)->nullable();
         });
 
         // Copy "type" to "type_temp"
