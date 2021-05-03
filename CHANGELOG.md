@@ -9,7 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Fixed migration crash on SQLite
+- Fixed migration crash on SQLite (thanks to [@murad-optimist](https://github.com/murad-optimist))
 
 ## [3.5.2] - 2021-04-22
 
