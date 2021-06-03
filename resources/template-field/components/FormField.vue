@@ -7,7 +7,7 @@
         v-model="template"
         :disabled="hasParentResourceTemplate"
       >
-        <option value="">Choose a template</option>
+        <option value="">{{__("novaPageManager.ChooseATemplate")}}</option>
         <option :value="template.value" v-for="template in field.templates" :key="template.value">
           {{ template.label }}
         </option>

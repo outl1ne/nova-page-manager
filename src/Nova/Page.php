@@ -47,7 +47,7 @@ class Page extends TemplateResource
         $hasManyDifferentLocales = NovaPageManager::getPageModel()::select('locale')->distinct()->get()->count() > 1;
 
         $fields = [
-            Text::make('Name', function () {
+            Text::make(__('novaPageManager.name'), function () {
                 $pagePath = $this->resource->path;
                 $name = $this->resource->name;
                 $parentPaths = (explode('/', $pagePath));
@@ -55,19 +55,19 @@ class Page extends TemplateResource
                 array_pop($parentPaths);
                 return str_repeat('— ', count($parentPaths)) . $name;
             })->rules('required')->onlyOnIndex(),
-            Text::make('Name', 'name')->rules('required')->hideFromIndex(),
-            PrefixField::make('Slug', 'slug')
+            Text::make(__('novaPageManager.name'), 'name')->rules('required')->hideFromIndex(),
+            PrefixField::make(__('novaPageManager.slug'), 'slug')
                 ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale,parent_id," . ($this->resource->parent_id ?? 'NULL'), 'alpha_dash_or_slash')
                 ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{$this->resource->published},locale,$request->locale,parent_id," . ($this->resource->parent_id ?? 'NULL'), 'alpha_dash_or_slash')
                 ->onlyOnForms()
                 ->parentSlug($this->resource->path),
-            Text::make('Slug', function () {
+            Text::make(__('novaPageManager.slug'), function () {
                 $previewToken = $this->childDraft ? $this->childDraft->preview_token : $this->preview_token;
                 $previewPart = $previewToken ? '?preview=' . $previewToken : '';
                 $pagePath = $this->resource->path;
                 $pageBaseUrl = NovaPageManager::getPageUrl($this->resource);
                 $pageUrl = !empty($pageBaseUrl) ? $pageBaseUrl . $previewPart : null;
-                $buttonText = $this->resource->isDraft() ? 'View draft' : 'View';
+                $buttonText = $this->resource->isDraft() ? __('novaPageManager.viewDraft') : __('novaPageManager.view');
 
                 if (empty($pageBaseUrl)) return "<span class='bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap'>$pagePath</span>";
 
@@ -77,39 +77,39 @@ class Page extends TemplateResource
                         </div>";
             })->asHtml()->exceptOnForms(),
 
-            ParentField::make('Parent', 'parent_id')->hideFromIndex(),
-            TemplateField::make('Template', 'template')->sortable(),
+            ParentField::make(__('novaPageManager.parent'), 'parent_id')->hideFromIndex(),
+            TemplateField::make(__('novaPageManager.template'), 'template')->sortable(),
         ];
 
 
         if (NovaPageManager::hasNovaLang()) {
-            $fields[] = \OptimistDigital\NovaLang\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
+            $fields[] = \OptimistDigital\NovaLang\NovaLangField::make(__('novaPageManager.locale'), 'locale', 'locale_parent_id')->onlyOnForms();
         } else {
-            $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
+            $fields[] = LocaleField::make(__('novaPageManager.locale'), 'locale', 'locale_parent_id')
                 ->locales($locales)
                 ->onlyOnForms();
         }
 
         if (count($locales) > 1) {
-            $fields[] = LocaleField::make('Locale', 'locale', 'locale_parent_id')
+            $fields[] = LocaleField::make(__('novaPageManager.locale'), 'locale', 'locale_parent_id')
                 ->locales($locales)
                 ->exceptOnForms()
                 ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4));
         } else if ($hasManyDifferentLocales) {
-            $fields[] = Text::make('Locale', 'locale')->exceptOnForms();
+            $fields[] = Text::make(__('novaPageManager.locale'), 'locale')->exceptOnForms();
         }
 
         if (NovaPageManager::hasNovaDrafts()) {
-            $fields[] = \OptimistDigital\NovaDrafts\PublishedField::make('State', 'published');
-            $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make('Draft');
-            $fields[] = \OptimistDigital\NovaDrafts\UnpublishButton::make('Unpublish');
+            $fields[] = \OptimistDigital\NovaDrafts\PublishedField::make(__('novaPageManager.status'), 'published');
+            $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make(__('novaPageManager.draft'),'draft');
+            $fields[] = \OptimistDigital\NovaDrafts\UnpublishButton::make(__('novaPageManager.unpublish'),'unpublish');
         }
 
-        if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel('SEO', $this->getSeoFields());
+        if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel(__('novaPageManager.seo'), $this->getSeoFields());
 
         if (!empty($templateFieldsAndPanels)) {
             if (count($templateFieldsAndPanels['fields']) > 0) {
-                $fields[] = new Panel('Page data', $templateFieldsAndPanels['fields']);
+                $fields[] = new Panel(__('novaPageManager.pageData'), $templateFieldsAndPanels['fields']);
             }
 
             if (count($templateFieldsAndPanels['panels']) > 0) {
@@ -126,9 +126,9 @@ class Page extends TemplateResource
         if (!empty($customSeoFields)) return $customSeoFields;
 
         return [
-            Text::make('SEO Title', 'seo_title')->hideFromIndex()->hideWhenCreating(),
-            Text::make('SEO Description', 'seo_description')->hideFromIndex()->hideWhenCreating(),
-            Image::make('SEO Image', 'seo_image')->hideFromIndex()->hideWhenCreating()
+            Text::make(__('novaPageManager.seoTitle'), 'seo_title')->hideFromIndex()->hideWhenCreating(),
+            Text::make(__('novaPageManager.seoDescription'), 'seo_description')->hideFromIndex()->hideWhenCreating(),
+            Image::make(__('novaPageManager.seoImage'), 'seo_image')->hideFromIndex()->hideWhenCreating()
         ];
     }
 
@@ -173,5 +173,16 @@ class Page extends TemplateResource
         }
 
         return parent::applyOrderings($query, $orderings);
+    }
+
+
+    public static function label()
+    {
+        return __('novaPageManager.pages');
+    }
+
+    public static function singularLabel()
+    {
+        return __('novaPageManager.page');
     }
 }

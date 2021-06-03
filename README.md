@@ -391,6 +391,16 @@ This helper function finds and returns the first page with the given template. I
 }
 ```
 
+## Localization
+
+The translation file(s) can be published by using the following command:
+
+```bash
+php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServiceProvider" --tag="translations"
+```
+
+You can add your translations to `resources/lang/vendor/nova-page-manager/` by creating a new translations file with the locale name (ie `et.json`) and copying the JSON from the existing `en.json`.
+
 ## Credits
 
 - [Tarvo Reinpalu](https://github.com/Tarpsvo)

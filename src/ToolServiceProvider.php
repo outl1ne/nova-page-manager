@@ -11,9 +11,11 @@ use OptimistDigital\NovaPageManager\Nova\Region;
 use OptimistDigital\NovaPageManager\FieldResponseMixin;
 use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
 use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
+use OptimistDigital\NovaTranslationsLoader\LoadsNovaTranslations;
 
 class ToolServiceProvider extends ServiceProvider
 {
+    use LoadsNovaTranslations;
     /**
      * Bootstrap any application services.
      *
@@ -26,6 +28,8 @@ class ToolServiceProvider extends ServiceProvider
 
         // Load migrations
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
+
+        $this->loadTranslations(__DIR__ . '/../resources/lang', 'nova-page-manager', true);
 
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),

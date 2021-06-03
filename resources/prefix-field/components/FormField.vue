@@ -27,7 +27,7 @@
           type="button"
           @click="toggleCustomizeClick"
         >
-          {{ __('Customize') }}
+          {{ __('novaPageManager.Customize') }}
         </button>
       </div>
     </template>

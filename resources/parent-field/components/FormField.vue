@@ -2,7 +2,7 @@
   <default-field :field="field" :errors="errors" v-if="canHaveParent">
     <template slot="field">
       <select name="parent" class="w-full form-control form-input form-input-bordered" v-model="parent">
-        <option value="">Choose parent</option>
+        <option value="">{{__("novaPageManager.ChooseParent")}}</option>
         <option :value="option.value" v-for="option in options" :key="option.value">{{ option.label }}</option>
       </select>
     </template>

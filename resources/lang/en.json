@@ -1,0 +1,31 @@
+{
+  "novaPageManager.navigationItemTitle": "Page manager",
+  "novaPageManager.navigationPagesTitle": "Pages",
+  "novaPageManager.navigationRegionsTitle": "Regions",
+  "novaPageManager.pages": "Pages",
+  "novaPageManager.page": "Page",
+  "novaPageManager.regions": "Regions",
+  "novaPageManager.region": "Region",
+  "novaPageManager.regionData": "Region data",
+  "novaPageManager.name": "Name",
+  "novaPageManager.locale": "Locale",
+  "novaPageManager.slug": "Slug",
+  "novaPageManager.viewDraft": "View draft",
+  "novaPageManager.view": "View",
+  "novaPageManager.parent": "Parent",
+  "novaPageManager.template": "Template",
+  "novaPageManager.status": "Status",
+  "novaPageManager.draft": "Draft",
+  "novaPageManager.unpublish": "Unpublish",
+  "novaPageManager.seo": "SEO",
+  "novaPageManager.pageData": "Page data",
+  "novaPageManager.seoTitle": "SEO title",
+  "novaPageManager.seoDescription": "SEO description",
+  "novaPageManager.seoImage": "SEO image",
+  "novaPageManager.Customize" : "Customize",
+  "novaPageManager.ChooseATemplate" : "Choose a template",
+  "novaPageManager.ChooseARegion" : "Choose a region",
+  "novaPageManager.ChooseParent" : "Choose parent"
+
+
+}

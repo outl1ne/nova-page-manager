@@ -7,7 +7,7 @@
         v-model="region"
         v-if="canEditRegion"
       >
-        <option value="">Choose a region</option>
+        <option value="">{{ __('novaPageManager.ChooseARegion') }}</option>
         <option :value="region" v-for="region in field.regions" :key="region">{{ region }}</option>
       </select>
       <input

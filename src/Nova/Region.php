@@ -43,19 +43,19 @@ class Region extends TemplateResource
         // Create fields array
         $fields = [
             ID::make()->sortable(),
-            Text::make('Name', 'name')->rules('required'),
-            RegionField::make('Region')->sortable(),
-            LocaleField::make('Locale', 'locale', 'locale_parent_id')
+            Text::make(__('novaPageManager.name'), 'name')->rules('required'),
+            RegionField::make(__('novaPageManager.region'),'region')->sortable(),
+            LocaleField::make(__('novaPageManager.locale'), 'locale', 'locale_parent_id')
                 ->locales(NovaPageManager::getLocales())
                 ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
         ];
 
         if (count($templateFieldsAndPanels['fields']) > 0) {
-            $fields[] = new Panel('Region data', $templateFieldsAndPanels['fields']);
+            $fields[] = new Panel(__('novaPageManager.regionData'), $templateFieldsAndPanels['fields']);
         }
 
         if (NovaPageManager::hasNovaLang())
-            $fields[] = \OptimistDigital\NovaLang\NovaLangField::make('Locale', 'locale', 'locale_parent_id')->onlyOnForms();
+            $fields[] = \OptimistDigital\NovaLang\NovaLangField::make(__('novaPageManager.locale'), 'locale', 'locale_parent_id')->onlyOnForms();
 
         if (count($templateFieldsAndPanels['panels']) > 0) {
             $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
@@ -80,5 +80,15 @@ class Region extends TemplateResource
         }
 
         return $query;
+    }
+
+    public static function label()
+    {
+        return __('novaPageManager.regions');
+    }
+
+    public static function singularLabel()
+    {
+        return __('novaPageManager.region');
     }
 }
