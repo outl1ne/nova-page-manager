@@ -10,7 +10,7 @@
   "devDependencies": {
     "cross-env": "^7.0.3",
     "laravel-mix": "^6.0.22",
-    "postcss": "^8.3.5",
+    "postcss": "^8.2.10",
     "prettier": "^2.3.1",
     "sass": "^1.35.1",
     "sass-loader": "12.1.0",
