@@ -218,9 +218,9 @@ if (!function_exists('nova_get_page_by_slug')) {
             })
             ->orWhere(DB::raw("REPLACE(CONCAT(locale, '/', slug), '//', '/')"), $slug)
             ->orWhere(DB::raw("REPLACE(CONCAT(locale, '/', slug), '//', '/')"), $slug . '/')
-            ->firstOrFail();
+            ->first();
 
-        if ((isset($page->preview_token) && $page->preview_token !== $previewToken) || empty($page)) {
+        if (empty($page) || (isset($page->preview_token) && $page->preview_token !== $previewToken)) {
             return null;
         }
 
