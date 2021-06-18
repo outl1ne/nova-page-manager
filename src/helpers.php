@@ -347,6 +347,7 @@ if (!function_exists('nova_resolve_fields_data')) {
 if (!function_exists('nova_page_manager_sanitize_panel_name')) {
     function nova_page_manager_sanitize_panel_name($name)
     {
+        $name = \Illuminate\Support\Str::slug($name);
         $removedSpecialChars = preg_replace("/[^A-Za-z0-9 ]/", '', $name);
         $snakeCase = preg_replace("/\s+/", '_', $removedSpecialChars);
         return strtolower($snakeCase);
