@@ -366,6 +366,8 @@ if (!function_exists('nova_page_manager_get_page_by_path')) {
         if (empty($slugs)) $slugs = ['/'];
 
         $parent = nova_get_page_by_slug($slugs[0], $previewToken);
+        if (empty($parent)) return null;
+
         $isParent = $parent['parent_id'] == null;
         while (!$isParent) {
             $parent = nova_get_page($parent['parent_id']);
