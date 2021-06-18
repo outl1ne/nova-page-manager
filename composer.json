@@ -25,7 +25,7 @@
     "php": ">=7.1.0",
     "laravel/nova": "^2.9 || ^3.0",
     "optimistdigital/nova-locale-field": "^2.0.1",
-    "optimistdigital/nova-translations-loader": "^2.0.0 || ^3.0.0",
+    "optimistdigital/nova-translations-loader": "^3.0.0",
     "doctrine/dbal": "^2.9"
   },
   "autoload": {

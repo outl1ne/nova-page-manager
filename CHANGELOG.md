@@ -5,13 +5,7 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [3.6.1] - 2021-06-18
-
-### Added
-
-- Fixed missing dependency on `nova-translations-loader`
-
-## [3.6.0] - 2021-06-18
+## [4.0.0] - 2021-06-18
 
 ### Added
 
@@ -19,6 +13,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Dropped PHP 7.1, Laravel 6 and Nova 2 support
 - Fixed `nova_get_page_by_slug` throwing an exception instead of returning null (thanks to [@akiyamaSM](https://github.com/akiyamaSM))
 - Fixed Panel names in non-standard locales (cyrillic etc) being transformed into `_` instead of a proper name (thanks to [@shahruslan](https://github.com/shahruslan))
 - Updated packages
