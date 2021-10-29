@@ -9,17 +9,17 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.3",
-    "laravel-mix": "^6.0.29",
-    "postcss": "^8.3.6",
-    "prettier": "^2.3.2",
-    "sass": "^1.39.0",
-    "sass-loader": "12.1.0",
+    "laravel-mix": "^6.0.37",
+    "postcss": "^8.3.11",
+    "prettier": "^2.4.1",
+    "sass": "^1.43.4",
+    "sass-loader": "12.3.0",
     "vue-loader": "^15.9.8",
     "vue-template-compiler": "^2.6.14"
   },
   "dependencies": {
     "laravel-nova": "^1.12.3",
-    "slugify": "^1.6.0",
+    "slugify": "^1.6.1",
     "vue": "^2.6.14"
   }
 }
