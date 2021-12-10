@@ -40,7 +40,10 @@
     "laravel": {
       "providers": [
         "OptimistDigital\\NovaPageManager\\ToolServiceProvider"
-      ]
+      ],
+      "aliases": {
+        "NovaPageManagerCache": "OptimistDigital\\NovaPageManager\\Facade"
+      }
     }
   },
   "config": {

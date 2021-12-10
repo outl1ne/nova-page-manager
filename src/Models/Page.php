@@ -2,6 +2,7 @@
 
 namespace OptimistDigital\NovaPageManager\Models;
 
+use NovaPageManagerCache;
 use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class Page extends TemplateModel
@@ -40,14 +41,53 @@ class Page extends TemplateModel
         return $this->belongsTo(NovaPageManager::getPageModel());
     }
 
+    public function getParentAttribute()
+    {
+        if ($this->relationLoaded('parent')) {
+            return $this->getRelationValue('parent');
+        }
+
+        $parent = \NovaPageManagerCache::find($this->parent_id);
+
+        $this->setRelation('parent', $parent);
+
+        return $parent;
+    }
+
     public function childDraft()
     {
         return $this->hasOne(NovaPageManager::getPageModel(), 'draft_parent_id', 'id');
     }
 
+    public function getChildDraftAttribute()
+    {
+        if ($this->relationLoaded('child_draft')) {
+            return $this->getRelationValue('child_draft');
+        }
+
+        $childDraft = \NovaPageManagerCache::find($this->draft_parent_id);
+
+        $this->setRelation('child_draft', $childDraft);
+
+        return $childDraft;
+    }
+
     public function localeParent()
     {
         return $this->belongsTo(NovaPageManager::getPageModel());
+    }
+
+    public function getLocaleParentAttribute()
+    {
+        if ($this->relationLoaded('locale_parent')) {
+            return $this->getRelationValue('locale_parent');
+        }
+
+        $localeParent = \NovaPageManagerCache::find($this->locale_parent_id);
+
+        $this->setRelation('locale_parent', $localeParent);
+
+        return $localeParent;
     }
 
     public function isDraft()

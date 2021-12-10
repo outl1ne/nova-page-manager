@@ -16,6 +16,19 @@ use OptimistDigital\NovaTranslationsLoader\LoadsNovaTranslations;
 class ToolServiceProvider extends ServiceProvider
 {
     use LoadsNovaTranslations;
+
+    /**
+     * Register any application services.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->singleton(NovaPageManagerCache::class, function () {
+            return new NovaPageManagerCache;
+        });
+    }
+
     /**
      * Bootstrap any application services.
      *
