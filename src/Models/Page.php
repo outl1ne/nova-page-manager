@@ -65,7 +65,7 @@ class Page extends TemplateModel
             return $this->getRelationValue('child_draft');
         }
 
-        $childDraft = \NovaPageManagerCache::find($this->draft_parent_id);
+        $childDraft = NovaPageManagerCache::whereChildDraft($this->id);
 
         $this->setRelation('child_draft', $childDraft);
 

@@ -13,6 +13,13 @@ class NovaPageManagerCache
         });
     }
 
+    public function whereChildDraft($draftParentId)
+    {
+        return $this->get('draft_parent_id', $draftParentId, function () use ($draftParentId) {
+            return NovaPageManager::getPageModel()::where('draft_parent_id', $draftParentId)->first();
+        });
+    }
+
     protected function get($column, $id, $modelQuery)
     {
         if (!$this->isCached($column, $id)) {
