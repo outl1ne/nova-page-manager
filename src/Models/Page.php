@@ -34,6 +34,10 @@ class Page extends TemplateModel
                 });
             }
         });
+
+        static::updated(function () {
+            NovaPageManagerCache::clear();
+        });
     }
 
     public function parent()
@@ -47,7 +51,7 @@ class Page extends TemplateModel
             return $this->getRelationValue('parent');
         }
 
-        $parent = \NovaPageManagerCache::find($this->parent_id);
+        $parent = NovaPageManagerCache::find($this->parent_id);
 
         $this->setRelation('parent', $parent);
 
@@ -83,7 +87,7 @@ class Page extends TemplateModel
             return $this->getRelationValue('locale_parent');
         }
 
-        $localeParent = \NovaPageManagerCache::find($this->locale_parent_id);
+        $localeParent = NovaPageManagerCache::find($this->locale_parent_id);
 
         $this->setRelation('locale_parent', $localeParent);
 

@@ -47,4 +47,9 @@ class NovaPageManagerCache
     {
         return $this->cache[$column][$id];
     }
+
+    public function clear()
+    {
+        $this->cache = [];
+    }
 }
