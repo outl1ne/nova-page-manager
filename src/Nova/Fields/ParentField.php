@@ -2,6 +2,7 @@
 
 namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
+use NovaPageManagerCache;
 use Laravel\Nova\Fields\Field;
 use OptimistDigital\NovaPageManager\Models\Page;
 use OptimistDigital\NovaPageManager\NovaPageManager;
@@ -68,7 +69,7 @@ class ParentField extends Field
 
         $parent = null;
         if (isset($resource->parent_id)) {
-            $parentPage = NovaPageManager::getPageModel()::find($resource->parent_id);
+            $parentPage = NovaPageManagerCache::find($resource->parent_id);
             $parent = [
                 'name' => $parentPage->name,
                 'slug' => $parentPage->slug,
@@ -89,9 +90,9 @@ class ParentField extends Field
 
         // All parent's parents
         if (isset($page->parent_id)) {
-            $_current = NovaPageManager::getPageModel()::find($page->parent_id);
+            $_current = NovaPageManagerCache::find($page->parent_id);
             while (isset($_current->parent_id)) {
-                $_current = NovaPageManager::getPageModel()::find($_current->parent_id);
+                $_current = NovaPageManagerCache::find($_current->parent_id);
                 $childrenAndParents[] = $_current;
             }
         }
