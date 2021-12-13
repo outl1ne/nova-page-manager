@@ -5,6 +5,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.0.3] - 2021-12-13
+
+### Added
+
+- Added `created_at` and `updated_at` to `nova_get_page()`
+
+### Changed
+
+- Fixed abnormal amount of queries in page manager index view (thanks to [@allantatter](https://github.com/allantatter)))
+- Updated packages
+
 ## [4.0.2] - 2021-10-29
 
 ### Changed
