@@ -150,6 +150,8 @@ if (!function_exists('nova_format_page')) {
         if (!isset($template)) return null;
 
         $pageData = [
+            'created_at' => $page->created_at,
+            'updated_at' => $page->updated_at,
             'locale' => $page->locale ?: null,
             'id' => $page->id ?: null,
             'name' => $page->name ?: null,
