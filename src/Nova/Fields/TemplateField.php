@@ -3,7 +3,7 @@
 namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
-use OptimistDigital\NovaPageManager\NovaPageManager;
+use OptimistDigital\NovaPageManager\NPM;
 
 class TemplateField extends Field
 {
@@ -17,7 +17,7 @@ class TemplateField extends Field
 
         $this->withMeta([
             'asHtml' => true,
-            'templates' => collect(NovaPageManager::getTemplates())
+            'templates' => collect(NPM::getTemplates())
                 ->filter(function ($template) use ($resourceName) {
                     return $template::$type === $resourceName;
                 })
@@ -27,12 +27,10 @@ class TemplateField extends Field
                         'value' => $template::$name
                     ];
                 }),
-            'resourceTemplates' => collect(NovaPageManager::getPageModel()::all(), NovaPageManager::getRegionModel()::all())->flatten()->pluck('template', 'id')
+            'resourceTemplates' => collect(NPM::getPageModel()::all(), NPM::getRegionModel()::all())->flatten()->pluck('template', 'id')
         ]);
 
-        $templates = array_map(function ($template) {
-            return $template::$name;
-        }, NovaPageManager::getTemplates());
+        $templates = array_map(fn ($template) => $template::$name, NPM::getTemplates());
         $this->rules('required', 'in:' . implode(',', $templates));
     }
 }

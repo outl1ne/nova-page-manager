@@ -2,7 +2,6 @@
 
 namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
-use Illuminate\Support\Str;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;
 

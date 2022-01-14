@@ -2,22 +2,13 @@
 
 namespace OptimistDigital\NovaPageManager;
 
-class NovaPageManagerCache
+class NPMCache
 {
     protected $cache = [];
 
     public function find($id)
     {
-        return $this->get('id', $id, function () use ($id) {
-            return NovaPageManager::getPageModel()::find($id);
-        });
-    }
-
-    public function whereChildDraft($draftParentId)
-    {
-        return $this->get('draft_parent_id', $draftParentId, function () use ($draftParentId) {
-            return NovaPageManager::getPageModel()::where('draft_parent_id', $draftParentId)->first();
-        });
+        return $this->get('id', $id, fn () => NovaPageManager::getPageModel()::find($id));
     }
 
     protected function get($column, $id, $modelQuery)

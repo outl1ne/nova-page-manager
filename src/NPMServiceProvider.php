@@ -6,14 +6,11 @@ use Laravel\Nova\Nova;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
-use OptimistDigital\NovaPageManager\Nova\Page;
-use OptimistDigital\NovaPageManager\Nova\Region;
 use OptimistDigital\NovaPageManager\FieldResponseMixin;
 use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
-use OptimistDigital\NovaPageManager\Http\Middleware\Authorize;
 use OptimistDigital\NovaTranslationsLoader\LoadsNovaTranslations;
 
-class ToolServiceProvider extends ServiceProvider
+class NPMServiceProvider extends ServiceProvider
 {
     use LoadsNovaTranslations;
 
@@ -24,9 +21,7 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton(NovaPageManagerCache::class, function () {
-            return new NovaPageManagerCache;
-        });
+        $this->app->singleton(NPMCache::class, fn () => new NPMCache);
     }
 
     /**
@@ -36,14 +31,12 @@ class ToolServiceProvider extends ServiceProvider
      */
     public function boot()
     {
-        // Load views
+        // Load all data
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-page-manager');
-
-        // Load migrations
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-
         $this->loadTranslations(__DIR__ . '/../resources/lang', 'nova-page-manager', true);
 
+        // Publish migrations and config
         $this->publishes([
             __DIR__ . '/../database/migrations' => database_path('migrations'),
         ], 'nova-page-manager-migrations');
@@ -53,12 +46,9 @@ class ToolServiceProvider extends ServiceProvider
         ], 'config');
 
         // Register resources
-        $pageResource = config('nova-page-manager.page_resource') ?: Page::class;
-        $regionResource = config('nova-page-manager.region_resource') ?: Region::class;
-
         Nova::resources([
-            $pageResource,
-            $regionResource,
+            NPM::getPageResource(),
+            NPM::getRegionResource(),
         ]);
 
         // Register commands

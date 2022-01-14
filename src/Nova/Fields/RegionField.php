@@ -3,7 +3,7 @@
 namespace OptimistDigital\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
-use OptimistDigital\NovaPageManager\NovaPageManager;
+use OptimistDigital\NovaPageManager\NPM;
 
 class RegionField extends Field
 {
@@ -23,10 +23,10 @@ class RegionField extends Field
         $this->withMeta([
             'asHtml' => true,
             'regions' => $regions,
-            'existingRegions' => NovaPageManager::getRegionModel()::whereNull('locale_parent_id')->get()->pluck('template', 'id'),
+            'existingRegions' => NPM::getRegionModel()::all()->pluck('template', 'id'),
         ]);
 
-        $regionsTableName = NovaPageManager::getRegionsTableName();
+        $regionsTableName = NPM::getRegionsTableName();
         $locale = request()->get('locale');
         $this->creationRules('required', "unique:$regionsTableName,template,NULL,id,locale,$locale");
         $this->updateRules('required', "unique:$regionsTableName,template,{{resourceId}},id,locale,$locale");
@@ -38,13 +38,11 @@ class RegionField extends Field
             return [$region->template];
         }
 
-        return collect(NovaPageManager::getRegionTemplates())
+        return collect(NPM::getRegionTemplates())
             ->filter(function ($template) {
-                return !NovaPageManager::getRegionModel()::where('template', $template::$name)->exists();
+                return !NPM::getRegionModel()::where('template', $template::$name)->exists();
             })
-            ->map(function ($template) {
-                return $template::$name;
-            })
+            ->map(fn ($template) => $template::$name)
             ->toArray();
     }
 }

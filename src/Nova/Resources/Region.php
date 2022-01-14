@@ -1,16 +1,13 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Nova;
+namespace OptimistDigital\NovaPageManager\Nova\Resources;
 
-use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Heading;
-use Laravel\Nova\Fields\ID;
-use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Panel;
-use OptimistDigital\NovaLocaleField\LocaleField;
+use Laravel\Nova\Fields\ID;
+use Illuminate\Http\Request;
+use Laravel\Nova\Fields\Text;
+use OptimistDigital\NovaPageManager\NPM;
 use OptimistDigital\NovaPageManager\Nova\Fields\RegionField;
-use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class Region extends TemplateResource
 {
@@ -23,17 +20,15 @@ class Region extends TemplateResource
 
     public function __construct($resource)
     {
-        self::$model = NovaPageManager::getRegionModel();
+        self::$model = NPM::getRegionModel();
         parent::__construct($resource);
     }
 
     public static function newModel()
     {
-        $model = empty(self::$model) ? NovaPageManager::getRegionModel() : self::$model;
-
+        $model = empty(self::$model) ? NPM::getRegionModel() : self::$model;
         return new $model;
     }
-
 
     public function fields(Request $request)
     {
@@ -44,18 +39,12 @@ class Region extends TemplateResource
         $fields = [
             ID::make()->sortable(),
             Text::make(__('novaPageManager.name'), 'name')->rules('required'),
-            RegionField::make(__('novaPageManager.region'),'region')->sortable(),
-            LocaleField::make(__('novaPageManager.locale'), 'locale', 'locale_parent_id')
-                ->locales(NovaPageManager::getLocales())
-                ->maxLocalesOnIndex(config('nova-page-manager.max_locales_shown_on_index', 4)),
+            RegionField::make(__('novaPageManager.region'), 'region')->sortable(),
         ];
 
         if (count($templateFieldsAndPanels['fields']) > 0) {
             $fields[] = new Panel(__('novaPageManager.regionData'), $templateFieldsAndPanels['fields']);
         }
-
-        if (NovaPageManager::hasNovaLang())
-            $fields[] = \OptimistDigital\NovaLang\NovaLangField::make(__('novaPageManager.locale'), 'locale', 'locale_parent_id')->onlyOnForms();
 
         if (count($templateFieldsAndPanels['panels']) > 0) {
             $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
@@ -67,19 +56,6 @@ class Region extends TemplateResource
     public function title()
     {
         return $this->name;
-    }
-
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        if (NovaPageManager::hasNovaLang()) {
-            $localeColumn = NovaPageManager::getRegionsTableName() . '.locale';
-            $query->where(function ($subQuery) use ($localeColumn) {
-                $subQuery->where($localeColumn, nova_lang_get_active_locale())
-                    ->orWhereNotIn($localeColumn, array_keys(nova_lang_get_all_locales()));
-            });
-        }
-
-        return $query;
     }
 
     public static function label()

@@ -2,10 +2,9 @@
 
 namespace OptimistDigital\NovaPageManager\Nova;
 
-use Illuminate\Http\Request;
 use Laravel\Nova\Resource;
-use OptimistDigital\NovaLocaleField\Filters\LocaleFilter;
-use OptimistDigital\NovaPageManager\NovaPageManager;
+use Illuminate\Http\Request;
+use OptimistDigital\NovaPageManager\NPM;
 
 abstract class TemplateResource extends Resource
 {
@@ -16,8 +15,8 @@ abstract class TemplateResource extends Resource
         if (isset($this->templateClass)) return $this->templateClass;
 
         $templates = $this->type === 'page'
-            ? NovaPageManager::getPageTemplates()
-            : NovaPageManager::getRegionTemplates();
+            ? NPM::getPageTemplates()
+            : NPM::getRegionTemplates();
 
         if (isset($this->template)) {
             foreach ($templates as $template) {
@@ -96,15 +95,6 @@ abstract class TemplateResource extends Resource
         return [
             'fields' => $templateFields,
             'panels' => $templatePanels,
-        ];
-    }
-
-    public function filters(Request $request)
-    {
-        if (NovaPageManager::hasNovaLang()) return [];
-
-        return [
-            (new LocaleFilter($this->resource->getTable() . '.locale'))->locales(NovaPageManager::getLocales()),
         ];
     }
 }

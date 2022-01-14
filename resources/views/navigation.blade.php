@@ -8,7 +8,7 @@
 </h3>
 
 <ul class="list-reset mb-8">
-    @if(\OptimistDigital\NovaPageManager\NovaPageManager::pagesEnabled())
+    @if(\OptimistDigital\NovaPageManager\NPM::pagesEnabled())
         <li class="leading-wide mb-4 text-sm">
             <router-link
                 :to="{ name: 'index', params: { resourceName: 'pages' } }"
@@ -19,7 +19,7 @@
         </li>
     @endif
 
-    @if(\OptimistDigital\NovaPageManager\NovaPageManager::regionsEnabled())
+    @if(\OptimistDigital\NovaPageManager\NPM::regionsEnabled())
         <li class="leading-wide mb-4 text-sm">
             <router-link
                 :to="{ name: 'index', params: { resourceName: 'regions' } }"

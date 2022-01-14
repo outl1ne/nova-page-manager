@@ -3,28 +3,22 @@
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/optimistdigital/nova-page-manager.svg?style=flat-square)](https://packagist.org/packages/optimistdigital/nova-page-manager)
 [![Total Downloads](https://img.shields.io/packagist/dt/optimistdigital/nova-page-manager.svg?style=flat-square)](https://packagist.org/packages/optimistdigital/nova-page-manager)
 
-This [Laravel Nova](https://nova.laravel.com) package allows you to create and manage pages and regions. The package is geared towards headless CMS's.
+This [Laravel Nova](https://nova.laravel.com) package allows you to create and manage pages and regions for your frontend application.
 
 ## Requirements
 
-- Laravel Nova <= 2.0.7 || >= 2.0.10
-
-Laravel Nova 2.0.8 and 2.0.9 are breaking for Nova Page Manager.
+```
+- PHP >=7.4.0
+- laravel/nova ^3.30.0
+```
 
 ## Features
 
-- Pages and Regions management
-- Programmatically created templates for Pages and Regions
-- Multilanguage support
-- Optional pages draft support
+- Page and Region management
+- Artisan commands for creating page and region templates
+- Multiple locale support
 
 ## Screenshots
-
-![Index View](docs/index.png)
-
-![Filter Dropdown](docs/filter.png)
-
-![Page Content Area](docs/content.png)
 
 ## Installation
 
@@ -135,14 +129,6 @@ Locales can be defined similarly to how templates are registered. The config acc
 
 'locales' => NovaPageManagerConfiguration::class . '::locales',
 // ...
-```
-
-### Enabling page draft feature
-
-Draft feature allows you to create previews of pages before publishing them. By default this feature is not installed, but you can install [nova-drafts](https://github.com/optimistdigital/nova-drafts) with the following command.
-
-```bash
-composer require optimistdigital/nova-drafts
 ```
 
 ### Overriding SEO fields

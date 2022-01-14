@@ -2,15 +2,15 @@
 
 namespace OptimistDigital\NovaPageManager\Models;
 
-use NovaPageManagerCache;
-use OptimistDigital\NovaPageManager\NovaPageManager;
+use NPMCache;
+use OptimistDigital\NovaPageManager\NPM;
 
 class Region extends TemplateModel
 {
     public function __construct(array $attributes = [])
     {
         parent::__construct($attributes);
-        $this->setTable(NovaPageManager::getRegionsTableName());
+        $this->setTable(NPM::getRegionsTableName());
     }
 
     protected static function boot()
@@ -18,7 +18,7 @@ class Region extends TemplateModel
         parent::boot();
 
         static::updated(function () {
-            NovaPageManagerCache::clear();
+            NPMCache::clear();
         });
     }
 }

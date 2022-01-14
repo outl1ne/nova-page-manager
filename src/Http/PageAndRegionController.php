@@ -3,15 +3,15 @@
 namespace OptimistDigital\NovaPageManager\Http;
 
 use Illuminate\Routing\Controller;
+use OptimistDigital\NovaPageManager\NPM;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use OptimistDigital\NovaPageManager\NovaPageManager;
 
 class PageAndRegionController extends Controller
 {
     public function getPagesAndRegions(NovaRequest $request)
     {
-        $pages = NovaPageManager::getPageModel()::all();
-        $regions = NovaPageManager::getRegionModel()::all();
+        $pages = NPM::getPageModel()::all();
+        $regions = NPM::getRegionModel()::all();
 
         return [
             'pages' => $pages,

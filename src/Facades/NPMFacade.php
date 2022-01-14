@@ -2,10 +2,12 @@
 
 namespace OptimistDigital\NovaPageManager;
 
-class Facade extends \Illuminate\Support\Facades\Facade
+use \Illuminate\Support\Facades\Facade;
+
+class NPMFacade extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return NovaPageManagerCache::class;
+        return NPMCache::class;
     }
 }
