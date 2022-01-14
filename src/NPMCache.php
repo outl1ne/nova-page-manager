@@ -8,7 +8,7 @@ class NPMCache
 
     public function find($id)
     {
-        return $this->get('id', $id, fn () => NovaPageManager::getPageModel()::find($id));
+        return $this->get('id', $id, fn () => NPM::getPageModel()::find($id));
     }
 
     protected function get($column, $id, $modelQuery)

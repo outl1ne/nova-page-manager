@@ -1,9 +1,8 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Nova;
+namespace OptimistDigital\NovaPageManager\Nova\Resources;
 
 use Laravel\Nova\Resource;
-use Illuminate\Http\Request;
 use OptimistDigital\NovaPageManager\NPM;
 
 abstract class TemplateResource extends Resource

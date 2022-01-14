@@ -2,16 +2,15 @@
 
 namespace OptimistDigital\NovaPageManager\Nova\Resources;
 
+use Laravel\Nova\Panel;
 use Illuminate\Http\Request;
-use Laravel\Nova\Fields\Heading;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Image;
+use OptimistDigital\NovaPageManager\NPM;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ResourceIndexRequest;
-use Laravel\Nova\Panel;
 use OptimistDigital\NovaPageManager\Nova\Fields\PrefixField;
 use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
-use OptimistDigital\NovaPageManager\NPM;
 
 class Page extends TemplateResource
 {
