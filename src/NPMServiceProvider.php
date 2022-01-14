@@ -22,6 +22,7 @@ class NPMServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->singleton(NPMCache::class, fn () => new NPMCache);
+        $this->mergeConfigFrom(__DIR__ . '/../config/nova-page-manager.php', 'nova-page-manager');
     }
 
     /**
