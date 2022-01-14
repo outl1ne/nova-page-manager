@@ -3,13 +3,12 @@
 namespace OptimistDigital\NovaPageManager;
 
 use Illuminate\Http\Request;
+use OptimistDigital\NovaPageManager\Core\TemplateTypes;
 
-abstract class Template
+class Template
 {
-    public static $type = 'page';
-    public static $name = '';
-    public static $seo = false;
-    public static $view = null;
+    public static $type = TemplateTypes::PAGE;
+    public static $slug = '';
 
     protected $resource = null;
 
@@ -18,5 +17,13 @@ abstract class Template
         $this->resource = $resource;
     }
 
-    abstract function fields(Request $request): array;
+    public function fields(Request $request)
+    {
+        return [];
+    }
+
+    public function seoFields(Request $request)
+    {
+        return true;
+    }
 }

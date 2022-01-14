@@ -21,6 +21,9 @@ class CreatePageManagerTables extends Migration
         Schema::create($pagesTableName, function (Blueprint $table) {
             $table->bigIncrements('id');
 
+            // Active status
+            $table->boolean('active')->default(true);
+
             // Parent ID
             $table->bigInteger('parent_id')->nullable();
 

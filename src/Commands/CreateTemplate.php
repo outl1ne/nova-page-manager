@@ -4,6 +4,7 @@ namespace OptimistDigital\NovaPageManager\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
+use OptimistDigital\NovaPageManager\Core\TemplateTypes;
 
 class CreateTemplate extends Command
 {
@@ -14,7 +15,7 @@ class CreateTemplate extends Command
      **/
     protected $files;
 
-    protected $typeOptions = ['page', 'region'];
+    protected $typeOptions = [TemplateTypes::PAGE, TemplateTypes::REGION];
 
     protected $signature = 'pagemanager:template {className?} {name?} {type?}';
 
