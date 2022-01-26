@@ -113,7 +113,6 @@ class Page extends TemplateResource
         $table = NPM::getPagesTableName();
 
         $query->selectRaw("{$table}.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE({$table}.name, '')) AS hierarchy_order")
-            ->doesntHave('childDraft')
             ->leftJoin("{$table} AS p1", 'p1.id', '=', "{$table}.parent_id")
             ->leftJoin("{$table} AS p2", 'p2.id', '=', 'p1.parent_id')
             ->leftJoin("{$table} AS p3", 'p3.id', '=', 'p2.parent_id')

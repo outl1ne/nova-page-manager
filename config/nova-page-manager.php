@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'page_resource' => \OptimistDigital\NovaPageManager\Nova\Page::class,
+    'page_resource' => \OptimistDigital\NovaPageManager\Nova\Resources\Page::class,
 
 
     /*
@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'region_resource' => \OptimistDigital\NovaPageManager\Nova\Region::class,
+    'region_resource' => \OptimistDigital\NovaPageManager\Nova\Resources\Region::class,
 
 
     /*
