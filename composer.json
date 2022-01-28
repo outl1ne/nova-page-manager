@@ -22,8 +22,8 @@
   ],
   "license": "MIT",
   "require": {
-    "php": ">=7.4.0",
-    "optimistdigital/nova-translations-loader": "^5"
+    "php": ">=8.0.0",
+    "optimistdigital/nova-translations-loader-php": "dev-main"
   },
   "autoload": {
     "psr-4": {
