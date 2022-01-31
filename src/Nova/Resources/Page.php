@@ -6,11 +6,11 @@ use Laravel\Nova\Panel;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Select;
+use Laravel\Nova\Fields\Slug;
 use OptimistDigital\NovaPageManager\NPM;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ResourceIndexRequest;
-use OptimistDigital\NovaPageManager\Nova\Fields\PrefixField;
-use OptimistDigital\NovaPageManager\Nova\Fields\TemplateField;
 
 class Page extends TemplateResource
 {
@@ -36,34 +36,37 @@ class Page extends TemplateResource
     public function fields(Request $request)
     {
         // Get base data
-        $tableName = NPM::getPagesTableName();
         $templateClass = $this->getTemplateClass();
         $templateFieldsAndPanels = get_class($request) === ResourceIndexRequest::class ? [] : $this->getTemplateFieldsAndPanels();
 
         $fields = [
-            Text::make(__('novaPageManager.name'), function () {
+            // Name on index view
+            Text::make(__od_npm('nameField'), function () {
                 $pagePath = $this->resource->path;
                 $name = $this->resource->name;
                 $parentPaths = (explode('/', $pagePath));
                 array_shift($parentPaths);
                 array_pop($parentPaths);
                 return str_repeat('— ', count($parentPaths)) . $name;
-            })->rules('required')->onlyOnIndex(),
+            })->onlyOnIndex(),
 
-            Text::make(__('novaPageManager.name'), 'name')
-                ->rules('required')
+            // Name on detail/form views
+            Text::make(__od_npm('nameField'), 'name')
+                ->required()
+                ->rules('required', 'max:255')
                 ->hideFromIndex(),
 
-            PrefixField::make(__('novaPageManager.slug'), 'slug')
-                ->creationRules('required', "unique:{$tableName},slug,NULL,id,locale,$request->locale,parent_id," . ($this->resource->parent_id ?? 'NULL'), 'alpha_dash_or_slash')
-                ->updateRules('required', "unique:{$tableName},slug,{{resourceId}},id,published,{$this->resource->published},locale,$request->locale,parent_id," . ($this->resource->parent_id ?? 'NULL'), 'alpha_dash_or_slash')
-                ->onlyOnForms()
-                ->parentSlug($this->resource->path),
+            // Slug on form views
+            Slug::make(__od_npm('slugField'), 'slug')
+                ->translatable(NPM::getLocales())
+                ->from('name')
+                ->onlyOnForms(),
 
-            Text::make(__('novaPageManager.slug'), function () {
+            // Slug on index/detail views
+            Text::make(__od_npm('slugField'), function () {
                 $pagePath = $this->resource->path;
                 $pageUrl = NPM::getPageUrl($this->resource);
-                $buttonText = $this->resource->isDraft() ? __('novaPageManager.viewDraft') : __('novaPageManager.view');
+                $buttonText = __('novaPageManager.view');
 
                 if (empty($pageUrl)) return "<span class='bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap'>$pagePath</span>";
 
@@ -73,7 +76,10 @@ class Page extends TemplateResource
                         </div>";
             })->asHtml()->exceptOnForms(),
 
-            TemplateField::make(__('novaPageManager.template'), 'template')->sortable(),
+            // Template selector
+            Select::make(__od_npm('templateField'), 'template')
+                ->options(fn () => $this->getTemplateOptions())
+                ->displayUsingLabels(),
         ];
 
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel(__('novaPageManager.seo'), $this->getSeoFields());
@@ -101,6 +107,18 @@ class Page extends TemplateResource
             Text::make(__('novaPageManager.seoDescription'), 'seo_description')->hideFromIndex()->hideWhenCreating(),
             Image::make(__('novaPageManager.seoImage'), 'seo_image')->hideFromIndex()->hideWhenCreating()
         ];
+    }
+
+    protected function getTemplateOptions()
+    {
+        $templates = NPM::getPageTemplates();
+
+        $options = [];
+        foreach ($templates as $template) {
+            $options[$template::$id] = $template::$name;
+        }
+
+        return $options;
     }
 
     public function title()

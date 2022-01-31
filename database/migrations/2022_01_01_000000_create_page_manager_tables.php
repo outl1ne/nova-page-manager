@@ -30,7 +30,7 @@ class CreatePageManagerTables extends Migration
             // Page, region, template
             $table->string('template')->nullable(false);
 
-            $table->json('name')->nullable(); // Translatable name
+            $table->string('name', 255);
             $table->json('slug')->nullable(); // Translatable slug
             $table->json('seo')->nullable(); // Translatable and modifiable SEO data
             $table->json('data')->nullable(); // Translatable and modifiable page data
@@ -46,7 +46,7 @@ class CreatePageManagerTables extends Migration
             // Page, region, template
             $table->string('template')->nullable(false);
 
-            $table->json('name')->nullable(); // Translatable name
+            $table->string('name', 255);
             $table->json('data')->nullable(); // Translatable and modifiable page data
 
             // Created at, updated at
@@ -61,8 +61,7 @@ class CreatePageManagerTables extends Migration
      */
     public function down()
     {
-        $table = config('nova-page-manager.table', 'nova_page_manager');
-
-        Schema::dropIfExists($table);
+        Schema::dropIfExists(NPM::getPagesTableName());
+        Schema::dropIfExists(NPM::getRegionsTableName());
     }
 }

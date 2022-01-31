@@ -6,6 +6,11 @@ use OptimistDigital\NovaPageManager\NovaPageManager;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Heading;
 
+function __od_npm($string)
+{
+    return __("nova-page-manager::nova-page-manager.{$string}");
+}
+
 // ------------------------------
 // nova_get_pages_structure
 // ------------------------------

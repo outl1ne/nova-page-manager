@@ -7,8 +7,9 @@ use OptimistDigital\NovaPageManager\Core\TemplateTypes;
 
 class Template
 {
+    public static $id = '';
+    public static $name = '';
     public static $type = TemplateTypes::PAGE;
-    public static $slug = '';
 
     protected $resource = null;
 

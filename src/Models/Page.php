@@ -4,11 +4,18 @@ namespace OptimistDigital\NovaPageManager\Models;
 
 use NPMCache;
 use OptimistDigital\NovaPageManager\NPM;
+use Spatie\Translatable\HasTranslations;
 
 class Page extends TemplateModel
 {
-    protected $appends = [
-        'path'
+    use HasTranslations;
+
+    protected $translatable = ['slug'];
+
+    protected $appends = [];
+
+    protected $casts = [
+        'data' => 'array',
     ];
 
     public function __construct(array $attributes = [])
@@ -58,31 +65,31 @@ class Page extends TemplateModel
         return $parent;
     }
 
-    public function getPathAttribute()
-    {
-        $localeParent = $this->localeParent;
-        $isLocaleChild = $localeParent !== null;
-        $pathFinderPage = $isLocaleChild ? $localeParent : $this;
-        if (!isset($pathFinderPage->parent)) return NPM::getPagePath($this, $this->normalizePath($this->slug));
+    // public function getPathAttribute()
+    // {
+    //     $localeParent = $this->localeParent;
+    //     $isLocaleChild = $localeParent !== null;
+    //     $pathFinderPage = $isLocaleChild ? $localeParent : $this;
+    //     if (!isset($pathFinderPage->parent)) return NPM::getPagePath($this, $this->normalizePath($this->slug));
 
-        $parentSlugs = [];
-        $parent = $pathFinderPage->parent;
-        while (isset($parent)) {
-            $parentSlugs[] = $parent->slug;
-            $parent = $parent->parent;
-        }
-        $parentSlugs = array_reverse($parentSlugs);
+    //     $parentSlugs = [];
+    //     $parent = $pathFinderPage->parent;
+    //     while (isset($parent)) {
+    //         $parentSlugs[] = $parent->slug;
+    //         $parent = $parent->parent;
+    //     }
+    //     $parentSlugs = array_reverse($parentSlugs);
 
-        $normalizedPath = $this->normalizePath(implode('/', $parentSlugs) . "/" . $this->slug);
+    //     $normalizedPath = $this->normalizePath(implode('/', $parentSlugs) . "/" . $this->slug);
 
-        return NPM::getPagePath($this, $normalizedPath);
-    }
+    //     return NPM::getPagePath($this, $normalizedPath);
+    // }
 
-    protected function normalizePath($path)
-    {
-        if (empty($path)) return null;
-        if ($path[0] !== '/') $path = "/$path";
-        if (strlen($path) > 1 && substr($path, -1) === '/') $path = substr($path, 0, -1);
-        return preg_replace('/[\/]+/', '/', $path);
-    }
+    // protected function normalizePath($path)
+    // {
+    //     if (empty($path)) return null;
+    //     if ($path[0] !== '/') $path = "/$path";
+    //     if (strlen($path) > 1 && substr($path, -1) === '/') $path = substr($path, 0, -1);
+    //     return preg_replace('/[\/]+/', '/', $path);
+    // }
 }

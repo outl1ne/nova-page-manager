@@ -39,7 +39,7 @@
         "OptimistDigital\\NovaPageManager\\NPMServiceProvider"
       ],
       "aliases": {
-        "NPMCache": "OptimistDigital\\NovaPageManager\\Facades\\NPMFacade"
+        "NPMCache": "OptimistDigital\\NovaPageManager\\Facades\\NPMCache"
       }
     }
   },

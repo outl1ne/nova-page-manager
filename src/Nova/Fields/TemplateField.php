@@ -18,9 +18,7 @@ class TemplateField extends Field
         $this->withMeta([
             'asHtml' => true,
             'templates' => collect(NPM::getTemplates())
-                ->filter(function ($template) use ($resourceName) {
-                    return $template::$type === $resourceName;
-                })
+                ->filter(fn ($template) => $template::$type === $resourceName)
                 ->map(function ($template) {
                     return [
                         'label' => $template::$name,

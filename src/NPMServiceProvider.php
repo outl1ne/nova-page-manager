@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use OptimistDigital\NovaPageManager\FieldResponseMixin;
 use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
-use OptimistDigital\NovaTranslationsLoader\LoadsNovaTranslations;
+use OptimistDigital\NovaTranslationsLoaderPHP\LoadsNovaTranslations;
 
 class NPMServiceProvider extends ServiceProvider
 {
