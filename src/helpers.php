@@ -164,11 +164,22 @@ if (!function_exists('nova_format_page')) {
         ];
 
         if ($template::$seo) {
-            $pageData['seo'] = [
-                'title' => $page->seo_title,
-                'description' => $page->seo_description,
-                'image' => $page->seo_image,
-            ];
+            $seo_fields = config('nova-page-manager.seo_fields');
+            if($seo_fields == null) {
+                //Return by default
+                $pageData['seo'] = [
+                    'title' => $page->seo_title,
+                    'description' => $page->seo_description,
+                    'image' => $page->seo_image,
+                ];
+            }
+            else {
+                //Return according seo_fields configuration
+                $pageData['seo'] = [];
+                foreach($seo_fields as $seo_field) {
+                    $pageData['seo'][$seo_field->attribute] = $page->{$seo_field->attribute};
+                }
+            } 
         }
 
         return $pageData;
