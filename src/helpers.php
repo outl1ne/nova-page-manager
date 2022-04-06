@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Collection;
-use OptimistDigital\NovaPageManager\Models\TemplateModel;
-use OptimistDigital\NovaPageManager\NovaPageManager;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Heading;
+use Illuminate\Support\Collection;
+use OptimistDigital\NovaPageManager\NovaPageManager;
+use OptimistDigital\NovaPageManager\Models\TemplateModel;
 
 // ------------------------------
 // nova_get_pages_structure
@@ -406,13 +406,12 @@ if (!function_exists('nova_page_manager_get_page_by_template')) {
     {
         if (empty($template)) return [];
 
-        $pageQuery = NovaPageManager::getPageModel()::where('template', $template);
+        $pageQuery = NovaPageManager::getPageModel()::where('template', $template)->whereNull('locale_parent_id');
         if (!empty($locale)) $pageQuery->where('locale', $locale);
         if (!empty($previewToken)) $pageQuery->where('preview_token', $previewToken);
 
         $page = $pageQuery->first();
         if (!$page) return [];
-
         if (!empty($locale)) return nova_format_page($page);
 
         $localeChildren = NovaPageManager::getPageModel()::where('template', $template)->where('locale_parent_id', $page->id)->get();
