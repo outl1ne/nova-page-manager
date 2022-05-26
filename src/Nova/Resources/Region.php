@@ -60,11 +60,11 @@ class Region extends TemplateResource
 
     public static function label()
     {
-        return __('novaPageManager.regions');
+        return __('novaPageManager.regionResourceLabel');
     }
 
     public static function singularLabel()
     {
-        return __('novaPageManager.region');
+        return __('novaPageManager.regionResourceSingularLabel');
     }
 }

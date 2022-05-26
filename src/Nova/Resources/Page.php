@@ -141,11 +141,11 @@ class Page extends TemplateResource
 
     public static function label()
     {
-        return __('novaPageManager.pages');
+        return __('novaPageManager.pageResourceLabel');
     }
 
     public static function singularLabel()
     {
-        return __('novaPageManager.page');
+        return __('novaPageManager.pageResourceSingularLabel');
     }
 }
