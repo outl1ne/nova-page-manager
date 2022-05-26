@@ -1,9 +1,9 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Models;
+namespace Outl1ne\NovaPageManager\Models;
 
 use NPMCache;
-use OptimistDigital\NovaPageManager\NPM;
+use Outl1ne\NovaPageManager\NPM;
 use Spatie\Translatable\HasTranslations;
 
 class Page extends TemplateModel

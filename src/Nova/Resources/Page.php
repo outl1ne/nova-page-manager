@@ -1,14 +1,14 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Nova\Resources;
+namespace Outl1ne\NovaPageManager\Nova\Resources;
 
 use Laravel\Nova\Panel;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
-use Laravel\Nova\Fields\Slug;
-use OptimistDigital\NovaPageManager\NPM;
+use Outl1ne\NovaPageManager\NPM;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Http\Requests\ResourceIndexRequest;
 

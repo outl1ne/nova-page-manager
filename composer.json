@@ -1,5 +1,5 @@
 {
-  "name": "optimistdigital/nova-page-manager",
+  "name": "outl1ne/nova-page-manager",
   "description": "Page(s) and region(s) manager for Laravel Nova.",
   "keywords": [
     "laravel",
@@ -15,19 +15,19 @@
       "role": "Developer"
     },
     {
-      "name": "Optimist Digital",
+      "name": "Outl1ne",
       "email": "info@optimistdigital.com",
       "role": "Maintainer"
     }
   ],
   "license": "MIT",
   "require": {
-    "php": ">=8.0.0",
-    "optimistdigital/nova-translations-loader-php": "dev-main"
+    "php": ">=8.0",
+    "outl1ne/nova-translations-loader": "^5.0"
   },
   "autoload": {
     "psr-4": {
-      "OptimistDigital\\NovaPageManager\\": "src/"
+      "Outl1ne\\NovaPageManager\\": "src/"
     },
     "files": [
       "src/helpers.php"
@@ -36,10 +36,10 @@
   "extra": {
     "laravel": {
       "providers": [
-        "OptimistDigital\\NovaPageManager\\NPMServiceProvider"
+        "Outl1ne\\NovaPageManager\\NPMServiceProvider"
       ],
       "aliases": {
-        "NPMCache": "OptimistDigital\\NovaPageManager\\Facades\\NPMCache"
+        "NPMCache": "Outl1ne\\NovaPageManager\\Facades\\NPMCache"
       }
     }
   },

@@ -1,6 +1,6 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Models;
+namespace Outl1ne\NovaPageManager\Models;
 
 use Illuminate\Database\Eloquent\Model;
 

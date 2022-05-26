@@ -1,9 +1,9 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager;
+namespace Outl1ne\NovaPageManager;
 
 use Illuminate\Http\Request;
-use OptimistDigital\NovaPageManager\Core\TemplateTypes;
+use Outl1ne\NovaPageManager\Core\TemplateTypes;
 
 class Template
 {

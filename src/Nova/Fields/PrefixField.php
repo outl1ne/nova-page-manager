@@ -1,6 +1,6 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Nova\Fields;
+namespace Outl1ne\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Http\Requests\NovaRequest;

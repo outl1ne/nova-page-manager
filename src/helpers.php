@@ -1,10 +1,10 @@
 <?php
 
-use Illuminate\Support\Collection;
-use OptimistDigital\NovaPageManager\Models\TemplateModel;
-use OptimistDigital\NovaPageManager\NovaPageManager;
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Heading;
+use Illuminate\Support\Collection;
+use Outl1ne\NovaPageManager\NovaPageManager;
+use Outl1ne\NovaPageManager\Models\TemplateModel;
 
 function __od_npm($string)
 {

@@ -1,6 +1,6 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager;
+namespace Outl1ne\NovaPageManager;
 
 class NPM
 {
@@ -20,24 +20,24 @@ class NPM
     // Models
     public static function getPageModel(): string
     {
-        return config('nova-page-manager.page_model', \OptimistDigital\NovaPageManager\Models\Page::class);
+        return config('nova-page-manager.page_model', \Outl1ne\NovaPageManager\Models\Page::class);
     }
 
     public static function getRegionModel(): string
     {
-        return config('nova-page-manager.region_model', \OptimistDigital\NovaPageManager\Models\Region::class);
+        return config('nova-page-manager.region_model', \Outl1ne\NovaPageManager\Models\Region::class);
     }
 
 
     // Resources
     public static function getPageResource(): string
     {
-        return config('nova-page-manager.page_resource', \OptimistDigital\NovaPageManager\Nova\Resources\Page::class);
+        return config('nova-page-manager.page_resource', \Outl1ne\NovaPageManager\Nova\Resources\Page::class);
     }
 
     public static function getRegionResource(): string
     {
-        return config('nova-page-manager.region_resource', \OptimistDigital\NovaPageManager\Nova\Resources\Region::class);
+        return config('nova-page-manager.region_resource', \Outl1ne\NovaPageManager\Nova\Resources\Region::class);
     }
 
 

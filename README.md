@@ -1,7 +1,7 @@
 # Nova Page Manager
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/optimistdigital/nova-page-manager.svg?style=flat-square)](https://packagist.org/packages/optimistdigital/nova-page-manager)
-[![Total Downloads](https://img.shields.io/packagist/dt/optimistdigital/nova-page-manager.svg?style=flat-square)](https://packagist.org/packages/optimistdigital/nova-page-manager)
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/outl1ne/nova-page-manager.svg?style=flat-square)](https://packagist.org/packages/outl1ne/nova-page-manager)
+[![Total Downloads](https://img.shields.io/packagist/dt/outl1ne/nova-page-manager.svg?style=flat-square)](https://packagist.org/packages/outl1ne/nova-page-manager)
 
 This [Laravel Nova](https://nova.laravel.com) package allows you to create and manage pages and regions for your frontend application.
 
@@ -26,7 +26,7 @@ Install the package in a Laravel Nova project via Composer and run migrations:
 
 ```bash
 # Install package
-composer require optimistdigital/nova-page-manager
+composer require outl1ne/nova-page-manager
 
 # Run automatically loaded migrations
 php artisan migrate
@@ -35,7 +35,7 @@ php artisan migrate
 Publish the `nova-page-manager` configuration file and edit it to your preference:
 
 ```bash
-php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Outl1ne\NovaPageManager\ToolServiceProvider" --tag="config"
 ```
 
 Register the tool with Nova in the `tools()` method of the `NovaServiceProvider`:
@@ -47,7 +47,7 @@ public function tools()
 {
     return [
         // ...
-        new \OptimistDigital\NovaPageManager\NovaPageManager
+        new \Outl1ne\NovaPageManager\NovaPageManager
     ];
 }
 ```
@@ -383,7 +383,7 @@ This helper function finds and returns the first page with the given template. I
 The translation file(s) can be published by using the following command:
 
 ```bash
-php artisan vendor:publish --provider="OptimistDigital\NovaPageManager\ToolServiceProvider" --tag="translations"
+php artisan vendor:publish --provider="Outl1ne\NovaPageManager\ToolServiceProvider" --tag="translations"
 ```
 
 You can add your translations to `resources/lang/vendor/nova-page-manager/` by creating a new translations file with the locale name (ie `et.json`) and copying the JSON from the existing `en.json`.

@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'page_resource' => \OptimistDigital\NovaPageManager\Nova\Resources\Page::class,
+    'page_resource' => \Outl1ne\NovaPageManager\Nova\Resources\Page::class,
 
 
     /*
@@ -63,7 +63,7 @@ return [
     |
     */
 
-    'page_model' => \OptimistDigital\NovaPageManager\Models\Page::class,
+    'page_model' => \Outl1ne\NovaPageManager\Models\Page::class,
 
 
     /*
@@ -78,7 +78,7 @@ return [
     |
     */
 
-    'region_resource' => \OptimistDigital\NovaPageManager\Nova\Resources\Region::class,
+    'region_resource' => \Outl1ne\NovaPageManager\Nova\Resources\Region::class,
 
 
     /*
@@ -90,7 +90,7 @@ return [
     |
     */
 
-    'region_model' => \OptimistDigital\NovaPageManager\Models\Region::class,
+    'region_model' => \Outl1ne\NovaPageManager\Models\Region::class,
 
     /*
     |--------------------------------------------------------------------------

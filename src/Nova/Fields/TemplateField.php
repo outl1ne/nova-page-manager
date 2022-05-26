@@ -1,9 +1,9 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Nova\Fields;
+namespace Outl1ne\NovaPageManager\Nova\Fields;
 
 use Laravel\Nova\Fields\Field;
-use OptimistDigital\NovaPageManager\NPM;
+use Outl1ne\NovaPageManager\NPM;
 
 class TemplateField extends Field
 {

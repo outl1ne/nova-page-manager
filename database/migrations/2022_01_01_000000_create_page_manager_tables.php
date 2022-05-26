@@ -1,11 +1,11 @@
 <?php
 
+use Outl1ne\NovaPageManager\NPM;
 use Illuminate\Support\Facades\Schema;
-use OptimistDigital\NovaPageManager\NPM;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreatePageManagerTables extends Migration
+return new class extends Migration
 {
     /**
      * Run the migrations.
@@ -64,4 +64,4 @@ class CreatePageManagerTables extends Migration
         Schema::dropIfExists(NPM::getPagesTableName());
         Schema::dropIfExists(NPM::getRegionsTableName());
     }
-}
+};

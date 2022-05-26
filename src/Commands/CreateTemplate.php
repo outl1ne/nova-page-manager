@@ -1,10 +1,10 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Commands;
+namespace Outl1ne\NovaPageManager\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use OptimistDigital\NovaPageManager\Core\TemplateTypes;
+use Outl1ne\NovaPageManager\Core\TemplateTypes;
 
 class CreateTemplate extends Command
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager;
+namespace Outl1ne\NovaPageManager;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
-use OptimistDigital\NovaPageManager\FieldResponseMixin;
-use OptimistDigital\NovaPageManager\Commands\CreateTemplate;
-use OptimistDigital\NovaTranslationsLoaderPHP\LoadsNovaTranslations;
+use Outl1ne\NovaPageManager\FieldResponseMixin;
+use Outl1ne\NovaPageManager\Commands\CreateTemplate;
+use Outl1ne\NovaTranslationsLoaderPHP\LoadsNovaTranslations;
 
 class NPMServiceProvider extends ServiceProvider
 {

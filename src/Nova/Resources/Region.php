@@ -1,13 +1,13 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Nova\Resources;
+namespace Outl1ne\NovaPageManager\Nova\Resources;
 
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Laravel\Nova\Fields\Text;
-use OptimistDigital\NovaPageManager\NPM;
-use OptimistDigital\NovaPageManager\Nova\Fields\RegionField;
+use Outl1ne\NovaPageManager\NPM;
+use Outl1ne\NovaPageManager\Nova\Fields\RegionField;
 
 class Region extends TemplateResource
 {

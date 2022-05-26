@@ -1,6 +1,6 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager;
+namespace Outl1ne\NovaPageManager;
 
 class NPMCache
 {

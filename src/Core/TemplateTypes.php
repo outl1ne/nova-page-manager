@@ -1,6 +1,6 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Core;
+namespace Outl1ne\NovaPageManager\Core;
 
 class TemplateTypes
 {

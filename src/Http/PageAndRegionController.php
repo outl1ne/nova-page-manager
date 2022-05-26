@@ -1,9 +1,9 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Http;
+namespace Outl1ne\NovaPageManager\Http;
 
+use Outl1ne\NovaPageManager\NPM;
 use Illuminate\Routing\Controller;
-use OptimistDigital\NovaPageManager\NPM;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
 class PageAndRegionController extends Controller
