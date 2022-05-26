@@ -8,7 +8,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Outl1ne\NovaPageManager\FieldResponseMixin;
 use Outl1ne\NovaPageManager\Commands\CreateTemplate;
-use Outl1ne\NovaTranslationsLoaderPHP\LoadsNovaTranslations;
+use Outl1ne\NovaTranslationsLoader\LoadsNovaTranslations;
 
 class NPMServiceProvider extends ServiceProvider
 {
@@ -35,7 +35,7 @@ class NPMServiceProvider extends ServiceProvider
         // Load all data
         $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-page-manager');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
-        $this->loadTranslations(__DIR__ . '/../resources/lang', 'nova-page-manager', true);
+        $this->loadTranslations(__DIR__ . '/../lang', 'nova-page-manager');
 
         // Publish migrations and config
         $this->publishes([

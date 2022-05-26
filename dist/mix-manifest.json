@@ -1,3 +1,4 @@
 {
-    "/js/nova-page-manager-resources.js": "/js/nova-page-manager-resources.js"
+    "/js/entry.js": "/js/entry.js",
+    "/css/entry.css": "/css/entry.css"
 }
