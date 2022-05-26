@@ -1,5 +1,5 @@
 {
-  "name": "optimistdigital/nova-page-manager",
+  "name": "outl1ne/nova-page-manager",
   "description": "Page(s) and region(s) manager for Laravel Nova.",
   "keywords": [
     "laravel",
@@ -15,22 +15,20 @@
       "role": "Developer"
     },
     {
-      "name": "Optimist Digital",
+      "name": "Outl1ne",
       "email": "info@optimistdigital.com",
       "role": "Maintainer"
     }
   ],
   "license": "MIT",
   "require": {
-    "php": ">=7.1.0",
-    "laravel/nova": "^2.9 || ^3.0",
-    "optimistdigital/nova-locale-field": "^2.0.1",
-    "optimistdigital/nova-translations-loader": "^3.0.0",
-    "doctrine/dbal": "^2.9"
+    "php": ">=8.0",
+    "laravel/nova": "^4.0",
+    "outl1ne/nova-translations-loader": "^5.0"
   },
   "autoload": {
     "psr-4": {
-      "OptimistDigital\\NovaPageManager\\": "src/"
+      "Outl1ne\\NovaPageManager\\": "src/"
     },
     "files": [
       "src/helpers.php"
@@ -39,10 +37,10 @@
   "extra": {
     "laravel": {
       "providers": [
-        "OptimistDigital\\NovaPageManager\\ToolServiceProvider"
+        "Outl1ne\\NovaPageManager\\NPMServiceProvider"
       ],
       "aliases": {
-        "NovaPageManagerCache": "OptimistDigital\\NovaPageManager\\Facade"
+        "NPMCache": "Outl1ne\\NovaPageManager\\Facades\\NPMCache"
       }
     }
   },
@@ -50,5 +48,11 @@
     "sort-packages": true
   },
   "minimum-stability": "dev",
-  "prefer-stable": true
+  "prefer-stable": true,
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://nova.laravel.com"
+    }
+  ]
 }

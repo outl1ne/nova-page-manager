@@ -1,11 +1,10 @@
 <?php
 
-namespace OptimistDigital\NovaPageManager\Nova\Fields;
+namespace Outl1ne\NovaPageManager\Nova\Fields;
 
-use NovaPageManagerCache;
+use NPMCache;
 use Laravel\Nova\Fields\Field;
-use OptimistDigital\NovaPageManager\Models\Page;
-use OptimistDigital\NovaPageManager\NovaPageManager;
+use Outl1ne\NovaPageManager\NPM;
 
 class ParentField extends Field
 {
@@ -30,12 +29,9 @@ class ParentField extends Field
 
         $options = [];
 
-        NovaPageManager::getPageModel()::whereNull('locale_parent_id')
-            ->where('published', true)
-            ->get()
-            ->each(function ($page) use (&$options) {
-                $options[$page->id] = $page->name . ' (' . trim($page->path, '/') . ')';
-            });
+        NPM::getPageModel()::all()->each(function ($page) use (&$options) {
+            $options[$page->id] = $page->name . ' (' . trim($page->path, '/') . ')';
+        });
 
         $this->withMeta([
             'asHtml' => true,
@@ -69,7 +65,7 @@ class ParentField extends Field
 
         $parent = null;
         if (isset($resource->parent_id)) {
-            $parentPage = NovaPageManagerCache::find($resource->parent_id);
+            $parentPage = NPMCache::find($resource->parent_id);
             $parent = [
                 'name' => $parentPage->name,
                 'slug' => $parentPage->slug,
@@ -77,7 +73,6 @@ class ParentField extends Field
         }
 
         $this->withMeta([
-            'canHaveParent' => empty($resource->locale_parent_id),
             'options' => $options,
             'parent' => $parent,
         ]);
@@ -90,21 +85,19 @@ class ParentField extends Field
 
         // All parent's parents
         if (isset($page->parent_id)) {
-            $_current = NovaPageManagerCache::find($page->parent_id);
+            $_current = NPMCache::find($page->parent_id);
             while (isset($_current->parent_id)) {
-                $_current = NovaPageManagerCache::find($_current->parent_id);
+                $_current = NPMCache::find($_current->parent_id);
                 $childrenAndParents[] = $_current;
             }
         }
 
         // All children
-        $childPages = NovaPageManager::getPageModel()::where('parent_id', $page->id)->get();
+        $childPages = NPM::getPageModel()::where('parent_id', $page->id)->get();
 
         while (sizeof($childPages) > 0) {
             $childrenAndParents = array_merge($childrenAndParents, $childPages->toArray());
-            $childPages = NovaPageManager::getPageModel()::whereIn('parent_id', $childPages->map(function ($childPage) {
-                return $childPage->id;
-            }))->get();
+            $childPages = NPM::getPageModel()::whereIn('parent_id', $childPages->map(fn ($childPage) => $childPage->id))->get();
         }
 
         return $childrenAndParents;

@@ -3,15 +3,15 @@
 return [
     /*
     |--------------------------------------------------------------------------
-    | Table name
+    | Table names
     |--------------------------------------------------------------------------
     |
-    | Set a custom table for Nova Page Manager to store its data.
+    | Set table names for the pages and regions tables.
     |
     */
 
-    'table' => 'nova_page_manager',
-
+    'pages_table' => 'pages',
+    'regions_table' => 'regions',
 
     /*
     |--------------------------------------------------------------------------
@@ -41,20 +41,6 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Max locales shown on index
-    |--------------------------------------------------------------------------
-    |
-    | Sets the number of locales shown on index. If the number of locales
-    | exceeds the defined count, the locales will be shown only on the detail
-    | view.
-    |
-    */
-
-    'max_locales_shown_on_index' => 4,
-
-
-    /*
-    |--------------------------------------------------------------------------
     | Overwrite the page resource with a custom implementation
     |--------------------------------------------------------------------------
     |
@@ -65,7 +51,7 @@ return [
     |
     */
 
-    'page_resource' => null,
+    'page_resource' => \Outl1ne\NovaPageManager\Nova\Resources\Page::class,
 
 
     /*
@@ -77,7 +63,7 @@ return [
     |
     */
 
-    'page_model' => OptimistDigital\NovaPageManager\Models\Page::class,
+    'page_model' => \Outl1ne\NovaPageManager\Models\Page::class,
 
 
     /*
@@ -92,7 +78,7 @@ return [
     |
     */
 
-    'region_resource' => null,
+    'region_resource' => \Outl1ne\NovaPageManager\Nova\Resources\Region::class,
 
 
     /*
@@ -104,7 +90,7 @@ return [
     |
     */
 
-    'region_model' => OptimistDigital\NovaPageManager\Models\Region::class,
+    'region_model' => \Outl1ne\NovaPageManager\Models\Region::class,
 
     /*
     |--------------------------------------------------------------------------

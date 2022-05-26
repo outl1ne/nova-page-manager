@@ -3,8 +3,13 @@
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\Heading;
 use Illuminate\Support\Collection;
-use OptimistDigital\NovaPageManager\NovaPageManager;
-use OptimistDigital\NovaPageManager\Models\TemplateModel;
+use Outl1ne\NovaPageManager\NovaPageManager;
+use Outl1ne\NovaPageManager\Models\TemplateModel;
+
+function __od_npm($string)
+{
+    return __("nova-page-manager::nova-page-manager.{$string}");
+}
 
 // ------------------------------
 // nova_get_pages_structure
