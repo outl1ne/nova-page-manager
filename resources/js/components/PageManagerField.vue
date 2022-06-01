@@ -1,6 +1,6 @@
 <template>
   <div id="page-manager-field" class="relative py-3">
-    <div>header</div>
+    <PageManagerFieldHeader :locales="field.locales" :activeLocale="locale" @changeLocale="(l) => (locale = l)" />
 
     <div>body</div>
   </div>
@@ -8,11 +8,20 @@
 
 <script>
 import { FormField } from 'laravel-nova';
+import PageManagerFieldHeader from './PageManagerFieldHeader';
 
 export default {
   mixins: [FormField],
-
+  components: { PageManagerFieldHeader },
   props: ['resourceName', 'resourceId', 'field'],
+
+  data: () => ({
+    locale: void 0,
+  }),
+
+  beforeMount() {
+    this.locale = Object.keys(this.field.locales)[0];
+  },
 
   mounted() {
     // Fix classes on Detail view
