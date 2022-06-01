@@ -4,6 +4,7 @@ namespace Outl1ne\PageManager;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Fields\Field;
+use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
 use Outl1ne\PageManager\FieldResponseMixin;
@@ -67,5 +68,16 @@ class NPMServiceProvider extends ServiceProvider
         }, 'Field must be alphanumeric with dashes or underscores or a single slash.');
 
         Field::mixin(new FieldResponseMixin);
+
+        $this->registerRoutes();
+    }
+
+    protected function registerRoutes()
+    {
+        if ($this->app->routesAreCached()) return;
+
+        Route::middleware(['nova', \Outl1ne\PageManager\Http\Middleware\AuthorizeMiddleware::class])
+            ->prefix('nova-vendor/page-manager')
+            ->group(__DIR__ . '/../routes/api.php');
     }
 }
