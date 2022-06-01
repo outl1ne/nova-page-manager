@@ -35,7 +35,7 @@ php artisan migrate
 Publish the `nova-page-manager` configuration file and edit it to your preference:
 
 ```bash
-php artisan vendor:publish --provider="Outl1ne\NovaPageManager\ToolServiceProvider" --tag="config"
+php artisan vendor:publish --provider="Outl1ne\PageManager\ToolServiceProvider" --tag="config"
 ```
 
 Register the tool with Nova in the `tools()` method of the `NovaServiceProvider`:
@@ -47,7 +47,7 @@ public function tools()
 {
     return [
         // ...
-        new \Outl1ne\NovaPageManager\NovaPageManager
+        new \Outl1ne\PageManager\PageManager
     ];
 }
 ```
@@ -127,7 +127,7 @@ Locales can be defined similarly to how templates are registered. The config acc
 
 // if you wish to cache the configuration, pass a reference instead:
 
-'locales' => NovaPageManagerConfiguration::class . '::locales',
+'locales' => NPMConfiguration::class . '::locales',
 // ...
 ```
 
@@ -150,7 +150,7 @@ To add a locale prefix to page paths or to modify page paths for any other reaso
 
 // if you wish to cache the configuration, pass a reference instead:
 
-'page_path' => NovaPageManagerConfiguration::class . '::pageUrl',
+'page_path' => NPMConfiguration::class . '::pageUrl',
 // ...
 ```
 
@@ -168,7 +168,7 @@ To display a link to the actual page next to the slug, add or overwrite the clos
 
 // if you wish to cache the configuration, pass a reference instead:
 
-'page_url' => NovaPageManagerConfiguration::class . '::pageUrl',
+'page_url' => NPMConfiguration::class . '::pageUrl',
 // ...
 ```
 
@@ -383,7 +383,7 @@ This helper function finds and returns the first page with the given template. I
 The translation file(s) can be published by using the following command:
 
 ```bash
-php artisan vendor:publish --provider="Outl1ne\NovaPageManager\ToolServiceProvider" --tag="translations"
+php artisan vendor:publish --provider="Outl1ne\PageManager\ToolServiceProvider" --tag="translations"
 ```
 
 You can add your translations to `resources/lang/vendor/nova-page-manager/` by creating a new translations file with the locale name (ie `et.json`) and copying the JSON from the existing `en.json`.

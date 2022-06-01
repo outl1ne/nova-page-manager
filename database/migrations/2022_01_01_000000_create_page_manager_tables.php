@@ -1,6 +1,6 @@
 <?php
 
-use Outl1ne\NovaPageManager\NPM;
+use Outl1ne\PageManager\NPM;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
@@ -18,32 +18,35 @@ return new class extends Migration
         $regionsTableName = NPM::getRegionsTableName();
 
         // Create pages table
-        Schema::create($pagesTableName, function (Blueprint $table) {
-            $table->bigIncrements('id');
+        Schema::create($pagesTableName, function (Blueprint $table) use ($pagesTableName) {
+            $table->id();
 
             // Active status
             $table->boolean('active')->default(true);
 
             // Parent ID
-            $table->bigInteger('parent_id')->nullable();
+            $table->unsignedBigInteger('parent_id')->nullable();
 
-            // Page, region, template
+            // Template class
             $table->string('template')->nullable(false);
 
             $table->string('name', 255);
             $table->json('slug')->nullable(); // Translatable slug
-            $table->json('seo')->nullable(); // Translatable and modifiable SEO data
-            $table->json('data')->nullable(); // Translatable and modifiable page data
+            $table->json('seo')->nullable(); // Translatable SEO data
+            $table->json('data')->nullable(); // Translatable page data
 
-            // Created at, updated at
+            // created_at, updated_at
             $table->timestamps();
+
+            // Foreign key
+            $table->foreign('parent_id')->references('id')->on($pagesTableName);
         });
 
         // Create regions table
         Schema::create($regionsTableName, function (Blueprint $table) {
-            $table->bigIncrements('id');
+            $table->id();
 
-            // Page, region, template
+            // Template class
             $table->string('template')->nullable(false);
 
             $table->string('name', 255);

@@ -1,12 +1,12 @@
 <?php
 
-namespace Outl1ne\NovaPageManager\Commands;
+namespace Outl1ne\PageManager\Commands;
 
 use Illuminate\Console\Command;
+use Outl1ne\PageManager\Template;
 use Illuminate\Filesystem\Filesystem;
-use Outl1ne\NovaPageManager\Core\TemplateTypes;
 
-class CreateTemplate extends Command
+class NPMTemplateCommand extends Command
 {
     /**
      * The filesystem instance.
@@ -15,11 +15,11 @@ class CreateTemplate extends Command
      **/
     protected $files;
 
-    protected $typeOptions = [TemplateTypes::PAGE, TemplateTypes::REGION];
+    protected $typeOptions = [Template::TYPE_PAGE, Template::TYPE_REGION];
 
-    protected $signature = 'pagemanager:template {className?} {name?} {type?}';
+    protected $signature = 'npm:template {className?}';
 
-    protected $description = 'Creates a new Template file and its boilerplate.';
+    protected $description = 'Creates a new page or region template file.';
 
     protected $className;
 
@@ -31,12 +31,10 @@ class CreateTemplate extends Command
 
     public function handle()
     {
-        $this->className = $this->getClassNameArgument();
-        $this->type = $this->getTypeArgument();
-        $this->name = $this->getNameArgument();
+        $this->className = $this->getClassName();
         $path = $this->getPath();
         $this->files->put($path, $this->buildClass());
-        $this->info('Successfully created Template at ' . $path);
+        $this->info('Successfully created template at ' . $path);
     }
 
     /**
@@ -44,38 +42,12 @@ class CreateTemplate extends Command
      *
      * @return string
      **/
-    public function getClassNameArgument()
+    public function getClassName()
     {
         if (!$this->argument('className')) {
-            return $this->ask('Please enter a name for the Template class');
+            return $this->ask('Please enter a name for the template class (ie HomePageTemplate)');
         }
         return $this->argument('className');
-    }
-
-    /**
-     * Gets the name argument - if missing, asks the user to enter it.
-     *
-     * @return string
-     **/
-    public function getNameArgument()
-    {
-        if (!$this->argument('name')) {
-            return $this->ask('Please enter a name for the Template (ie about-page)');
-        }
-        return $this->argument('name');
-    }
-
-    /**
-     * Gets the name argument - if missing, asks the user to enter it.
-     *
-     * @return string
-     **/
-    public function getTypeArgument()
-    {
-        if (!$this->argument('type') || !in_array($this->argument('type'), $this->typeOptions)) {
-            return $this->choice('Please choose a type for the Template', $this->typeOptions);
-        }
-        return $this->argument('type');
     }
 
     /**
@@ -118,7 +90,7 @@ class CreateTemplate extends Command
             ':type' => $this->type,
         ];
 
-        $templateFilePath = ($this->type === 'page')
+        $templateFilePath = ($this->type === Template::TYPE_PAGE)
             ? __DIR__ . '/../Stubs/PageTemplate.php'
             : __DIR__ . '/../Stubs/RegionTemplate.php';
 

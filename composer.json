@@ -24,11 +24,12 @@
   "require": {
     "php": ">=8.0",
     "laravel/nova": "^4.0",
+    "outl1ne/nova-translatable": "^2.0",
     "outl1ne/nova-translations-loader": "^5.0"
   },
   "autoload": {
     "psr-4": {
-      "Outl1ne\\NovaPageManager\\": "src/"
+      "Outl1ne\\PageManager\\": "src/"
     },
     "files": [
       "src/helpers.php"
@@ -37,10 +38,10 @@
   "extra": {
     "laravel": {
       "providers": [
-        "Outl1ne\\NovaPageManager\\NPMServiceProvider"
+        "Outl1ne\\PageManager\\NPMServiceProvider"
       ],
       "aliases": {
-        "NPMCache": "Outl1ne\\NovaPageManager\\Facades\\NPMCache"
+        "NPMCache": "Outl1ne\\PageManager\\Facades\\NPMCache"
       }
     }
   },

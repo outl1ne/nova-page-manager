@@ -3,5 +3,9 @@
   "novaPageManager.pageResourceLabel": "Pages",
   "novaPageManager.pageResourceSingularLabel": "Page",
   "novaPageManager.regionResourceLabel": "Regions",
-  "novaPageManager.regionResourceSingularLabel": "Region"
+  "novaPageManager.regionResourceSingularLabel": "Region",
+  "novaPageManager.templateField": "Template",
+  "novaPageManager.nameField": "Name",
+  "novaPageManager.slugField": "Slug",
+  "novaPageManager.pageFieldsPanelName": "Page Data"
 }

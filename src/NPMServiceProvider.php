@@ -1,13 +1,13 @@
 <?php
 
-namespace Outl1ne\NovaPageManager;
+namespace Outl1ne\PageManager;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Validator;
-use Outl1ne\NovaPageManager\FieldResponseMixin;
-use Outl1ne\NovaPageManager\Commands\CreateTemplate;
+use Outl1ne\PageManager\FieldResponseMixin;
+use Outl1ne\PageManager\Commands\NPMTemplateCommand;
 use Outl1ne\NovaTranslationsLoader\LoadsNovaTranslations;
 
 class NPMServiceProvider extends ServiceProvider
@@ -55,7 +55,7 @@ class NPMServiceProvider extends ServiceProvider
         // Register commands
         if ($this->app->runningInConsole()) {
             $this->commands([
-                CreateTemplate::class
+                NPMTemplateCommand::class
             ]);
         }
 

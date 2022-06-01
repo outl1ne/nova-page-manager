@@ -1,16 +1,15 @@
 <?php
 
-namespace Outl1ne\NovaPageManager\Nova\Resources;
+namespace Outl1ne\PageManager\Nova\Resources;
 
 use Laravel\Nova\Panel;
 use Illuminate\Http\Request;
+use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
-use Outl1ne\NovaPageManager\NPM;
-use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\Http\Requests\ResourceIndexRequest;
+use Outl1ne\PageManager\Nova\Fields\PageManagerField;
 
 class Page extends TemplateResource
 {
@@ -35,35 +34,27 @@ class Page extends TemplateResource
 
     public function fields(Request $request)
     {
-        // Get base data
-        $templateClass = $this->getTemplateClass();
-        $templateFieldsAndPanels = get_class($request) === ResourceIndexRequest::class ? [] : $this->getTemplateFieldsAndPanels();
+        return [
+            // Template selector
+            Select::make(__('novaPageManager.templateField'), 'template')
+                ->options(fn () => $this->getTemplateOptions())
+                ->rules('required', 'max:255')
+                ->displayUsingLabels(),
 
-        $fields = [
-            // Name on index view
-            Text::make(__od_npm('nameField'), function () {
-                $pagePath = $this->resource->path;
-                $name = $this->resource->name;
-                $parentPaths = (explode('/', $pagePath));
-                array_shift($parentPaths);
-                array_pop($parentPaths);
-                return str_repeat('— ', count($parentPaths)) . $name;
-            })->onlyOnIndex(),
-
-            // Name on detail/form views
-            Text::make(__od_npm('nameField'), 'name')
-                ->required()
+            // Name field
+            Text::make(__('novaPageManager.nameField'), 'name')
+                ->translatable(NPM::getLocales())
                 ->rules('required', 'max:255')
                 ->hideFromIndex(),
 
             // Slug on form views
-            Slug::make(__od_npm('slugField'), 'slug')
+            Slug::make(__('novaPageManager.slugField'), 'slug')
                 ->translatable(NPM::getLocales())
                 ->from('name')
                 ->onlyOnForms(),
 
             // Slug on index/detail views
-            Text::make(__od_npm('slugField'), function () {
+            Text::make(__('novaPageManager.slugField'), function () {
                 $pagePath = $this->resource->path;
                 $pageUrl = NPM::getPageUrl($this->resource);
                 $buttonText = __('novaPageManager.view');
@@ -76,25 +67,12 @@ class Page extends TemplateResource
                         </div>";
             })->asHtml()->exceptOnForms(),
 
-            // Template selector
-            Select::make(__od_npm('templateField'), 'template')
-                ->options(fn () => $this->getTemplateOptions())
-                ->displayUsingLabels(),
+            Panel::make(__('novaPageManager.pageFieldsPanelName'), [
+                PageManagerField::make('', 'page_manager')
+                    ->hideWhenCreating()
+                    ->readonly(),
+            ])
         ];
-
-        if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel(__('novaPageManager.seo'), $this->getSeoFields());
-
-        if (!empty($templateFieldsAndPanels)) {
-            if (count($templateFieldsAndPanels['fields']) > 0) {
-                $fields[] = new Panel(__('novaPageManager.pageData'), $templateFieldsAndPanels['fields']);
-            }
-
-            if (count($templateFieldsAndPanels['panels']) > 0) {
-                $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
-            }
-        }
-
-        return $fields;
     }
 
     protected function getSeoFields()
@@ -114,8 +92,8 @@ class Page extends TemplateResource
         $templates = NPM::getPageTemplates();
 
         $options = [];
-        foreach ($templates as $template) {
-            $options[$template::$id] = $template::$name;
+        foreach ($templates as $slug => $template) {
+            $options[$slug] = (new $template['class'])->name(request());
         }
 
         return $options;
@@ -124,19 +102,6 @@ class Page extends TemplateResource
     public function title()
     {
         return $this->name . ' (' . $this->slug . ')';
-    }
-
-    public static function indexQuery(NovaRequest $request, $query)
-    {
-        $table = NPM::getPagesTableName();
-
-        $query->selectRaw("{$table}.*, CONCAT(COALESCE(p3.name, ''), COALESCE(p2.name, ''), COALESCE(p1.name, ''), COALESCE({$table}.name, '')) AS hierarchy_order")
-            ->leftJoin("{$table} AS p1", 'p1.id', '=', "{$table}.parent_id")
-            ->leftJoin("{$table} AS p2", 'p2.id', '=', 'p1.parent_id')
-            ->leftJoin("{$table} AS p3", 'p3.id', '=', 'p2.parent_id')
-            ->orderByRaw('hierarchy_order');
-
-        return $query;
     }
 
     public static function label()

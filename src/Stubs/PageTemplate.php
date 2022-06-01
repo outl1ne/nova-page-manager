@@ -3,16 +3,20 @@
 namespace App\Nova\Templates;
 
 use Illuminate\Http\Request;
-use Outl1ne\NovaPageManager\Template;
+use Outl1ne\PageManager\Template;
 
 class :className extends Template
 {
-    public static $type = ':type';
-    public static $name = ':name';
-    public static $seo = false;
-    public static $view = null;
+    public function name(Request $request) {
+        return static::class;
+    }
 
     public function fields(Request $request): array
+    {
+        return [];
+    }
+
+    public function metaData(Request $request): array
     {
         return [];
     }

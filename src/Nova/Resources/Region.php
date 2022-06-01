@@ -1,13 +1,12 @@
 <?php
 
-namespace Outl1ne\NovaPageManager\Nova\Resources;
+namespace Outl1ne\PageManager\Nova\Resources;
 
 use Laravel\Nova\Panel;
 use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
+use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Text;
-use Outl1ne\NovaPageManager\NPM;
-use Outl1ne\NovaPageManager\Nova\Fields\RegionField;
 
 class Region extends TemplateResource
 {
@@ -39,7 +38,6 @@ class Region extends TemplateResource
         $fields = [
             ID::make()->sortable(),
             Text::make(__('novaPageManager.name'), 'name')->rules('required'),
-            RegionField::make(__('novaPageManager.region'), 'region')->sortable(),
         ];
 
         if (count($templateFieldsAndPanels['fields']) > 0) {

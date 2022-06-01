@@ -1,22 +1,19 @@
 <?php
 
-namespace Outl1ne\NovaPageManager\Models;
+namespace Outl1ne\PageManager\Models;
 
 use NPMCache;
-use Outl1ne\NovaPageManager\NPM;
+use Outl1ne\PageManager\NPM;
+use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
 
-class Page extends TemplateModel
+class Page extends Model
 {
     use HasTranslations;
 
-    protected $translatable = ['slug'];
-
-    protected $appends = [];
-
-    protected $casts = [
-        'data' => 'array',
-    ];
+    protected $fillable = ['parent_id'];
+    protected $translatable = ['name', 'slug'];
+    protected $casts = ['data' => 'array'];
 
     public function __construct(array $attributes = [])
     {
@@ -29,17 +26,7 @@ class Page extends TemplateModel
         parent::boot();
 
         static::deleting(function ($template) {
-            // Is a parent template
-            if ($template->parent_id === null) {
-                // Find child templates
-                $childTemplates = NPM::getPageModel()::where('parent_id', '=', $template->id)->get();
-                if (count($childTemplates) === 0) return;
-
-                // Set their parent to null
-                $childTemplates->each(function ($template) {
-                    $template->update(['parent_id' => null]);
-                });
-            }
+            // TODO Handle children upon delete
         });
 
         static::updated(function () {

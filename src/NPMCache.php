@@ -1,6 +1,6 @@
 <?php
 
-namespace Outl1ne\NovaPageManager;
+namespace Outl1ne\PageManager;
 
 class NPMCache
 {

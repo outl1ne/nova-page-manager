@@ -1,6 +1,6 @@
 <?php
 
-namespace Outl1ne\NovaPageManager\Facades;
+namespace Outl1ne\PageManager\Facades;
 
 use \Illuminate\Support\Facades\Facade;
 
@@ -8,6 +8,6 @@ class NPMCache extends Facade
 {
     protected static function getFacadeAccessor()
     {
-        return \Outl1ne\NovaPageManager\NPMCache::class;
+        return \Outl1ne\PageManager\NPMCache::class;
     }
 }

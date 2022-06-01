@@ -22,7 +22,20 @@ return [
     |
     */
 
-    'templates' => [],
+    'templates' => [
+        'pages' => [
+            // 'home-page' => [
+            //     'class' => '\App\Nova\Templates\HomePageTemplate',
+            //     'unique' => true,
+            // ],
+        ],
+        'regions' => [
+            // 'header' => [
+            //     'class' => '\App\Nova\Templates\HeaderRegionTemplate',
+            //     'unique' => true,
+            // ],
+        ],
+    ],
 
 
     /*
@@ -36,7 +49,7 @@ return [
     |
     */
 
-    'locales' => ['en' => 'English'],
+    'locales' => ['en' => 'English', 'et' => 'Estonian'],
 
 
     /*
@@ -51,7 +64,7 @@ return [
     |
     */
 
-    'page_resource' => \Outl1ne\NovaPageManager\Nova\Resources\Page::class,
+    'page_resource' => \Outl1ne\PageManager\Nova\Resources\Page::class,
 
 
     /*
@@ -63,7 +76,7 @@ return [
     |
     */
 
-    'page_model' => \Outl1ne\NovaPageManager\Models\Page::class,
+    'page_model' => \Outl1ne\PageManager\Models\Page::class,
 
 
     /*
@@ -78,7 +91,7 @@ return [
     |
     */
 
-    'region_resource' => \Outl1ne\NovaPageManager\Nova\Resources\Region::class,
+    'region_resource' => \Outl1ne\PageManager\Nova\Resources\Region::class,
 
 
     /*
@@ -90,7 +103,7 @@ return [
     |
     */
 
-    'region_model' => \Outl1ne\NovaPageManager\Models\Region::class,
+    'region_model' => \Outl1ne\PageManager\Models\Region::class,
 
     /*
     |--------------------------------------------------------------------------

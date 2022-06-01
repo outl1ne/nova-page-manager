@@ -3,7 +3,7 @@
 namespace App\Nova\Templates;
 
 use Illuminate\Http\Request;
-use Outl1ne\NovaPageManager\Template;
+use Outl1ne\PageManager\Template;
 
 class :className extends Template
 {

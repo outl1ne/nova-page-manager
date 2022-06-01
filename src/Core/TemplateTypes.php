@@ -1,6 +1,6 @@
 <?php
 
-namespace Outl1ne\NovaPageManager\Core;
+namespace Outl1ne\PageManager\Core;
 
 class TemplateTypes
 {

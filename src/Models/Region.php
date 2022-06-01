@@ -1,11 +1,12 @@
 <?php
 
-namespace Outl1ne\NovaPageManager\Models;
+namespace Outl1ne\PageManager\Models;
 
 use NPMCache;
-use Outl1ne\NovaPageManager\NPM;
+use Outl1ne\PageManager\NPM;
+use Illuminate\Database\Eloquent\Model;
 
-class Region extends TemplateModel
+class Region extends Model
 {
     public function __construct(array $attributes = [])
     {

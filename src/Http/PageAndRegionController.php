@@ -1,8 +1,8 @@
 <?php
 
-namespace Outl1ne\NovaPageManager\Http;
+namespace Outl1ne\PageManager\Http;
 
-use Outl1ne\NovaPageManager\NPM;
+use Outl1ne\PageManager\NPM;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
