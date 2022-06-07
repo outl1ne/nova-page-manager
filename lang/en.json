@@ -7,5 +7,6 @@
   "novaPageManager.templateField": "Template",
   "novaPageManager.nameField": "Name",
   "novaPageManager.slugField": "Slug",
-  "novaPageManager.defaultPanelName": "Page Data"
+  "novaPageManager.defaultPanelName": "Page Data",
+  "novaPageManager.customizeSlug": "Customize"
 }

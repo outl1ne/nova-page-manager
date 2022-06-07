@@ -3,6 +3,7 @@
 namespace Outl1ne\PageManager\Models;
 
 use NPMCache;
+use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Illuminate\Database\Eloquent\Model;
 use Spatie\Translatable\HasTranslations;
@@ -52,31 +53,29 @@ class Page extends Model
         return $parent;
     }
 
-    // public function getPathAttribute()
-    // {
-    //     $localeParent = $this->localeParent;
-    //     $isLocaleChild = $localeParent !== null;
-    //     $pathFinderPage = $isLocaleChild ? $localeParent : $this;
-    //     if (!isset($pathFinderPage->parent)) return NPM::getPagePath($this, $this->normalizePath($this->slug));
+    public function getPathAttribute()
+    {
+        $parentSlugs = [];
+        $parent = $this->parent;
+        while (isset($parent)) {
+            $parentSlugs[] = $parent->slug;
+            $parent = $parent->parent;
+        }
+        $parentSlugs = array_reverse($parentSlugs);
 
-    //     $parentSlugs = [];
-    //     $parent = $pathFinderPage->parent;
-    //     while (isset($parent)) {
-    //         $parentSlugs[] = $parent->slug;
-    //         $parent = $parent->parent;
-    //     }
-    //     $parentSlugs = array_reverse($parentSlugs);
+        return $this->normalizePath(implode('/', $parentSlugs) . '/' . $this->slug);
+    }
 
-    //     $normalizedPath = $this->normalizePath(implode('/', $parentSlugs) . "/" . $this->slug);
+    public function normalizePath($path)
+    {
+        if (empty($path)) return null;
 
-    //     return NPM::getPagePath($this, $normalizedPath);
-    // }
+        // Replace multiple consecutive / with just one
+        $path = preg_replace('/[\/]+/', '/', $path);
 
-    // protected function normalizePath($path)
-    // {
-    //     if (empty($path)) return null;
-    //     if ($path[0] !== '/') $path = "/$path";
-    //     if (strlen($path) > 1 && substr($path, -1) === '/') $path = substr($path, 0, -1);
-    //     return preg_replace('/[\/]+/', '/', $path);
-    // }
+        if (!Str::startsWith($path, '/')) $path = "/$path";
+        if (Str::length($path) > 1 && Str::endsWith($path, '/')) $path = substr($path, 0, -1);
+
+        return $path;
+    }
 }

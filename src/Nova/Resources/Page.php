@@ -10,6 +10,7 @@ use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
+use Outl1ne\PageManager\Nova\Fields\PrefixSlugField;
 
 class Page extends TemplateResource
 {
@@ -32,9 +33,28 @@ class Page extends TemplateResource
         return new $model;
     }
 
+    public function getParentOptions()
+    {
+        $page = NPM::getPageModel();
+        if ($this->id) {
+            $pages = $page::whereNot('id', '<=>', $this->id)->whereNot('parent_id', '<=>', $this->id)->get();
+        } else {
+            $pages = $page::all();
+        }
+        return $pages->pluck('name', 'id');
+    }
+
     public function fields(Request $request)
     {
         return [
+            // Parent selector
+            Select::make('Parent page', 'parent_id')
+                ->options($this->getParentOptions())
+                ->hideFromIndex()
+                ->hideFromDetail()
+                ->displayUsingLabels()
+                ->nullable(),
+
             // Template selector
             Select::make(__('novaPageManager.templateField'), 'template')
                 ->options(fn () => $this->getTemplateOptions())
@@ -48,10 +68,13 @@ class Page extends TemplateResource
                 ->hideFromIndex(),
 
             // Slug on form views
-            Slug::make(__('novaPageManager.slugField'), 'slug')
+            PrefixSlugField::make(__('novaPageManager.slugField'), 'slug')
                 ->translatable(NPM::getLocales())
-                ->from('name')
-                ->onlyOnForms(),
+                ->from('name.en')
+                ->onlyOnForms()
+                ->pathPrefix($this->path)
+                ->pathSuffix($this->template ? $this->template->pathSuffix($request) : null)
+                ->rules('required'),
 
             // Slug on index/detail views
             Text::make(__('novaPageManager.slugField'), function () {

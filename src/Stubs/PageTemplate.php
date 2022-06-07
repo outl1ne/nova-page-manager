@@ -20,4 +20,8 @@ class :className extends Template
     {
         return [];
     }
+
+    public function pathSuffix(Request $request) {
+        return null;
+    }
 }

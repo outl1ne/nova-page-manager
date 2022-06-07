@@ -84,9 +84,19 @@ class NPM
         return Arr::first(static::getPageTemplates(), fn ($template) => $template['class'] === $className);
     }
 
+    public static function getPageTemplateBySlug($templateSlug)
+    {
+        return Arr::first(static::getPageTemplates(), fn ($template) => $template['slug'] === $templateSlug);
+    }
+
     public static function getRegionTemplateByClass($className)
     {
         return Arr::first(static::getRegionTemplates(), fn ($template) => $template['class'] === $className);
+    }
+
+    public static function getRegionTemplateBySlug($templateSlug)
+    {
+        return Arr::first(static::getRegionTemplates(), fn ($template) => $template['slug'] === $templateSlug);
     }
 
     public static function getTemplateClassType($templateClass)

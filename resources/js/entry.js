@@ -1,4 +1,5 @@
 import PageManagerField from './components/PageManagerField';
+import PrefixSlugField from './components/PrefixSlugField';
 
 let pageManagerDarkModeObserver = null;
 
@@ -20,4 +21,5 @@ Nova.booting((Vue, router, store) => {
 
   Vue.component('form-page-manager-field', PageManagerField);
   Vue.component('detail-page-manager-field', PageManagerField);
+  Vue.component('form-prefix-slug-field', PrefixSlugField);
 });
