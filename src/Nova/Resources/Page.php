@@ -68,9 +68,8 @@ class Page extends TemplateResource
             })->asHtml()->exceptOnForms(),
 
             Panel::make(__('novaPageManager.pageFieldsPanelName'), [
-                PageManagerField::make('', 'page_manager')
-                    ->hideWhenCreating()
-                    ->readonly(),
+                PageManagerField::make(\Outl1ne\PageManager\Template::TYPE_PAGE)
+                    ->hideWhenCreating(),
             ])
         ];
     }

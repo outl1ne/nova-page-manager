@@ -23,10 +23,6 @@
 <script>
 export default {
   props: ['locales', 'activeLocale'],
-
-  updated() {
-    console.info(this.activeLocale, this.locales);
-  },
 };
 </script>
 
@@ -34,7 +30,7 @@ export default {
 #page-manager-field-header {
   position: absolute;
   right: 0;
-  top: -56px;
+  top: 20px;
   display: flex;
 }
 </style>
