@@ -4,6 +4,7 @@ namespace Outl1ne\PageManager\Nova\Resources;
 
 use Laravel\Nova\Panel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Arr;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Slug;
@@ -128,6 +129,11 @@ class Page extends TemplateResource
     protected function getTemplateOptions()
     {
         $templates = NPM::getPageTemplates();
+        $existingTemplates = NPM::getPageModel()::select('template')->groupBy('template')->get()->pluck('template')->toArray();
+        $templates = Arr::where($templates, function ($template) use ($existingTemplates) {
+            if (!($template['unique'] ?? false)) return true;
+            return !in_array($template['slug'], $existingTemplates);
+        });
 
         $options = [];
         foreach ($templates as $slug => $template) {

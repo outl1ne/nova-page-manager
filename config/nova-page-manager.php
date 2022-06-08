@@ -52,110 +52,38 @@ return [
     'locales' => ['en' => 'English', 'et' => 'Estonian'],
 
 
-    /*
-    |--------------------------------------------------------------------------
-    | Overwrite the page resource with a custom implementation
-    |--------------------------------------------------------------------------
-    |
-    | Add a custom implementation of the Page resource.
-    |
-    | Return false if you want to disable the Page resource
-    | and hide it from the sidebar.
-    |
-    */
-
-    'page_resource' => \Outl1ne\PageManager\Nova\Resources\Page::class,
-
 
     /*
     |--------------------------------------------------------------------------
-    | Overwrite the page model with a custom implementation
+    | Resource and model overrides
     |--------------------------------------------------------------------------
     |
-    | Add a custom implementation of the Page model.
+    | Add a custom implementation of Page and/or Region models/resources.
     |
-    */
-
-    'page_model' => \Outl1ne\PageManager\Models\Page::class,
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Overwrite the region resource with a custom implementation
-    |--------------------------------------------------------------------------
-    |
-    | Add a custom implementation of the Region resource.
-    |
-    | Return false if you want to disable the Region resource
-    | and hide it from the sidebar.
-    |
-    */
-
-    'region_resource' => \Outl1ne\PageManager\Nova\Resources\Region::class,
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Overwrite the region model with a custom implementation
-    |--------------------------------------------------------------------------
-    |
-    | Add a custom implementation of the Region model.
+    | Return false for any resource if you want to disable it
+    | and hide the item from the navigation sidebar.
     |
     */
 
     'region_model' => \Outl1ne\PageManager\Models\Region::class,
+    'region_resource' => \Outl1ne\PageManager\Nova\Resources\Region::class,
+    'page_model' => \Outl1ne\PageManager\Models\Page::class,
+    'page_resource' => \Outl1ne\PageManager\Nova\Resources\Page::class,
 
-    /*
-    |--------------------------------------------------------------------------
-    | Overwrite seo fields with a custom implementation
-    |--------------------------------------------------------------------------
-    |
-    | Add a custom implementation of seo fields.
-    |
-    | When $seo is assigned as true in template class this custom array of
-    | fields will be displayed in resource view instead of the default one.
-    |
-    */
-
-    'seo_fields' => null,
 
 
     /*
     |--------------------------------------------------------------------------
-    | Page URL
+    | Base URL
     |--------------------------------------------------------------------------
     |
-    | If a closure is specified, a link to the page is shown next to
-    | the page slug. The closure accepts a Page model as a paramater.
+    | Define the base URL for your pages. Can be a string (ie https://webshop.com)
+    | or a closure.
     |
-    | Set to `null` if the link should not be displayed.
-    |
-    | Closure example:
-    | function (Page $page) {
-    |   return env('FRONTEND_URL') . '/' . $page->path;
-    | }
+    | If a closure is specified, the function is called with the $page as a
+    | parameter. For example: fn($page) => config('app.url') . $page->path;
     |
     */
 
-    'page_url' => null,
-
-
-    /*
-    |--------------------------------------------------------------------------
-    | Page path
-    |--------------------------------------------------------------------------
-    |
-    | If a closure is specified, you can modify the page path before
-    | it's finalized.
-    |
-    | The closure will be called with parameters (Page $page, $path).
-    |
-    | An example usecase is when you want to add a locale prefix to non-default
-    | locale pages.
-    |
-    | Set to `null` if you do not wish to modify page paths.
-    |
-    */
-
-    'page_path' => null,
+    'base_url' => null,
 ];

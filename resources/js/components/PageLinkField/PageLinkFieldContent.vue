@@ -6,6 +6,7 @@
   </div>
 
   <a
+    v-if="baseUrl"
     :href="fullUrl"
     target="_BLANK"
     rel="noopener noreferrer"

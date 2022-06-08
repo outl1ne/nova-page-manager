@@ -39,16 +39,13 @@ export default {
   }),
 
   beforeMount() {
-    console.info(this);
     this.locale = Object.keys(this.field.locales)[0];
   },
 
   mounted() {
     this.refreshFields();
     if (this.$refs.field) {
-      console.info(this.$refs.field.parentElement);
       this.$refs.field.parentElement.style = 'background: none; padding: 0;';
-      console.info(this.$refs.field.style);
       this.$refs.field.parentElement.parentElement.querySelector('h1').style = 'display: none;';
     }
   },
