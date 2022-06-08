@@ -34,7 +34,6 @@ class NPMServiceProvider extends ServiceProvider
     public function boot()
     {
         // Load all data
-        $this->loadViewsFrom(__DIR__ . '/../resources/views', 'nova-page-manager');
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadTranslations(__DIR__ . '/../lang', 'nova-page-manager');
 
@@ -59,15 +58,6 @@ class NPMServiceProvider extends ServiceProvider
                 NPMTemplateCommand::class
             ]);
         }
-
-        // Custom validation
-        Validator::extend('alpha_dash_or_slash', function ($attribute, $value, $parameters, $validator) {
-            if (!is_string($value) && !is_numeric($value)) return false;
-            if ($value === '/') return true;
-            return preg_match('/^[\pL\pM\pN_-]+$/u', $value) > 0;
-        }, 'Field must be alphanumeric with dashes or underscores or a single slash.');
-
-        Field::mixin(new FieldResponseMixin);
 
         $this->registerRoutes();
     }
