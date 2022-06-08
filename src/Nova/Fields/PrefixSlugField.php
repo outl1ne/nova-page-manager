@@ -2,7 +2,6 @@
 
 namespace Outl1ne\PageManager\Nova\Fields;
 
-use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Http\Requests\NovaRequest;
@@ -15,18 +14,6 @@ class PrefixSlugField extends Slug
      * @var string
      */
     public $component = 'prefix-slug-field';
-
-    public function pathPrefix($path)
-    {
-        $pathWithoutSelf = explode('/', $path);
-        array_pop($pathWithoutSelf);
-        $pathWithoutSelf = implode('/', $pathWithoutSelf);
-
-        return $this->withMeta([
-            'pathPrefix' => $pathWithoutSelf . '/',
-        ]);
-    }
-
 
     public function pathSuffix($path)
     {

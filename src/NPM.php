@@ -127,7 +127,7 @@ class NPM
 
 
     // Page URL generation
-    public static function getPageUrl($page)
+    public static function getPageUrl($page = null)
     {
         $getPageUrl = config('nova-page-manager.page_url');
         return isset($getPageUrl) ? call_user_func($getPageUrl, $page) : null;

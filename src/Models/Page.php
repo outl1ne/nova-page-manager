@@ -53,17 +53,40 @@ class Page extends Model
         return $parent;
     }
 
+    public function getSlugWithSuffix($locale = null)
+    {
+        $path = $locale ? $this->getTranslation('slug', $locale) : $this->slug;
+
+        $template = NPM::getPageTemplateBySlug($this->template);
+        if ($template) {
+            $templateClass = new $template['class'];
+            if ($pathSuffix = $templateClass->pathSuffix()) $path = "{$path}/{$pathSuffix}";
+        }
+
+        return $this->normalizePath($path);
+    }
+
     public function getPathAttribute()
     {
-        $parentSlugs = [];
-        $parent = $this->parent;
-        while (isset($parent)) {
-            $parentSlugs[] = $parent->slug;
-            $parent = $parent->parent;
-        }
-        $parentSlugs = array_reverse($parentSlugs);
+        $locales = NPM::getLocales();
 
-        return $this->normalizePath(implode('/', $parentSlugs) . '/' . $this->slug);
+        $localisedPaths = [];
+
+        foreach ($locales as $key => $localeName) {
+            $parentSlugs = [];
+            $parent = $this->parent;
+            while (isset($parent)) {
+                $parentSlugs[] = $parent->getSlugWithSuffix($key);
+                $parent = $parent->parent;
+            }
+            $parentSlugs = array_reverse($parentSlugs);
+
+            $path = implode('/', $parentSlugs) . '/' . $this->getSlugWithSuffix($key);
+
+            $localisedPaths[$key] = $this->normalizePath($path);
+        }
+
+        return $localisedPaths;
     }
 
     public function normalizePath($path)

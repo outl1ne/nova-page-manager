@@ -25,7 +25,7 @@ class :className extends Template
     }
 
     // Optional suffix to the route (ie {blogPostName})
-    public function pathSuffix(Request $request) {
+    public function pathSuffix() {
         return null;
     }
 }

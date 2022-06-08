@@ -9,6 +9,7 @@ use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
+use Outl1ne\PageManager\Nova\Fields\PageLinkField;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
 use Outl1ne\PageManager\Nova\Fields\PrefixSlugField;
 
@@ -46,6 +47,8 @@ class Page extends TemplateResource
 
     public function fields(Request $request)
     {
+        [$pathPrefix, $pathSuffix] = $this->getPathPrefixAndSuffix();
+
         return [
             // Parent selector
             Select::make('Parent page', 'parent_id')
@@ -64,32 +67,23 @@ class Page extends TemplateResource
             // Name field
             Text::make(__('novaPageManager.nameField'), 'name')
                 ->translatable(NPM::getLocales())
-                ->rules('required', 'max:255')
-                ->hideFromIndex(),
+                ->rules('required', 'max:255'),
 
             // Slug on form views
             PrefixSlugField::make(__('novaPageManager.slugField'), 'slug')
                 ->translatable(NPM::getLocales())
                 ->from('name.en')
                 ->onlyOnForms()
-                ->pathPrefix($this->path)
-                ->pathSuffix($this->template ? $this->template->pathSuffix($request) : null)
+                ->pathSuffix($pathSuffix)
                 ->rules('required'),
 
-            // Slug on index/detail views
-            Text::make(__('novaPageManager.slugField'), function () {
-                $pagePath = $this->resource->path;
-                $pageUrl = NPM::getPageUrl($this->resource);
-                $buttonText = __('novaPageManager.view');
+            // Slug on index and detail views
+            PageLinkField::make(__('novaPageManager.slugField'), 'path')
+                ->exceptOnForms()
+                ->baseUrl(NPM::getPageUrl())
+                ->translatable(NPM::getLocales()),
 
-                if (empty($pageUrl)) return "<span class='bg-40 text-sm py-1 px-2 rounded-lg whitespace-no-wrap'>$pagePath</span>";
-
-                return "<div class='whitespace-no-wrap'>
-                            <span class='bg-40 text-sm py-1 px-2 rounded-lg'>$pagePath</span>
-                            <a target='_blank' href='$pageUrl' class='text-sm py-1 px-2 text-primary no-underline dim font-bold'>$buttonText</a>
-                        </div>";
-            })->asHtml()->exceptOnForms(),
-
+            // Page data panel
             Panel::make(__('novaPageManager.pageFieldsPanelName'), [
                 PageManagerField::make(\Outl1ne\PageManager\Template::TYPE_PAGE)
                     ->hideWhenCreating(),
@@ -107,6 +101,28 @@ class Page extends TemplateResource
             Text::make(__('novaPageManager.seoDescription'), 'seo_description')->hideFromIndex()->hideWhenCreating(),
             Image::make(__('novaPageManager.seoImage'), 'seo_image')->hideFromIndex()->hideWhenCreating()
         ];
+    }
+
+    protected function getPathPrefixAndSuffix()
+    {
+        $pathPrefix = []; // translatable
+        $pathSuffix = null;
+
+        if ($this->id) {
+            $path = $this->path ?? [];
+            $locales = NPM::getLocales();
+            $pathSuffix = $this->template->pathSuffix();
+
+            foreach ($locales as $key => $localeName) {
+                // Explode path and remove page's own path + suffix if it has one
+                $explodedPath = explode('/', $path[$key]);
+                if (!empty($pathSuffix)) array_pop($explodedPath); // Remove suffix
+                array_pop($explodedPath); // Remove own path
+                $pathPrefix[$key] = implode('/', $explodedPath) . '/';
+            }
+        }
+
+        return [$pathPrefix, $pathSuffix];
     }
 
     protected function getTemplateOptions()

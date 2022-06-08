@@ -30,8 +30,13 @@ class Template
         return [];
     }
 
-    public function seoFields(Request $request)
+    public function resolve(Request $request, $page): array
     {
-        return true;
+        return [];
+    }
+
+    public function pathSuffix()
+    {
+        return ":orderId?";
     }
 }

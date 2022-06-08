@@ -46,7 +46,9 @@ export default {
   mounted() {
     this.refreshFields();
     if (this.$refs.field) {
-      this.$refs.field.parentElement.style = 'background: none';
+      console.info(this.$refs.field.parentElement);
+      this.$refs.field.parentElement.style = 'background: none; padding: 0;';
+      console.info(this.$refs.field.style);
       this.$refs.field.parentElement.parentElement.querySelector('h1').style = 'display: none;';
     }
   },
@@ -64,8 +66,6 @@ export default {
     },
 
     fill(formData) {
-      const ARR_REGEX = () => /\[\d+\]$/g;
-
       try {
         const localeKeys = Object.keys(this.field.locales);
 
