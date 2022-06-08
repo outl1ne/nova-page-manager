@@ -77,6 +77,7 @@ class Page extends TemplateResource
                 ->translatable(NPM::getLocales())
                 ->from('name.en')
                 ->onlyOnForms()
+                ->pathPrefix($pathPrefix)
                 ->pathSuffix($pathSuffix)
                 ->rules('required'),
 

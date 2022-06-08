@@ -3,11 +3,8 @@
 namespace Outl1ne\PageManager;
 
 use Laravel\Nova\Nova;
-use Laravel\Nova\Fields\Field;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Facades\Validator;
-use Outl1ne\PageManager\FieldResponseMixin;
 use Outl1ne\PageManager\Commands\NPMTemplateCommand;
 use Outl1ne\NovaTranslationsLoader\LoadsNovaTranslations;
 

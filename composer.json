@@ -32,7 +32,7 @@
       "Outl1ne\\PageManager\\": "src/"
     },
     "files": [
-      "src/helpers.php"
+      "src/Helpers/GlobalHelpers.php"
     ]
   },
   "extra": {

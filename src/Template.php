@@ -20,22 +20,22 @@ class Template
         $this->templateSlug = null;
     }
 
-    public function name(Request $request)
+    public function name(Request $request): string
     {
         return class_basename(static::class);
     }
 
-    public function fields(Request $request)
+    public function fields(Request $request): array
     {
         return [];
     }
 
-    public function resolve(Request $request, $page): array
+    public function resolve($page): array
     {
         return [];
     }
 
-    public function pathSuffix()
+    public function pathSuffix(): string|null
     {
         return ":orderId?";
     }

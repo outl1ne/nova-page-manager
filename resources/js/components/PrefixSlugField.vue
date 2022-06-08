@@ -55,6 +55,7 @@ export default {
   props: ['resourceName', 'resourceId', 'field'],
 
   mounted() {
+    console.info(this.field);
     if (this.shouldRegisterInitialListener) {
       this.registerChangeListener();
     }

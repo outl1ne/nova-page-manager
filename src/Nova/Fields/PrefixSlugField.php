@@ -15,6 +15,13 @@ class PrefixSlugField extends Slug
      */
     public $component = 'prefix-slug-field';
 
+    public function pathPrefix($path = [])
+    {
+        return $this->withMeta([
+            'pathPrefix' => $path,
+        ]);
+    }
+
     public function pathSuffix($path)
     {
         return $this->withMeta([
