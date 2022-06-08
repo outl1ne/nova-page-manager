@@ -3,16 +3,15 @@
 namespace Outl1ne\PageManager\Nova\Resources;
 
 use Laravel\Nova\Panel;
-use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Slug;
 use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
 use Outl1ne\PageManager\Nova\Fields\PageLinkField;
-use Outl1ne\PageManager\Nova\Fields\PageManagerField;
 use Outl1ne\PageManager\Nova\Fields\PrefixSlugField;
+use Outl1ne\PageManager\Nova\Fields\PageManagerField;
 
 class Page extends TemplateResource
 {
@@ -57,21 +56,24 @@ class Page extends TemplateResource
                 ->hideFromIndex()
                 ->hideFromDetail()
                 ->displayUsingLabels()
-                ->nullable(),
+                ->nullable()
+                ->showOnPreview(),
 
             // Template selector
             Select::make(__('novaPageManager.templateField'), 'template')
                 ->options(fn () => $this->getTemplateOptions())
                 ->rules('required', 'max:255')
-                ->displayUsingLabels(),
+                ->displayUsingLabels()
+                ->showOnPreview(),
 
             // Name field
             Text::make(__('novaPageManager.nameField'), 'name')
                 ->translatable(NPM::getLocales())
-                ->rules('required', 'max:255'),
+                ->rules('required', 'max:255')
+                ->showOnPreview(),
 
             // Slug on form views
-            PrefixSlugField::make(__('novaPageManager.slugField'), 'slug')
+            PrefixSlugField::make(__('novaPageManager.slugField'), 'path')
                 ->translatable(NPM::getLocales())
                 ->from('name.en')
                 ->onlyOnForms()
@@ -82,7 +84,8 @@ class Page extends TemplateResource
             PageLinkField::make(__('novaPageManager.slugField'), 'path')
                 ->exceptOnForms()
                 ->baseUrl(NPM::getPageUrl())
-                ->translatable(NPM::getLocales()),
+                ->translatable(NPM::getLocales())
+                ->showOnPreview(),
 
             // Page data panel
             Panel::make(__('novaPageManager.pageFieldsPanelName'), [
@@ -131,8 +134,13 @@ class Page extends TemplateResource
         $templates = NPM::getPageTemplates();
         $existingTemplates = NPM::getPageModel()::select('template')->groupBy('template')->get()->pluck('template')->toArray();
         $templates = Arr::where($templates, function ($template) use ($existingTemplates) {
+            // Is not unique
             if (!($template['unique'] ?? false)) return true;
-            return !in_array($template['slug'], $existingTemplates);
+
+            $isSameTemplate = $template['slug'] === $this->templateConfig['slug'];
+            $templateAlreadyExists = in_array($template['slug'], $existingTemplates);
+
+            return $templateAlreadyExists ? $isSameTemplate : true;
         });
 
         $options = [];

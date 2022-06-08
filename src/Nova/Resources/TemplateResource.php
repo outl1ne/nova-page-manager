@@ -2,8 +2,9 @@
 
 namespace Outl1ne\PageManager\Nova\Resources;
 
-use Illuminate\Support\Arr;
 use Laravel\Nova\Resource;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Outl1ne\PageManager\Template;
 
@@ -28,5 +29,10 @@ abstract class TemplateResource extends Resource
             : NPM::getRegionTemplates();
 
         return Arr::first($templates, fn ($t) => $t['slug'] === $this->resource->template);
+    }
+
+    public function authorizedToReplicate(Request $request)
+    {
+        return !($this->templateConfig['unique'] ?? false);
     }
 }
