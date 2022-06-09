@@ -124,7 +124,8 @@ class Page extends TemplateResource
                 $explodedPath = explode('/', $path[$key]);
                 if (!empty($pathSuffix)) array_pop($explodedPath); // Remove suffix
                 array_pop($explodedPath); // Remove own path
-                $pathPrefix[$key] = implode('/', $explodedPath) . '/';
+                $localePrefix = implode('/', $explodedPath);
+                $pathPrefix[$key] = !empty($localePrefix) ? "{$localePrefix}/" : null;
             }
         }
 

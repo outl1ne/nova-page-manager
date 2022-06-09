@@ -18,7 +18,7 @@
           class="w-full form-control form-input form-input-bordered"
           :class="{
             errorClasses,
-            'npm-rounded-l-none': !!field.pathPrefix,
+            'npm-rounded-l-none': !!prefix,
             'npm-rounded-r-none': !!field.pathSuffix,
           }"
           ref="theInput"
