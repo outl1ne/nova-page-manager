@@ -2,7 +2,6 @@
 
 namespace Outl1ne\PageManager\Models;
 
-use NPMCache;
 use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Illuminate\Database\Eloquent\Model;
@@ -29,28 +28,11 @@ class Page extends Model
         static::deleting(function ($template) {
             // TODO Handle children upon delete
         });
-
-        static::updated(function () {
-            NPMCache::clear();
-        });
     }
 
     public function parent()
     {
         return $this->belongsTo(NPM::getPageModel());
-    }
-
-    public function getParentAttribute()
-    {
-        if ($this->relationLoaded('parent')) {
-            return $this->getRelationValue('parent');
-        }
-
-        $parent = NPMCache::find($this->parent_id);
-
-        $this->setRelation('parent', $parent);
-
-        return $parent;
     }
 
     public function getSlugWithSuffix($locale = null)

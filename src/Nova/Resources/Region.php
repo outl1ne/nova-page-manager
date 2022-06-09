@@ -3,10 +3,12 @@
 namespace Outl1ne\PageManager\Nova\Resources;
 
 use Laravel\Nova\Panel;
-use Laravel\Nova\Fields\ID;
 use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Select;
+use Outl1ne\PageManager\Template;
+use Outl1ne\PageManager\Nova\Fields\PageManagerField;
 
 class Region extends TemplateResource
 {
@@ -16,6 +18,12 @@ class Region extends TemplateResource
     public static $search = ['name', 'template'];
 
     protected $type = 'region';
+
+
+
+    // ------------------------------
+    // Core resource setup
+    // ------------------------------
 
     public function __construct($resource)
     {
@@ -27,28 +35,6 @@ class Region extends TemplateResource
     {
         $model = empty(self::$model) ? NPM::getRegionModel() : self::$model;
         return new $model;
-    }
-
-    public function fields(Request $request)
-    {
-        // Get base data
-        $templateFieldsAndPanels = $this->getTemplateFieldsAndPanels();
-
-        // Create fields array
-        $fields = [
-            ID::make()->sortable(),
-            Text::make(__('novaPageManager.name'), 'name')->rules('required'),
-        ];
-
-        if (count($templateFieldsAndPanels['fields']) > 0) {
-            $fields[] = new Panel(__('novaPageManager.regionData'), $templateFieldsAndPanels['fields']);
-        }
-
-        if (count($templateFieldsAndPanels['panels']) > 0) {
-            $fields = array_merge($fields, $templateFieldsAndPanels['panels']);
-        }
-
-        return $fields;
     }
 
     public function title()
@@ -64,5 +50,36 @@ class Region extends TemplateResource
     public static function singularLabel()
     {
         return __('novaPageManager.regionResourceSingularLabel');
+    }
+
+
+
+    // ------------------------------
+    // Fields
+    // ------------------------------
+
+    public function fields(Request $request)
+    {
+        return [
+            // Template selector
+            Select::make(__('novaPageManager.templateField'), 'template')
+                ->options(fn () => $this->getTemplateOptions(Template::TYPE_REGION))
+                ->rules('required', 'max:255')
+                ->displayUsingLabels()
+                ->showOnPreview(),
+
+            // Name field
+            Text::make(__('novaPageManager.nameField'), 'name')
+                ->translatable(NPM::getLocales())
+                ->rules('required', 'max:255')
+                ->showOnPreview(),
+
+            // Page data panel
+            Panel::make(__('novaPageManager.pageFieldsPanelName'), [
+                PageManagerField::make(\Outl1ne\PageManager\Template::TYPE_REGION)
+                    ->withTemplate($this->template)
+                    ->hideWhenCreating(),
+            ])
+        ];
     }
 }

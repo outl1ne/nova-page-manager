@@ -8,8 +8,9 @@ use Outl1ne\PageManager\Template;
 class :className extends Template
 {
     // Name displayed in CMS
-    public function name(Request $request) {
-        return static::class;
+    public function name(Request $request)
+    {
+        return parent::name($request);
     }
 
     // Fields displayed in CMS
@@ -19,7 +20,8 @@ class :className extends Template
     }
 
     // Resolve data for serialization
-    public function resolve(Request $request, $page): array {
+    public function resolve($page): array
+    {
         // Modify data as you please (ie turn ID-s into models)
         return $page->data;
     }

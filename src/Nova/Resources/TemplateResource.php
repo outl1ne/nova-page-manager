@@ -35,4 +35,30 @@ abstract class TemplateResource extends Resource
     {
         return !($this->templateConfig['unique'] ?? false);
     }
+
+    public function getTemplateOptions($type)
+    {
+        $isPageType = $type === Template::TYPE_PAGE;
+
+        $model = $isPageType ? NPM::getPageModel() : NPM::getRegionModel();
+        $templates = $isPageType ? NPM::getPageTemplates() : NPM::getRegionTemplates();
+
+        $existingTemplates = $model::select('template')->groupBy('template')->get()->pluck('template')->toArray();
+        $templates = Arr::where($templates, function ($template) use ($existingTemplates) {
+            // Is not unique
+            if (!($template['unique'] ?? false)) return true;
+
+            $isSameTemplate = $template['slug'] === ($this->templateConfig['slug'] ?? null);
+            $templateAlreadyExists = in_array($template['slug'], $existingTemplates);
+
+            return $templateAlreadyExists ? $isSameTemplate : true;
+        });
+
+        $options = [];
+        foreach ($templates as $slug => $template) {
+            $options[$slug] = (new $template['class'])->name(request());
+        }
+
+        return $options;
+    }
 }

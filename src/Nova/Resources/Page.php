@@ -7,11 +7,11 @@ use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Text;
-use Laravel\Nova\Fields\Image;
 use Laravel\Nova\Fields\Select;
 use Outl1ne\PageManager\Nova\Fields\PageLinkField;
 use Outl1ne\PageManager\Nova\Fields\PrefixSlugField;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
+use Outl1ne\PageManager\Template;
 
 class Page extends TemplateResource
 {
@@ -21,6 +21,12 @@ class Page extends TemplateResource
     public static $search = ['name', 'slug', 'template'];
 
     protected $type = 'page';
+
+
+
+    // ------------------------------
+    // Core resource setup
+    // ------------------------------
 
     public function __construct($resource)
     {
@@ -34,16 +40,26 @@ class Page extends TemplateResource
         return new $model;
     }
 
-    public function getParentOptions()
+    public function title()
     {
-        $page = NPM::getPageModel();
-        if ($this->id) {
-            $pages = $page::whereNot('id', '<=>', $this->id)->whereNot('parent_id', '<=>', $this->id)->get();
-        } else {
-            $pages = $page::all();
-        }
-        return $pages->pluck('name', 'id');
+        return "{$this->name} ({$this->slug})";
     }
+
+    public static function label()
+    {
+        return __('novaPageManager.pageResourceLabel');
+    }
+
+    public static function singularLabel()
+    {
+        return __('novaPageManager.pageResourceSingularLabel');
+    }
+
+
+
+    // ------------------------------
+    // Fields
+    // ------------------------------
 
     public function fields(Request $request)
     {
@@ -61,7 +77,7 @@ class Page extends TemplateResource
 
             // Template selector
             Select::make(__('novaPageManager.templateField'), 'template')
-                ->options(fn () => $this->getTemplateOptions())
+                ->options(fn () => $this->getTemplateOptions(Template::TYPE_PAGE))
                 ->rules('required', 'max:255')
                 ->displayUsingLabels()
                 ->showOnPreview(),
@@ -97,16 +113,21 @@ class Page extends TemplateResource
         ];
     }
 
-    protected function getSeoFields()
-    {
-        $customSeoFields = NPM::getCustomSeoFields();
-        if (!empty($customSeoFields)) return $customSeoFields;
 
-        return [
-            Text::make(__('novaPageManager.seoTitle'), 'seo_title')->hideFromIndex()->hideWhenCreating(),
-            Text::make(__('novaPageManager.seoDescription'), 'seo_description')->hideFromIndex()->hideWhenCreating(),
-            Image::make(__('novaPageManager.seoImage'), 'seo_image')->hideFromIndex()->hideWhenCreating()
-        ];
+
+    // --------------------
+    // Page Manager Helpers
+    // --------------------
+
+    public function getParentOptions()
+    {
+        $page = NPM::getPageModel();
+        if ($this->id) {
+            $pages = $page::whereNot('id', '<=>', $this->id)->whereNot('parent_id', '<=>', $this->id)->get();
+        } else {
+            $pages = $page::all();
+        }
+        return $pages->pluck('name', 'id');
     }
 
     protected function getPathPrefixAndSuffix()
@@ -130,42 +151,5 @@ class Page extends TemplateResource
         }
 
         return [$pathPrefix, $pathSuffix];
-    }
-
-    protected function getTemplateOptions()
-    {
-        $templates = NPM::getPageTemplates();
-        $existingTemplates = NPM::getPageModel()::select('template')->groupBy('template')->get()->pluck('template')->toArray();
-        $templates = Arr::where($templates, function ($template) use ($existingTemplates) {
-            // Is not unique
-            if (!($template['unique'] ?? false)) return true;
-
-            $isSameTemplate = $template['slug'] === $this->templateConfig['slug'];
-            $templateAlreadyExists = in_array($template['slug'], $existingTemplates);
-
-            return $templateAlreadyExists ? $isSameTemplate : true;
-        });
-
-        $options = [];
-        foreach ($templates as $slug => $template) {
-            $options[$slug] = (new $template['class'])->name(request());
-        }
-
-        return $options;
-    }
-
-    public function title()
-    {
-        return $this->name . ' (' . $this->slug . ')';
-    }
-
-    public static function label()
-    {
-        return __('novaPageManager.pageResourceLabel');
-    }
-
-    public static function singularLabel()
-    {
-        return __('novaPageManager.pageResourceSingularLabel');
     }
 }

@@ -10,14 +10,12 @@ class Template
     const TYPE_REGION = 'region';
 
     protected $type = null; // 'page' or 'region'
-    protected $templateSlug = null;
     protected $resource = null;
 
     public function __construct($resource = null)
     {
         $this->resource = $resource;
         $this->type = NPM::getTemplateClassType(static::class);
-        $this->templateSlug = null;
     }
 
     public function name(Request $request): string
@@ -37,6 +35,6 @@ class Template
 
     public function pathSuffix(): string|null
     {
-        return ":orderId?";
+        return null;
     }
 }

@@ -2,6 +2,7 @@
 
 namespace Outl1ne\PageManager\Commands;
 
+use Illuminate\Support\Str;
 use Illuminate\Console\Command;
 use Outl1ne\PageManager\Template;
 use Illuminate\Filesystem\Filesystem;
@@ -22,6 +23,7 @@ class NPMTemplateCommand extends Command
     protected $description = 'Creates a new page or region template file.';
 
     protected $className;
+    protected $type;
 
     public function __construct(Filesystem $files)
     {
@@ -32,16 +34,12 @@ class NPMTemplateCommand extends Command
     public function handle()
     {
         $this->className = $this->getClassName();
+        $this->type = $this->getType();
         $path = $this->getPath();
         $this->files->put($path, $this->buildClass());
         $this->info('Successfully created template at ' . $path);
     }
 
-    /**
-     * Gets the class name argument - if missing, asks the user to enter it.
-     *
-     * @return string
-     **/
     public function getClassName()
     {
         if (!$this->argument('className')) {
@@ -50,11 +48,12 @@ class NPMTemplateCommand extends Command
         return $this->argument('className');
     }
 
-    /**
-     * Creates the directory for the template files and returns the file path.
-     *
-     * @return string
-     **/
+    public function getType()
+    {
+        $default = Str::contains($this->className, 'region', true) ? 1 : 0;
+        return $this->choice('Choose a type', $this->typeOptions, $default);
+    }
+
     protected function getPath()
     {
         return $this->makeDirectory(
@@ -62,12 +61,6 @@ class NPMTemplateCommand extends Command
         );
     }
 
-    /**
-     * Creates the directory for the template file.
-     *
-     * @param string $path Expected path of the Template file.
-     * @return string
-     **/
     protected function makeDirectory($path)
     {
         $directory = dirname($path);
@@ -77,17 +70,10 @@ class NPMTemplateCommand extends Command
         return $path;
     }
 
-    /**
-     * Create the template file content.
-     *
-     * @return string
-     */
     protected function buildClass()
     {
         $replace = [
             ':className' => $this->className,
-            ':name' => $this->name,
-            ':type' => $this->type,
         ];
 
         $templateFilePath = ($this->type === Template::TYPE_PAGE)
