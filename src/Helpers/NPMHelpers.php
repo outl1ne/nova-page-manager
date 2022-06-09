@@ -11,6 +11,27 @@ class NPMHelpers
         return NPM::getRegionModel()::all()->map(fn ($region) => static::formatRegion($region));
     }
 
+    public static function getPagesStructure()
+    {
+        $allPages = NPM::getPageModel()::all();
+
+        $pageStructure = [];
+
+        $formatAndAddChildren = function ($page) use ($allPages, &$formatAndAddChildren) {
+            $formattedPage = static::formatPage($page);
+            $children = $allPages->filter(fn ($sp) => $sp->parent_id === $page->id)->values();
+            $formattedPage['children'] = $children->map(fn ($page) => $formatAndAddChildren($page));
+            return $formattedPage;
+        };
+
+        $rootPages = $allPages->filter(fn ($page) => empty($page->parent_id))->values();
+        $rootPages->each(function ($page) use (&$pageStructure, $formatAndAddChildren) {
+            $pageStructure[] = $formatAndAddChildren($page);
+        });
+
+        return $pageStructure;
+    }
+
     public static function getPageByPath($path)
     {
         // TODO Get page by path
