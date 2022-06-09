@@ -1,16 +1,28 @@
 <?php
 
+namespace Outl1ne\PageManager\Helpers;
+
 use Outl1ne\PageManager\NPM;
 
-if (!function_exists('npmGetPageByPath')) {
-    function npmGetPageByPath($path)
+class NPMHelpers
+{
+    public static function getPageByPath($path)
     {
-        // TODO Find page by path and return data
+        // TODO Get page by path
     }
-}
 
-if (!function_exists('npmFormatPage')) {
-    function npmFormatPage($page)
+    public static function getPageByTemplate($templateSlug)
+    {
+        $page = NPM::getPageModel()::where('template', $templateSlug)->first();
+        return static::formatPage($page);
+    }
+
+    public static function getPagesByTemplate($path)
+    {
+        // TODO Get page by path
+    }
+
+    public static function formatPage($page)
     {
         if (empty($page)) return null;
 
@@ -18,6 +30,7 @@ if (!function_exists('npmFormatPage')) {
         if (empty($template)) return null;
 
         $request = request();
+        $templateClass = new $template['class'];
 
         $pageData = [
             'id' => $page->id,
@@ -27,17 +40,9 @@ if (!function_exists('npmFormatPage')) {
             'slug' => $page->slug ?: [],
             'path' => $page->path ?: [],
             'parent_id' => $page->parent_id,
-            'data' => $template->resolve($request, $page),
+            'data' => $templateClass->resolve($page),
             'template' => $page->template ?: null,
         ];
-
-        // if ($template::$seo) {
-        //     $pageData['seo'] = [
-        //         'title' => $page->seo_title,
-        //         'description' => $page->seo_description,
-        //         'image' => $page->seo_image,
-        //     ];
-        // }
 
         return $pageData;
     }

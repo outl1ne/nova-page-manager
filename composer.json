@@ -31,9 +31,7 @@
     "psr-4": {
       "Outl1ne\\PageManager\\": "src/"
     },
-    "files": [
-      "src/Helpers/GlobalHelpers.php"
-    ]
+    "files": []
   },
   "extra": {
     "laravel": {
