@@ -168,6 +168,14 @@ You can overwrite the page/region models or resources, just set the new classes 
 
 Helper functions can be found in the `Outl1ne\PageManager\Helpers\NPMHelpers` class.
 
+### NPMHelpers::getPagesStructure()
+
+Calls `resolve()` on their template class and returns all pages as a tree where child pages are nested inside the `children` array key recursively.
+
+### NPMHelpers::getPages()
+
+Calls `resolve()` on their template class and returns all pages. Returns an array of arrays.
+
 ### NPMHelpers::getRegions()
 
 Calls `resolve()` on their template class and returns all regions. Returns an array of arrays.

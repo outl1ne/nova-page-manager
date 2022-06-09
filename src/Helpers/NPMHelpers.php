@@ -11,6 +11,11 @@ class NPMHelpers
         return NPM::getRegionModel()::all()->map(fn ($region) => static::formatRegion($region));
     }
 
+    public static function getPages()
+    {
+        return NPM::getPageModel()::all()->map(fn ($page) => static::formatPage($page));
+    }
+
     public static function getPagesStructure()
     {
         $allPages = NPM::getPageModel()::all();
