@@ -73,7 +73,7 @@ class Page extends TemplateResource
                 ->showOnPreview(),
 
             // Slug on form views
-            PrefixSlugField::make(__('novaPageManager.slugField'), 'path')
+            PrefixSlugField::make(__('novaPageManager.slugField'), 'slug')
                 ->translatable(NPM::getLocales())
                 ->from('name.en')
                 ->onlyOnForms()

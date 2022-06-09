@@ -3,10 +3,10 @@
     <template #field>
       <div class="npm-flex npm-items-center">
         <div
-          v-if="field.pathPrefix"
-          class="form-control form-input form-input-bordered npm-flex npm-items-center npm-cursor-default npm-rounded-r-none npm-border-r-0 npm-font-mono"
+          v-if="prefix"
+          class="form-control form-input form-input-bordered npm-flex npm-items-center npm-cursor-default npm-rounded-r-none npm-border-r-0 npm-font-mono npm-whitespace-nowrap"
         >
-          {{ field.pathPrefix }}
+          {{ prefix }}
         </div>
 
         <input
@@ -52,10 +52,9 @@ import slug from 'slugify';
 export default {
   mixins: [FormField, HandlesValidationErrors],
 
-  props: ['resourceName', 'resourceId', 'field'],
+  props: ['resourceName', 'resourceId', 'field', 'translatableLocale'],
 
   mounted() {
-    console.info(this.field);
     if (this.shouldRegisterInitialListener) {
       this.registerChangeListener();
     }
@@ -115,6 +114,10 @@ export default {
 
     extraAttributes() {
       return this.field.extraAttributes || {};
+    },
+
+    prefix() {
+      if (this.field.pathPrefix) return this.field.pathPrefix[this.translatableLocale];
     },
   },
 };

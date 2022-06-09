@@ -25,7 +25,7 @@ class PrefixSlugField extends Slug
     public function pathSuffix($path)
     {
         return $this->withMeta([
-            'pathSuffix' => '/' . $path,
+            'pathSuffix' => !empty($path) ? '/' . $path : null,
         ]);
     }
 
