@@ -100,7 +100,7 @@ class Page extends TemplateResource
             // Slug on index and detail views
             PageLinkField::make(__('novaPageManager.slugField'), 'path')
                 ->exceptOnForms()
-                ->baseUrl(NPM::getPageUrl())
+                ->withPageUrl(NPM::getBaseUrl($this->resource))
                 ->translatable(NPM::getLocales())
                 ->showOnPreview(),
 

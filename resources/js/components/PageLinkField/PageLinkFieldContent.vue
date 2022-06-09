@@ -2,11 +2,11 @@
   <div
     class="npm-p-2 npm-font-mono whitespace-no-wrap npm-text-xs npm-bg-gray-100 dark:npm-bg-gray-900 npm-rounded npm-border npm-border-gray-200 dark:npm-border-gray-700 npm-inline-block"
   >
-    {{ path }}
+    {{ field.value }}
   </div>
 
   <a
-    v-if="baseUrl"
+    v-if="fullUrl"
     :href="fullUrl"
     target="_BLANK"
     rel="noopener noreferrer"
@@ -19,19 +19,14 @@
 
 <script>
 export default {
-  props: ['field'],
+  props: ['field', 'locale'],
 
   computed: {
-    path() {
-      return this.field.value;
-    },
-
-    baseUrl() {
-      return this.field.baseUrl;
-    },
-
     fullUrl() {
-      return `${this.baseUrl}${this.path}`;
+      if (this.field.pageUrl) {
+        return this.field.pageUrl[this.locale];
+      }
+      return void 0;
     },
   },
 };

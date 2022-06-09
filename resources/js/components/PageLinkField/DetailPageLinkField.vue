@@ -1,7 +1,7 @@
 <template>
   <PanelItem :index="index" :field="field">
     <template #value>
-      <PageLinkFieldContent :field="field" />
+      <PageLinkFieldContent :field="field" :locale="translatableLocale" />
     </template>
   </PanelItem>
 </template>
@@ -10,7 +10,7 @@
 import PageLinkFieldContent from './PageLinkFieldContent';
 
 export default {
-  props: ['resourceName', 'resourceId', 'field', 'index'],
+  props: ['resourceName', 'resourceId', 'field', 'index', 'translatableLocale'],
   components: { PageLinkFieldContent },
 };
 </script>

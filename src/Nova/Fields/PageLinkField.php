@@ -9,10 +9,10 @@ class PageLinkField extends Slug
 {
     public $component = 'page-link-field';
 
-    public function baseUrl($baseUrl)
+    public function withPageUrl($pageUrl)
     {
         return $this->withMeta([
-            'baseUrl' => $baseUrl,
+            'pageUrl' => $pageUrl,
         ]);
     }
 

@@ -44,7 +44,6 @@ class NPM
     }
 
 
-
     // Templates
     public static function getTemplates(): array
     {
@@ -52,7 +51,7 @@ class NPM
         $regionTemplates = config('nova-page-manager.templates.regions', []);
 
         $filterTemplates = function ($templates) {
-            // Move 'key' aka 'slug' into the array itself
+            // Move 'key' aka 'slug' into the array itself for easy access
             $mappedTemplates = Arr::map($templates, fn ($t, $s) => [...$t, 'slug' => $s]);
 
             return array_filter($mappedTemplates, function ($template) {
@@ -84,14 +83,14 @@ class NPM
         return Arr::first(static::getPageTemplates(), fn ($template) => $template['class'] === $className);
     }
 
-    public static function getPageTemplateBySlug($templateSlug)
-    {
-        return Arr::first(static::getPageTemplates(), fn ($template) => $template['slug'] === $templateSlug);
-    }
-
     public static function getRegionTemplateByClass($className)
     {
         return Arr::first(static::getRegionTemplates(), fn ($template) => $template['class'] === $className);
+    }
+
+    public static function getPageTemplateBySlug($templateSlug)
+    {
+        return Arr::first(static::getPageTemplates(), fn ($template) => $template['slug'] === $templateSlug);
     }
 
     public static function getRegionTemplateBySlug($templateSlug)
@@ -103,14 +102,8 @@ class NPM
     {
         $isPage = !!static::getPageTemplateByClass($templateClass);
         $isRegion = !!static::getRegionTemplateByClass($templateClass);
-        return $isPage ? static::TYPE_PAGE : ($isRegion ? static::TYPE_REGION : null);
+        return $isPage ? Template::TYPE_PAGE : ($isRegion ? Template::TYPE_REGION : null);
     }
-
-    public static function getPageTemplateSlug($className)
-    {
-        $template = static::getPageTemplateByClass($className);
-    }
-
 
 
     // Enabled states
@@ -125,20 +118,24 @@ class NPM
     }
 
 
-
     // Page URL generation
-    public static function getPageUrl($page = null)
+    public static function getBaseUrl($page = null)
     {
-        $getPageUrl = config('nova-page-manager.page_url');
-        return isset($getPageUrl) ? call_user_func($getPageUrl, $page) : null;
-    }
+        $baseUrl = config('nova-page-manager.base_url');
+        if (empty($baseUrl)) return null;
 
-    public static function getPagePath($page, $path)
-    {
-        $getPagePath = config('nova-page-manager.page_path');
-        return isset($getPagePath) ? call_user_func($getPagePath, $page, $path) : $path;
-    }
+        if (is_callable($baseUrl)) return call_user_func($baseUrl, $page);
 
+        // Create full URL myself
+        $baseUrl = rtrim($baseUrl, '/');
+
+        $paths = $page->path;
+        $fullUrls = [];
+        foreach ($paths as $localeKey => $path) {
+            $fullUrls[$localeKey] = "{$baseUrl}{$path}";
+        }
+        return $fullUrls;
+    }
 
 
     // Others
@@ -148,13 +145,5 @@ class NPM
         if (is_callable($localesConfig)) return call_user_func($localesConfig);
         if (is_array($localesConfig)) return $localesConfig;
         return ['en' => 'English'];
-    }
-
-    public static function getCustomSeoFields(): array
-    {
-        $seoFields = config('nova-page-manager.seo_fields', null);
-        if (is_callable($seoFields)) return call_user_func($seoFields);
-        if (is_array($seoFields)) return $seoFields;
-        return [];
     }
 }
