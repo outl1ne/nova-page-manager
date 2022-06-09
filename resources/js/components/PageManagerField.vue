@@ -45,7 +45,7 @@ export default {
   mounted() {
     this.refreshFields();
     if (this.$refs.field) {
-      this.$refs.field.parentElement.style = 'background: none; padding: 0;';
+      this.$refs.field.parentElement.style = 'background: none; padding: 0; box-shadow: none;';
       this.$refs.field.parentElement.parentElement.querySelector('h1').style = 'display: none;';
     }
   },
