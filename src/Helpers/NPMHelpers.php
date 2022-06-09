@@ -6,6 +6,11 @@ use Outl1ne\PageManager\NPM;
 
 class NPMHelpers
 {
+    public static function getRegions()
+    {
+        return NPM::getRegionModel()::all()->map(fn ($region) => static::formatRegion($region));
+    }
+
     public static function getPageByPath($path)
     {
         // TODO Get page by path
@@ -17,9 +22,10 @@ class NPMHelpers
         return static::formatPage($page);
     }
 
-    public static function getPagesByTemplate($path)
+    public static function getPagesByTemplate($templateSlug)
     {
-        // TODO Get page by path
+        $pages = NPM::getPageModel()::where('template', $templateSlug)->get();
+        return $pages->map(fn ($page) => static::formatPage($page))->toArray();
     }
 
     public static function formatPage($page)
@@ -29,10 +35,9 @@ class NPMHelpers
         $template = NPM::getPageTemplateBySlug($page->template);
         if (empty($template)) return null;
 
-        $request = request();
         $templateClass = new $template['class'];
 
-        $pageData = [
+        return [
             'id' => $page->id,
             'created_at' => $page->created_at,
             'updated_at' => $page->updated_at,
@@ -43,7 +48,24 @@ class NPMHelpers
             'data' => $templateClass->resolve($page),
             'template' => $page->template ?: null,
         ];
+    }
 
-        return $pageData;
+    public static function formatRegion($region)
+    {
+        if (empty($region)) return null;
+
+        $template = NPM::getRegionTemplateBySlug($region->template);
+        if (empty($template)) return null;
+
+        $templateClass = new $template['class'];
+
+        return [
+            'id' => $region->id,
+            'created_at' => $region->created_at,
+            'updated_at' => $region->updated_at,
+            'name' => $region->name ?: [],
+            'data' => $templateClass->resolve($region),
+            'template' => $region->template ?: null,
+        ];
     }
 }

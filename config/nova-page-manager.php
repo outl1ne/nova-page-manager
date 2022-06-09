@@ -26,7 +26,7 @@ return [
         'pages' => [
             // 'home-page' => [
             //     'class' => '\App\Nova\Templates\HomePageTemplate',
-            //     'unique' => true,
+            //     'unique' => true, // Whether more than one page can be created with this template
             // ],
         ],
         'regions' => [
