@@ -5,8 +5,7 @@
     "laravel",
     "nova",
     "page",
-    "manager",
-    "optimistdigital"
+    "manager"
   ],
   "authors": [
     {
@@ -16,7 +15,7 @@
     },
     {
       "name": "Outl1ne",
-      "email": "info@optimistdigital.com",
+      "email": "info@outl1ne.com",
       "role": "Maintainer"
     }
   ],
