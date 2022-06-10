@@ -13,7 +13,10 @@ class Page extends Model
 
     protected $fillable = ['parent_id'];
     protected $translatable = ['name', 'slug'];
-    protected $casts = ['data' => 'array'];
+    protected $casts = [
+        'data' => 'array',
+        'seo' => 'array',
+    ];
 
     public function __construct(array $attributes = [])
     {

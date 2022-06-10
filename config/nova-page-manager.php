@@ -40,6 +40,22 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | SEO fields
+    |--------------------------------------------------------------------------
+    |
+    | Set to true if you're happy with the default SEO fields:
+    | Title, description, image
+    |
+    | If you want to show custom SEO fields on all pages, overwrite this
+    | with a callable that returns an array of fields.
+    |
+    */
+
+    'page_seo_fields' => true,
+
+
+    /*
+    |--------------------------------------------------------------------------
     | Locales
     |--------------------------------------------------------------------------
     |

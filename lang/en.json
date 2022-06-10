@@ -8,6 +8,7 @@
   "novaPageManager.nameField": "Name",
   "novaPageManager.slugField": "Slug",
   "novaPageManager.defaultPanelName": "Page Data",
+  "novaPageManager.seoPanelName": "SEO Data",
   "novaPageManager.customizeSlug": "Customize",
   "novaPageManager.pageLinkViewButton": "View"
 }

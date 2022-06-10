@@ -6,6 +6,7 @@ use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Field;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Outl1ne\PageManager\Template;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\ParameterBag;
 
@@ -14,6 +15,7 @@ class PageManagerField extends Field
     public $component = 'page-manager-field';
 
     protected $template = null;
+    protected $seoFields = null;
 
     public function __construct($type)
     {
@@ -30,11 +32,28 @@ class PageManagerField extends Field
         return $this;
     }
 
+    public function withSeoFields($seoFields)
+    {
+        $this->seoFields = $seoFields;
+        return $this;
+    }
+
     public function fill(NovaRequest $request, $model)
     {
-        $locales = NPM::getLocales();
         $fields = new FieldCollection($this->template->fields($request));
-        $data = $request->get('data', '');
+        $model->data = $this->fillFieldsAndGetData($request, 'data', $fields);
+
+        if ($this->meta['type'] === Template::TYPE_PAGE) {
+            $seoFields = new FieldCollection($this->seoFields);
+            $model->seo = $this->fillFieldsAndGetData($request, 'seo', $seoFields);
+        }
+    }
+
+    protected function fillFieldsAndGetData($request, $attributeKey, $fields)
+    {
+        $locales = NPM::getLocales();
+
+        $data = $request->get($attributeKey, '');
         $data = json_decode($data, true);
 
         $newData = [];
@@ -50,13 +69,6 @@ class PageManagerField extends Field
             $newData[$key] = (array) $fakeModel;
         }
 
-        $model->data = $newData;
-    }
-
-    protected static function fillFields(NovaRequest $request, $model, $fields)
-    {
-        return $fields->map->fill($request, $model)->filter(function ($callback) {
-            return is_callable($callback);
-        })->values()->all();
+        return $newData;
     }
 }

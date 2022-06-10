@@ -1,41 +1,43 @@
 <template>
-  <div id="page-manager-field" class="npm-relative npm-py-6" ref="field">
-    <PageManagerFieldHeader :locales="field.locales" :activeLocale="locale" @changeLocale="changeLocale" />
+  <div ref="field">
+    <PageManagerPanelsContent
+      v-if="seoPanelsWithFields"
+      :view="field.view"
+      :resourceId="resourceId"
+      :resourceName="resourceName"
+      @field-changed="onUpdateFormStatus"
+      :validationErrors="validationErrors"
+      :panelsWithFields="seoPanelsWithFields"
+      :locales="field.locales"
+    />
 
-    <template v-for="(localeName, key) in field.locales" :key="key">
-      <div v-show="locale === key">
-        <component
-          v-for="panel in panelsWithFields[key]"
-          :key="panel.id"
-          :is="field.view + '-' + panel.component"
-          @field-changed="onUpdateFormStatus"
-          :panel="panel"
-          :name="panel.name"
-          :resource-id="resourceId"
-          :resource-name="resourceName"
-          :form-unique-id="formUniqueId"
-          mode="form"
-          :validation-errors="validationErrors"
-        />
-      </div>
-    </template>
+    <PageManagerPanelsContent
+      :view="field.view"
+      :resourceId="resourceId"
+      :resourceName="resourceName"
+      @field-changed="onUpdateFormStatus"
+      :validationErrors="validationErrors"
+      :locales="field.locales"
+      :panelsWithFields="panelsWithFields"
+    />
   </div>
 </template>
 
 <script>
 import API from '../api';
 import { FormField } from 'laravel-nova';
-import PageManagerFieldHeader from './PageManagerFieldHeader';
+import PageManagerPanelsContent from './PageManagerPanelsContent';
 
 export default {
   mixins: [FormField],
-  components: { PageManagerFieldHeader },
+  components: { PageManagerPanelsContent },
   props: ['resourceName', 'resourceId', 'field'],
 
   data: () => ({
     locale: void 0,
     loading: false,
     panelsWithFields: {},
+    seoPanelsWithFields: null,
   }),
 
   beforeMount() {
@@ -55,6 +57,7 @@ export default {
       this.loading = true;
       const { data } = await API.getFields(this.field.type, this.resourceId);
       this.panelsWithFields = data.panelsWithFields;
+      this.seoPanelsWithFields = data.seoPanelsWithFields;
       this.loading = false;
     },
 
@@ -64,36 +67,48 @@ export default {
 
     fill(formData) {
       try {
-        const localeKeys = Object.keys(this.field.locales);
-
-        const data = {};
-        for (const key of localeKeys) {
-          const localeData = {};
-          const panels = this.panelsWithFields[key];
-          for (const panel of panels) {
-            for (const field of panel.fields) {
-              const fd = new FormData();
-              field.fill(fd);
-
-              for (const key of fd.keys()) {
-                const [realKey, realValue] = this.getKeyAndValue(key, fd);
-
-                if (this.isKeyAnArray(key)) {
-                  if (!localeData[realKey]) localeData[realKey] = [];
-                  localeData[realKey].push(realValue);
-                } else {
-                  localeData[realKey] = realValue;
-                }
-              }
-            }
-          }
-          data[key] = localeData;
-        }
-
+        const data = this.getDataFromFill(this.panelsWithFields);
         formData.set('data', JSON.stringify(data));
       } catch (e) {
         console.error(e);
       }
+
+      try {
+        const seoData = this.getDataFromFill(this.seoPanelsWithFields);
+        formData.set('seo', JSON.stringify(seoData));
+      } catch (e) {
+        console.error(e);
+      }
+    },
+
+    getDataFromFill(panelsWithFields) {
+      const localeKeys = Object.keys(this.field.locales);
+
+      const data = {};
+      for (const key of localeKeys) {
+        const localeData = {};
+        const panels = panelsWithFields[key];
+        for (const panel of panels) {
+          for (const field of panel.fields) {
+            const fd = new FormData();
+            field.fill(fd);
+
+            for (const key of fd.keys()) {
+              const [realKey, realValue] = this.getKeyAndValue(key, fd);
+
+              if (this.isKeyAnArray(key)) {
+                if (!localeData[realKey]) localeData[realKey] = [];
+                localeData[realKey].push(realValue);
+              } else {
+                localeData[realKey] = realValue;
+              }
+            }
+          }
+        }
+        data[key] = localeData;
+      }
+
+      return data;
     },
 
     getKeyAndValue(key, formData) {

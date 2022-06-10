@@ -108,6 +108,7 @@ class Page extends TemplateResource
             Panel::make(__('novaPageManager.pageFieldsPanelName'), [
                 PageManagerField::make(\Outl1ne\PageManager\Template::TYPE_PAGE)
                     ->withTemplate($this->template)
+                    ->withSeoFields(NPM::getSeoFields())
                     ->hideWhenCreating(),
             ])
         ];

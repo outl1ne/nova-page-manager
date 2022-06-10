@@ -3,6 +3,9 @@
 namespace Outl1ne\PageManager;
 
 use Illuminate\Support\Arr;
+use Laravel\Nova\Fields\Text;
+use Laravel\Nova\Fields\Image;
+use Laravel\Nova\Fields\Textarea;
 use Illuminate\Support\Facades\Log;
 
 class NPM
@@ -145,5 +148,21 @@ class NPM
         if (is_callable($localesConfig)) return call_user_func($localesConfig);
         if (is_array($localesConfig)) return $localesConfig;
         return ['en' => 'English'];
+    }
+
+    public static function getSeoFields()
+    {
+        $seoConfig = config('nova-page-manager.page_seo_fields', null);
+        if (is_callable($seoConfig)) return call_user_func($seoConfig);
+
+        if ($seoConfig) {
+            return [
+                Text::make('SEO Title', 'title'),
+                Textarea::make('SEO Description', 'description'),
+                Image::make('SEO Image', 'image'),
+            ];
+        }
+
+        return null;
     }
 }
