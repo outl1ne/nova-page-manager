@@ -19,9 +19,7 @@ This [Laravel Nova](https://nova.laravel.com) package allows you to create and m
 
 ## Screenshots
 
-![Index (light)](docs/screenshots/index-light.png)
-![Detail (dark)](docs/screenshots/detail-dark.png)
-![Form (light)](docs/screenshots/form-light.png)
+![Form (dark)](docs/screenshots/form-dark.jpeg)
 
 ## Installation
 
