@@ -43,6 +43,7 @@ class PrefixSlugField extends Slug
 
             // Remove all slashes
             $slug = preg_replace('/[\/]+/', '', $slug);
+            if (empty($slug)) $slug = '/';
 
             $newSlugs[$key] = $slug;
         }
