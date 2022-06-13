@@ -61,7 +61,7 @@ class PageManagerField extends Field
             $fakeRequest = new NovaRequest();
             $fakeRequest->headers = new HeaderBag(['Content-Type' => 'application/json']);
             $fakeRequest->setMethod(NovaRequest::METHOD_POST);
-            $fakeRequest->setJson(new ParameterBag($data[$key]));
+            $fakeRequest->setJson(new ParameterBag($data ? $data[$key] : []));
 
             $fakeModel = (object) [];
             $fields->resolve((object) $fakeRequest->all());
