@@ -8,7 +8,7 @@ use Outl1ne\PageManager\Template;
 class :className extends Template
 {
     // Name displayed in CMS
-    public function name(Request $request)
+    public function name(Request $request): string
     {
         return parent::name($request);
     }
@@ -27,7 +27,8 @@ class :className extends Template
     }
 
     // Optional suffix to the route (ie {blogPostName})
-    public function pathSuffix() {
+    public function pathSuffix(): string|null
+    {
         return null;
     }
 }
