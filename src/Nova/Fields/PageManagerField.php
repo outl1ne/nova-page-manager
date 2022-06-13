@@ -63,7 +63,8 @@ class PageManagerField extends Field
             $dataAttributes = [];
             $fileAttributes = [];
 
-            foreach ($data[$key] as $k => $v) {
+            $localeData = $data[$key] ?? [];
+            foreach ($localeData as $k => $v) {
                 if ($v instanceof UploadedFile) {
                     $fileAttributes[$k] = $v;
                 } else {
@@ -76,7 +77,7 @@ class PageManagerField extends Field
             $fakeRequest->setMethod(NovaRequest::METHOD_POST);
 
             $fakeModel = (object) [];
-            $fields->resolve((object) $data[$key]);
+            $fields->resolve((object) $localeData);
             $fields->map->fill($fakeRequest, $fakeModel);
 
             $newData[$key] = array_merge(
