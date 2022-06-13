@@ -14,7 +14,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 
 - Reworked fields filling logic on both the JS and PHP side to support File and Image fields
-- Fixed spreading operator used on an array with string keys causing an exception on PHP 8.0
+- Fixed spread operator used on an array with string keys causing an exception on PHP 8.0
 - Fixed stub not having correct return types (thanks to [@kaareloun](https://github.com/kaareloun))
 
 ## [5.0.0] - 09-06-2022
