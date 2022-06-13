@@ -8,7 +8,7 @@
         v-for="locale of Object.keys(locales)"
         :key="locale"
         @click.prevent="$emit('changeLocale', locale)"
-        class="npm-cursor-pointer npm-font-bold npm-px-2 npm-h-full npm-flex npm-items-center npm-box-border npm-border-b-2"
+        class="npm-cursor-pointer npm-font-bold npm-px-2 npm-h-full npm-flex npm-items-center npm-box-border npm-border-b-2 npm-select-none"
         :class="{
           'text-primary-500 border-primary-500': activeLocale === locale,
           'npm-text-80 npm-border-transparent': activeLocale !== locale,
@@ -30,7 +30,7 @@ export default {
 #page-manager-field-header {
   position: absolute;
   right: 0;
-  top: 20px;
+  top: 14px;
   display: flex;
 }
 </style>

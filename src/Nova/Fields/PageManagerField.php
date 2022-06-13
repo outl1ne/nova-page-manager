@@ -4,11 +4,11 @@ namespace Outl1ne\PageManager\Nova\Fields;
 
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Field;
+use Illuminate\Http\UploadedFile;
+use Outl1ne\PageManager\Template;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Outl1ne\PageManager\Template;
 use Symfony\Component\HttpFoundation\HeaderBag;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class PageManagerField extends Field
 {
@@ -41,32 +41,48 @@ class PageManagerField extends Field
     public function fill(NovaRequest $request, $model)
     {
         $fields = new FieldCollection($this->template->fields($request));
-        $model->data = $this->fillFieldsAndGetData($request, 'data', $fields);
+
+        $model->data = $this->fillFieldsAndGetData($request, 'data', $fields, $model->data);
 
         if ($this->meta['type'] === Template::TYPE_PAGE) {
             $seoFields = new FieldCollection($this->seoFields);
-            $model->seo = $this->fillFieldsAndGetData($request, 'seo', $seoFields);
+
+            $model->seo = $this->fillFieldsAndGetData($request, 'seo', $seoFields, $model->seo);
         }
     }
 
-    protected function fillFieldsAndGetData($request, $attributeKey, $fields)
+    protected function fillFieldsAndGetData($request, $attributeKey, $fields, $existingData)
     {
         $locales = NPM::getLocales();
 
-        $data = $request->get($attributeKey, '');
-        $data = json_decode($data, true);
+        $all = $request->all();
+        $data = $all[$attributeKey] ?? [];
 
         $newData = [];
         foreach ($locales as $key => $localeName) {
-            $fakeRequest = new NovaRequest();
-            $fakeRequest->headers = new HeaderBag(['Content-Type' => 'application/json']);
+            $dataAttributes = [];
+            $fileAttributes = [];
+
+            foreach ($data[$key] as $k => $v) {
+                if ($v instanceof UploadedFile) {
+                    $fileAttributes[$k] = $v;
+                } else {
+                    $dataAttributes[$k] = $v;
+                }
+            }
+
+            $fakeRequest = new NovaRequest([], $dataAttributes, [], [], $fileAttributes);
+            $fakeRequest->headers = new HeaderBag(['Content-Type' => 'multipart/form-data']);
             $fakeRequest->setMethod(NovaRequest::METHOD_POST);
-            $fakeRequest->setJson(new ParameterBag($data[$key]));
 
             $fakeModel = (object) [];
-            $fields->resolve((object) $fakeRequest->all());
+            $fields->resolve((object) $data[$key]);
             $fields->map->fill($fakeRequest, $fakeModel);
-            $newData[$key] = (array) $fakeModel;
+
+            $newData[$key] = array_merge(
+                $existingData[$key] ?? [],
+                (array) $fakeModel,
+            );
         }
 
         return $newData;

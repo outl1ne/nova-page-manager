@@ -12,7 +12,7 @@
           :panel="panel"
           :name="panel.name"
           :resource-id="resourceId"
-          :resource-name="resourceName"
+          :resource-name="`page-manager/${type}/${resourceName}/${key}`"
           :form-unique-id="formUniqueId"
           mode="form"
           :validation-errors="validationErrors"
@@ -34,6 +34,7 @@ export default {
     'locales',
     'panelsWithFields',
     'view',
+    'type',
     'formUniqueId',
     'validationErrors',
   ],

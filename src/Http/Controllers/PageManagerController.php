@@ -79,4 +79,28 @@ class PageManagerController extends Controller
             'seoPanelsWithFields' => $seoPanelsData,
         ];
     }
+
+    public function deleteFile(Request $request)
+    {
+        $panelType = $request->route('panelType');
+        $resourceType = $request->route('resourceType');
+        $locale = $request->route('locale');
+        $resourceId = $request->route('resourceId');
+        $fieldAttribute = $request->route('fieldAttribute');
+
+        if (!in_array($panelType, ['seo', 'data'])) return response()->json(['error' => 'Invalid panel type.'], 400);
+        if (!in_array($resourceType, ['pages', 'regions'])) return response()->json(['error' => 'Invalid resource type.'], 400);
+
+        $modelClass = $resourceType === 'pages'
+            ? NPM::getPageModel()
+            : NPM::getRegionModel();
+
+        $model = $modelClass::findOrFail($resourceId);
+        $data = $model->{$panelType};
+        $data[$locale][$fieldAttribute] = null;
+        $model->{$panelType} = $data;
+        $model->save();
+
+        return response('', 204);
+    }
 }

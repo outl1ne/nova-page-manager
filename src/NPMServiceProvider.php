@@ -63,7 +63,6 @@ class NPMServiceProvider extends ServiceProvider
         if ($this->app->routesAreCached()) return;
 
         Route::middleware(['nova', \Outl1ne\PageManager\Http\Middleware\AuthorizeMiddleware::class])
-            ->prefix('nova-vendor/page-manager')
             ->group(__DIR__ . '/../routes/api.php');
     }
 }

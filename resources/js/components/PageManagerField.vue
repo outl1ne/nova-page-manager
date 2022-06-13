@@ -3,6 +3,7 @@
     <PageManagerPanelsContent
       v-if="seoPanelsWithFields"
       :view="field.view"
+      :type="'seo'"
       :resourceId="resourceId"
       :resourceName="resourceName"
       @field-changed="onUpdateFormStatus"
@@ -13,6 +14,7 @@
 
     <PageManagerPanelsContent
       :view="field.view"
+      :type="'data'"
       :resourceId="resourceId"
       :resourceName="resourceName"
       @field-changed="onUpdateFormStatus"
@@ -67,17 +69,39 @@ export default {
 
     fill(formData) {
       try {
-        const data = this.getDataFromFill(this.panelsWithFields);
-        formData.set('data', JSON.stringify(data));
+        this.addFieldValuesToFormData(this.panelsWithFields, 'data', formData);
       } catch (e) {
         console.error(e);
       }
 
       try {
-        const seoData = this.getDataFromFill(this.seoPanelsWithFields);
-        formData.set('seo', JSON.stringify(seoData));
+        this.addFieldValuesToFormData(this.seoPanelsWithFields, 'seo', formData);
       } catch (e) {
         console.error(e);
+      }
+    },
+
+    addFieldValuesToFormData(fields, keyPrefix, formData) {
+      const localizedData = this.getDataFromFill(fields);
+      const localeKeys = Object.keys(localizedData);
+
+      for (const locale of localeKeys) {
+        const data = localizedData[locale];
+        const dataKeys = Object.keys(data);
+
+        for (const key of dataKeys) {
+          const val = data[key];
+          const isFile = val instanceof File || val instanceof Blob;
+
+          if (typeof val === 'object' && !isFile) {
+            const objKeys = Object.keys(val);
+            for (const objKey of objKeys) {
+              formData.set(`${keyPrefix}[${locale}][${key}][${objKey}]`, val[objKey]);
+            }
+          } else {
+            formData.set(`${keyPrefix}[${locale}][${key}]`, val);
+          }
+        }
       }
     },
 
