@@ -55,7 +55,7 @@ class NPM
 
         $filterTemplates = function ($templates) {
             // Move 'key' aka 'slug' into the array itself for easy access
-            $mappedTemplates = Arr::map($templates, fn ($t, $s) => [...$t, 'slug' => $s]);
+            $mappedTemplates = Arr::map($templates, fn ($t, $s) => array_merge($t, ['slug' => $s]));
 
             return array_filter($mappedTemplates, function ($template) {
                 if (isset($template['class']) && class_exists($template['class'])) return true;
