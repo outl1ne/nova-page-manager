@@ -3,6 +3,7 @@
 namespace Outl1ne\PageManager\Helpers;
 
 use Outl1ne\PageManager\NPM;
+use Illuminate\Support\Arr;
 
 class NPMHelpers
 {
@@ -37,9 +38,31 @@ class NPMHelpers
         return $pageStructure;
     }
 
-    public static function getPageByPath($path)
+    public static function getPageByPath($path = '')
     {
-        // TODO Get page by path
+        if (!$path) return null;
+        $path = $path !== '/' ? rtrim($path, '/') : $path;
+        $pages = NPM::getPageModel()::all();
+        $originalPathSlugs = explode('/', $path);
+
+        foreach (NPM::getLocales() as $localeSlug => $locale) {
+            foreach ($pages as $page) {
+                if (!array_key_exists($localeSlug, $page->path)) continue;
+                $pagePath = preg_replace('/(:[^\/]+)|({[^}\/]+})/', ':', $page->path[$localeSlug]); // change all ':slug' to ':'
+                $pagePathSlugs = explode('/', $pagePath);
+
+                if (count($originalPathSlugs) !== count($pagePathSlugs)) continue;
+                $pathSlugs = Arr::map(explode('/', $path), function ($slug, $i) use ($pagePathSlugs) {
+                    return $pagePathSlugs[$i] === ':' ? ':' : $slug;
+                });
+
+                if ($pagePath === join('/', $pathSlugs)) {
+                    return self::formatPage($page);
+                }
+            }
+        }
+
+        return null;
     }
 
     public static function getPageByTemplate($templateSlug)
