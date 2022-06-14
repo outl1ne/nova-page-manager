@@ -20,7 +20,7 @@ class :className extends Template
     }
 
     // Resolve data for serialization
-    public function resolve($page): array
+    public function resolve($page, $params): array
     {
         // Modify data as you please (ie turn ID-s into models)
         return $page->data;
