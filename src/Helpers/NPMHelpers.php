@@ -48,7 +48,7 @@ class NPMHelpers
         foreach (NPM::getLocales() as $localeSlug => $locale) {
             foreach ($pages as $page) {
                 if (!array_key_exists($localeSlug, $page->path)) continue;
-                $pagePath = preg_replace('/:[^\/]*/', ':', $page->path[$localeSlug]); // change all ':slug' to ':'
+                $pagePath = preg_replace('/(:[^\/]+)|({[^}\/]+})/', ':', $page->path[$localeSlug]); // change all ':slug' to ':'
                 $pagePathSlugs = explode('/', $pagePath);
 
                 if (count($originalPathSlugs) !== count($pagePathSlugs)) continue;
