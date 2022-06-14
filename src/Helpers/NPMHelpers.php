@@ -57,7 +57,7 @@ class NPMHelpers
                 });
 
                 if ($pagePath === join('/', $pathSlugs)) {
-                    return NPMHelpers::formatPage($page);
+                    return self::formatPage($page);
                 }
             }
         }
