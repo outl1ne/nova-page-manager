@@ -5,6 +5,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.0.5] - 15-06-2022
+
+NB! Breaking - Template's resolve() function had its signature changed. It's now:
+
+```php
+public function resolve($page, $params): array
+{}
+```
+
+### Added
+
+- Added $params to Template's resolve function which are filled when using `getPageByPath` (thanks to [@kaareloun](https://github.com/kaareloun))
+
 ## [5.0.4] - 14-06-2022
 
 ### Added
