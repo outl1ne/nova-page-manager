@@ -4,6 +4,7 @@ namespace Outl1ne\PageManager\Helpers;
 
 use Outl1ne\PageManager\NPM;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
 
 class NPMHelpers
 {
@@ -38,6 +39,21 @@ class NPMHelpers
         return $pageStructure;
     }
 
+    protected static function getParams($path, $pagePath)
+    {
+        $pageSlugs = explode('/', $pagePath);
+        $params = [];
+
+        foreach (explode('/', $path) as $i => $slug) {
+            if (Str::contains($pageSlugs[$i], [':', '{', '}'])) {
+                $paramName = Str::replace([':', '{', '}'], '', $pageSlugs[$i]);
+                $params[$paramName] = $slug;
+            }
+        }
+
+        return $params;
+    }
+
     public static function getPageByPath($path = '')
     {
         if (!$path) return null;
@@ -52,12 +68,14 @@ class NPMHelpers
                 $pagePathSlugs = explode('/', $pagePath);
 
                 if (count($originalPathSlugs) !== count($pagePathSlugs)) continue;
+
                 $pathSlugs = Arr::map(explode('/', $path), function ($slug, $i) use ($pagePathSlugs) {
                     return $pagePathSlugs[$i] === ':' ? ':' : $slug;
                 });
 
                 if ($pagePath === join('/', $pathSlugs)) {
-                    return self::formatPage($page);
+                    $params = self::getParams($path, $page->path[$localeSlug]);
+                    return self::formatPage($page, $params);
                 }
             }
         }
@@ -77,7 +95,7 @@ class NPMHelpers
         return $pages->map(fn ($page) => static::formatPage($page))->toArray();
     }
 
-    public static function formatPage($page)
+    public static function formatPage($page, $params = [])
     {
         if (empty($page)) return null;
 
@@ -94,7 +112,7 @@ class NPMHelpers
             'slug' => $page->slug ?: [],
             'path' => $page->path ?: [],
             'parent_id' => $page->parent_id,
-            'data' => $templateClass->resolve($page),
+            'data' => $templateClass->resolve($page, $params),
             'template' => $page->template ?: null,
         ];
     }
