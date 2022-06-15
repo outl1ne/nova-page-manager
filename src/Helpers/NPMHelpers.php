@@ -39,6 +39,21 @@ class NPMHelpers
         return $pageStructure;
     }
 
+    protected static function getParams($path, $pagePath)
+    {
+        $pageSlugs = explode('/', $pagePath);
+        $params = [];
+
+        foreach (explode('/', $path) as $i => $slug) {
+            if (Str::contains($pageSlugs[$i], [':', '{', '}'])) {
+                $paramName = Str::replace([':', '{', '}'], '', $pageSlugs[$i]);
+                $params[$paramName] = $slug;
+            }
+        }
+
+        return $params;
+    }
+
     public static function getPageByPath($path = '')
     {
         if (!$path) return null;
@@ -51,22 +66,15 @@ class NPMHelpers
                 if (!array_key_exists($localeSlug, $page->path)) continue;
                 $pagePath = preg_replace('/(:[^\/]+)|({[^}\/]+})/', ':', $page->path[$localeSlug]); // change all ':slug' to ':'
                 $pagePathSlugs = explode('/', $pagePath);
-                $originalSlugs = explode('/', $page->path[$localeSlug]);
 
                 if (count($originalPathSlugs) !== count($pagePathSlugs)) continue;
 
-                $params = [];
-                $pathSlugs = Arr::map(explode('/', $path), function ($slug, $i) use ($pagePathSlugs, $originalSlugs, &$params) {
-                    if ($pagePathSlugs[$i] === ':') {
-                        $paramName = Str::replace([':', '{', '}'], '', $originalSlugs[$i]);
-                        $params[$paramName] = $slug;
-                        return ':';
-                    }
-
-                    return $slug;
+                $pathSlugs = Arr::map(explode('/', $path), function ($slug, $i) use ($pagePathSlugs) {
+                    return $pagePathSlugs[$i] === ':' ? ':' : $slug;
                 });
 
                 if ($pagePath === join('/', $pathSlugs)) {
+                    $params = self::getParams($path, $page->path[$localeSlug]);
                     return self::formatPage($page, $params);
                 }
             }
