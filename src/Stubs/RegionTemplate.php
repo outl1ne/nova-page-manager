@@ -20,7 +20,7 @@ class :className extends Template
     }
 
     // Resolve data for serialization
-    public function resolve($region): array
+    public function resolve($region, $params): array
     {
         // Modify data as you please (ie turn ID-s into models)
         return $region->data;

@@ -28,7 +28,7 @@ class Template
         return [];
     }
 
-    public function resolve($page): array
+    public function resolve($pageOrRegion, $params): array
     {
         return [];
     }
