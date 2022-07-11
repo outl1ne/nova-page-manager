@@ -38,11 +38,13 @@ class NPM
     // Resources
     public static function getPageResource(): string
     {
+        if (!static::getPageModel()) return null;
         return config('nova-page-manager.page_resource', \Outl1ne\PageManager\Nova\Resources\Page::class);
     }
 
     public static function getRegionResource(): string
     {
+        if (!static::getRegionModel()) return null;
         return config('nova-page-manager.region_resource', \Outl1ne\PageManager\Nova\Resources\Region::class);
     }
 

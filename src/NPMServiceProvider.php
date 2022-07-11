@@ -43,10 +43,10 @@ class NPMServiceProvider extends ServiceProvider
         ], 'config');
 
         // Register resources
-        Nova::resources([
+        Nova::resources(array_filter([
             NPM::getPageResource(),
             NPM::getRegionResource(),
-        ]);
+        ]));
 
         // Register commands
         if ($this->app->runningInConsole()) {
