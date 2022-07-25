@@ -78,6 +78,7 @@ class NPMHelpers
                 });
 
                 if ($pagePath === join('/', $pathSlugs)) {
+                    $page = $model::find($page->id);
                     $params = self::getParams($path, $page->path[$localeSlug]);
                     return self::formatPage($page, $params);
                 }
