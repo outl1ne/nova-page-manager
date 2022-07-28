@@ -9,9 +9,12 @@ use Outl1ne\PageManager\Template;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Symfony\Component\HttpFoundation\HeaderBag;
+use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerField extends Field
 {
+    use ConditionallyLoadsAttributes;
+
     public $component = 'page-manager-field';
 
     protected $template = null;
@@ -40,7 +43,7 @@ class PageManagerField extends Field
 
     public function fill(NovaRequest $request, $model)
     {
-        $fields = new FieldCollection($this->template->fields($request));
+        $fields = new FieldCollection($this->filter($this->template->fields($request)));
 
         $model->data = $this->fillFieldsAndGetData($request, 'data', $fields, $model->data);
 

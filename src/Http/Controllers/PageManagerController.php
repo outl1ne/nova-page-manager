@@ -4,15 +4,16 @@ namespace Outl1ne\PageManager\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
+use Laravel\Nova\ResolvesFields;
 use Outl1ne\PageManager\Template;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
-use Laravel\Nova\ResolvesFields;
+use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerController extends Controller
 {
-    use ResolvesFields;
+    use ResolvesFields, ConditionallyLoadsAttributes;
 
     public function getFields(Request $request, $type, $resourceId)
     {
@@ -40,7 +41,7 @@ class PageManagerController extends Controller
         foreach ($locales as $key => $locale) {
             $dataObject = (object) ($model->data[$key] ?? []);
             $fields = $templateClass->fields($request);
-            $fieldCollection = FieldCollection::make($fields);
+            $fieldCollection = FieldCollection::make($this->filter($fields));
             $fieldCollection->each(fn ($field) => $field->template = $templateClass);
             $fieldCollection->resolve($dataObject);
             $fieldCollection->assignDefaultPanel(__('novaPageManager.defaultPanelName'));
