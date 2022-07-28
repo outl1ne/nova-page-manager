@@ -2,9 +2,9 @@
 
 namespace Outl1ne\PageManager\Helpers;
 
-use Outl1ne\PageManager\NPM;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
+use Outl1ne\PageManager\NPM;
 
 class NPMHelpers
 {
@@ -56,9 +56,13 @@ class NPMHelpers
 
     public static function getPageByPath($path = '')
     {
-        if (!$path) return null;
+        if (!$path) {
+            return null;
+        }
+
         $path = $path !== '/' ? rtrim($path, '/') : $path;
-        $pages = NPM::getPageModel()::all();
+        $model = NPM::getPageModel();
+        $pages = $model::select(['id', 'slug', 'template', 'parent_id'])->get();
         $originalPathSlugs = explode('/', $path);
 
         foreach (NPM::getLocales() as $localeSlug => $locale) {
@@ -74,6 +78,7 @@ class NPMHelpers
                 });
 
                 if ($pagePath === join('/', $pathSlugs)) {
+                    $page = $model::find($page->id);
                     $params = self::getParams($path, $page->path[$localeSlug]);
                     return self::formatPage($page, $params);
                 }
