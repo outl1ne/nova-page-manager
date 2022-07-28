@@ -2,6 +2,7 @@
 
 namespace Outl1ne\PageManager\Nova\Fields;
 
+use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Http\UploadedFile;
@@ -80,6 +81,16 @@ class PageManagerField extends Field
             $fakeRequest->setMethod(NovaRequest::METHOD_POST);
 
             $fakeModel = (object) [];
+
+            $fields->each(function ($field) {
+                if ($field->panel) {
+                    $sanitizedPanelName = Str::slug($field->panel, '_');
+                    $field->attribute = $sanitizedPanelName . '->' . $field->attribute;
+                }
+
+                return $field;
+            });
+
             $fields->resolve((object) $localeData);
             $fields->map->fill($fakeRequest, $fakeModel);
 

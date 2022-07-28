@@ -8,10 +8,10 @@ use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Select;
+use Outl1ne\PageManager\Template;
 use Outl1ne\PageManager\Nova\Fields\PageLinkField;
 use Outl1ne\PageManager\Nova\Fields\PrefixSlugField;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
-use Outl1ne\PageManager\Template;
 
 class Page extends TemplateResource
 {
