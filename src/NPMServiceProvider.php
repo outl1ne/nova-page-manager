@@ -3,6 +3,7 @@
 namespace Outl1ne\PageManager;
 
 use Laravel\Nova\Nova;
+use Laravel\Nova\Panel;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Outl1ne\PageManager\Commands\NPMTemplateCommand;
@@ -56,6 +57,7 @@ class NPMServiceProvider extends ServiceProvider
         }
 
         $this->registerRoutes();
+        $this->registerMacros();
     }
 
     protected function registerRoutes()
@@ -64,5 +66,12 @@ class NPMServiceProvider extends ServiceProvider
 
         Route::middleware(['nova', \Outl1ne\PageManager\Http\Middleware\AuthorizeMiddleware::class])
             ->group(__DIR__ . '/../routes/api.php');
+    }
+
+    protected function registerMacros()
+    {
+        Panel::macro('fieldPrefix', function ($attribute) {
+            return $this->withMeta(['fieldPrefix' => $attribute]);
+        });
     }
 }

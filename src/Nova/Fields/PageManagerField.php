@@ -2,20 +2,26 @@
 
 namespace Outl1ne\PageManager\Nova\Fields;
 
+use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Field;
 use Illuminate\Http\UploadedFile;
 use Outl1ne\PageManager\Template;
+use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Symfony\Component\HttpFoundation\HeaderBag;
+use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerField extends Field
 {
+    use ConditionallyLoadsAttributes;
+
     public $component = 'page-manager-field';
 
     protected $template = null;
     protected $seoFields = null;
+    protected $fieldOriginalAttributes = [];
 
     public function __construct($type)
     {
@@ -40,35 +46,32 @@ class PageManagerField extends Field
 
     public function fill(NovaRequest $request, $model)
     {
-        $fields = new FieldCollection($this->template->fields($request));
-
-        $model->data = $this->fillFieldsAndGetData($request, 'data', $fields, $model->data);
+        $fields = new FieldCollection($this->filter($this->template->fields($request)));
+        $this->fillFields($request, 'data', $fields, $model);
 
         if ($this->meta['type'] === Template::TYPE_PAGE) {
             $seoFields = new FieldCollection($this->seoFields);
-
-            $model->seo = $this->fillFieldsAndGetData($request, 'seo', $seoFields, $model->seo);
+            $this->fillFields($request, 'seo', $seoFields, $model);
         }
     }
 
-    protected function fillFieldsAndGetData($request, $attributeKey, $fields, $existingData)
+    protected function fillFields($request, $attributeKey, $baseFields, $model)
     {
-        $locales = NPM::getLocales();
+        $locales = array_keys(NPM::getLocales());
+        $data = $request->get($attributeKey, []);
 
-        $all = $request->all();
-        $data = $all[$attributeKey] ?? [];
-
-        $newData = [];
-        foreach ($locales as $key => $localeName) {
+        foreach ($locales as $locale) {
             $dataAttributes = [];
             $fileAttributes = [];
+            $localeData = $data[$locale] ?? [];
 
-            $localeData = $data[$key] ?? [];
             foreach ($localeData as $k => $v) {
+                $fullKey = $attributeKey . '->' . $locale . '->' . $k;
+
                 if ($v instanceof UploadedFile) {
-                    $fileAttributes[$k] = $v;
+                    $fileAttributes[$fullKey] = $v;
                 } else {
-                    $dataAttributes[$k] = $v;
+                    $dataAttributes[$fullKey] = $v;
                 }
             }
 
@@ -76,16 +79,25 @@ class PageManagerField extends Field
             $fakeRequest->headers = new HeaderBag(['Content-Type' => 'multipart/form-data']);
             $fakeRequest->setMethod(NovaRequest::METHOD_POST);
 
-            $fakeModel = (object) [];
+            $fields = $baseFields->map(fn ($field) => $this->transformFieldAttributes($field, "{$attributeKey}->{$locale}"));
             $fields->resolve((object) $localeData);
-            $fields->map->fill($fakeRequest, $fakeModel);
+            $fields->map->fill($fakeRequest, $model);
+        }
+    }
 
-            $newData[$key] = array_merge(
-                $existingData[$key] ?? [],
-                (array) $fakeModel,
-            );
+    public static function transformFieldAttributes($baseField, $prefix = null)
+    {
+        $field = clone $baseField;
+        $attribute = $field->attribute;
+
+        if (isset($field->assignedPanel->meta['fieldPrefix'])) {
+            $fieldPrefix = $field->assignedPanel->meta['fieldPrefix'];
+            $attribute = $fieldPrefix . '->' . $attribute;
         }
 
-        return $newData;
+        if ($prefix) $attribute = $prefix . '->' . $attribute;
+        $field->attribute = $attribute;
+
+        return $field;
     }
 }
