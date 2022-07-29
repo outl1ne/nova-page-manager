@@ -85,10 +85,13 @@ class PageManagerField extends Field
         }
     }
 
-    public static function transformFieldAttributes($baseField, $prefix = null)
+    public static function transformFieldAttributes($field, $prefix = null)
     {
-        $field = clone $baseField;
-        $attribute = $field->attribute;
+        if (empty($field->meta['originalAttribute'])) {
+            $field->withMeta(['originalAttribute' => $field->attribute]);
+        }
+
+        $attribute = $field->meta['originalAttribute'];
 
         if (isset($field->assignedPanel->meta['fieldPrefix'])) {
             $fieldPrefix = $field->assignedPanel->meta['fieldPrefix'];
