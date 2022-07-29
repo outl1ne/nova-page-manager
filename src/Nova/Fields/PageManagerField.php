@@ -85,17 +85,21 @@ class PageManagerField extends Field
         }
     }
 
-    protected function transformFieldAttributes($baseField, $prefix)
+    public static function transformFieldAttributes($baseField, $prefix = null)
     {
         $field = clone $baseField;
         $attribute = $field->attribute;
 
-        if ($field->panel) {
-            $sanitizedPanelName = Str::slug($field->panel, '_');
-            $attribute = $sanitizedPanelName . '->' . $attribute;
+        if (
+            isset($field->assignedPanel) &&
+            isset($field->assignedPanel->meta['fieldPrefix'])
+        ) {
+            $fieldPrefix = $field->assignedPanel->meta['fieldPrefix'];
+            $attribute = $fieldPrefix . '->' . $attribute;
         }
 
-        $field->attribute = $prefix . '->' . $attribute;
+        if ($prefix) $attribute = $prefix . '->' . $attribute;
+        $field->attribute = $attribute;
 
         return $field;
     }

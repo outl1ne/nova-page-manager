@@ -10,6 +10,7 @@ use Outl1ne\PageManager\Template;
 use Illuminate\Routing\Controller;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
+use Outl1ne\PageManager\Nova\Fields\PageManagerField;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerController extends Controller
@@ -43,19 +44,8 @@ class PageManagerController extends Controller
             $dataObject = (object) ($model->data[$key] ?? []);
             $fields = $templateClass->fields($request);
             $fieldCollection = FieldCollection::make($this->filter($fields));
-
-            $fieldCollection->each(function ($field) use ($templateClass) {
-                $field->template = $templateClass;
-
-                if ($field->panel) {
-                    $sanitizedPanelName = Str::slug($field->panel, '_');
-                    $field->attribute = $sanitizedPanelName . '->' . $field->attribute;
-                }
-
-                return $field;
-            });
-
             $fieldCollection->each(fn ($field) => $field->template = $templateClass);
+            $fieldCollection = $fieldCollection->map(fn ($field) => PageManagerField::transformFieldAttributes($field));
             $fieldCollection->resolve($dataObject);
             $fieldCollection->assignDefaultPanel(__('novaPageManager.defaultPanelName'));
             $fieldsData[$key] = $fieldCollection;
