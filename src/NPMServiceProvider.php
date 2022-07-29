@@ -71,8 +71,7 @@ class NPMServiceProvider extends ServiceProvider
     protected function registerMacros()
     {
         Panel::macro('fieldPrefix', function ($attribute) {
-            $this->withMeta(['fieldPrefix' => $attribute]);
-            return $this;
+            return $this->withMeta(['fieldPrefix' => $attribute]);
         });
     }
 }
