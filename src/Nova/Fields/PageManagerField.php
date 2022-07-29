@@ -90,10 +90,7 @@ class PageManagerField extends Field
         $field = clone $baseField;
         $attribute = $field->attribute;
 
-        if (
-            isset($field->assignedPanel) &&
-            isset($field->assignedPanel->meta['fieldPrefix'])
-        ) {
+        if (isset($field->assignedPanel->meta['fieldPrefix'])) {
             $fieldPrefix = $field->assignedPanel->meta['fieldPrefix'];
             $attribute = $fieldPrefix . '->' . $attribute;
         }
