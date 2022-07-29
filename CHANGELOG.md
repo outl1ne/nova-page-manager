@@ -5,6 +5,20 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.1.0] - 29-07-2022
+
+### Added
+
+- Added support for Panels inside page template fields
+
+- Added `fieldPrefix` macro to Panel
+  - Allows you to store panel data in objects.
+  - ->fieldPrefix('hero') stores data in `data->{locale}->hero->{field_attribute}`
+
+### Changed
+
+- Updated packages
+
 ## [5.0.8] - 28-07-2022
 
 ### Changed
