@@ -124,7 +124,12 @@ class Page extends TemplateResource
     {
         $page = NPM::getPageModel();
         if ($this->id) {
-            $pages = $page::whereNot('id', '<=>', $this->id)->whereNot('parent_id', '<=>', $this->id)->get();
+            $pages = $page::query()
+                ->where('id', '<>', $this->id)
+                ->where(fn ($query) => $query
+                    ->whereNull('parent_id')
+                    ->orWhere('parent_id', '<>', $this->id))
+                ->get();
         } else {
             $pages = $page::all();
         }
