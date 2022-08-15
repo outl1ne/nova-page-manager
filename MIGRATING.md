@@ -1,6 +1,6 @@
-# Migrating from Nova 3 / Page Manager 4 to Nova 4 / Page Manager 5
+## Migrating from Nova 3 / Page Manager 4 to Nova 4 / Page Manager 5
 
-## Migration
+### Migration
 
 This is a working migration that migrates pages from Page Manager 4 from Page Manager 5.
 
