@@ -1,11 +1,11 @@
 <template>
-  <div class="npm-relative">
+  <div class="o1-relative">
     <PageManagerFieldHeader :locales="locales" :activeLocale="locale" @changeLocale="changeLocale" />
 
     <template v-for="(localeName, key) in locales" :key="key">
       <div v-show="locale === key">
         <component
-          class="npm-py-6"
+          class="o1-py-6"
           v-for="panel in panelsWithFields[key]"
           :key="panel.id"
           :is="view + '-' + panel.component"

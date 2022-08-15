@@ -1,6 +1,6 @@
 <template>
   <div
-    class="npm-p-2 npm-font-mono whitespace-no-wrap npm-text-xs npm-bg-gray-100 dark:npm-bg-gray-900 npm-rounded npm-border npm-border-gray-200 dark:npm-border-gray-700 npm-inline-block"
+    class="o1-p-2 o1-font-mono whitespace-no-wrap o1-text-xs o1-bg-gray-100 dark:o1-bg-gray-900 o1-rounded o1-border o1-border-gray-200 dark:o1-border-gray-700 o1-inline-block"
   >
     {{ field.value }}
   </div>
@@ -10,7 +10,7 @@
     :href="fullUrl"
     target="_BLANK"
     rel="noopener noreferrer"
-    class="text-primary-500 npm-font-bold npm-ml-3 hover:npm-opacity-80"
+    class="text-primary-500 o1-font-bold o1-ml-3 hover:o1-opacity-80"
     @click.stop
   >
     {{ __('novaPageManager.pageLinkViewButton') }}

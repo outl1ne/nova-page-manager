@@ -3,17 +3,15 @@ import PrefixSlugField from './components/PrefixSlugField';
 import IndexPageLinkField from './components/PageLinkField/IndexPageLinkField';
 import DetailPageLinkField from './components/PageLinkField/DetailPageLinkField';
 
-let pageManagerDarkModeObserver = null;
-
 Nova.booting((Vue, router, store) => {
-  pageManagerDarkModeObserver = new MutationObserver(() => {
+  new MutationObserver(() => {
     const cls = document.documentElement.classList;
     const isDarkMode = cls.contains('dark');
 
-    if (isDarkMode && !cls.contains('npm-dark')) {
-      cls.add('npm-dark');
-    } else if (!isDarkMode && cls.contains('npm-dark')) {
-      cls.remove('npm-dark');
+    if (isDarkMode && !cls.contains('o1-dark')) {
+      cls.add('o1-dark');
+    } else if (!isDarkMode && cls.contains('o1-dark')) {
+      cls.remove('o1-dark');
     }
   }).observe(document.documentElement, {
     attributes: true,

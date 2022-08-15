@@ -1,10 +1,10 @@
 <template>
   <DefaultField :field="field" :errors="errors">
     <template #field>
-      <div class="npm-flex npm-items-center">
+      <div class="o1-flex o1-items-center">
         <div
           v-if="prefix"
-          class="form-control form-input form-input-bordered npm-flex npm-items-center npm-cursor-default npm-rounded-r-none npm-border-r-0 npm-font-mono npm-whitespace-nowrap"
+          class="form-control form-input form-input-bordered o1-flex o1-items-center o1-cursor-default o1-rounded-r-none o1-border-r-0 o1-font-mono o1-whitespace-nowrap"
         >
           {{ prefix }}
         </div>
@@ -18,21 +18,21 @@
           class="w-full form-control form-input form-input-bordered"
           :class="{
             errorClasses,
-            'npm-rounded-l-none': !!prefix,
-            'npm-rounded-r-none': !!field.pathSuffix,
+            'o1-rounded-l-none': !!prefix,
+            'o1-rounded-r-none': !!field.pathSuffix,
           }"
           ref="theInput"
         />
 
         <div
           v-if="field.pathSuffix"
-          class="form-control form-input form-input-bordered npm-flex npm-items-center npm-cursor-default npm-rounded-l-none npm-border-l-0 npm-font-mono"
+          class="form-control form-input form-input-bordered o1-flex o1-items-center o1-cursor-default o1-rounded-l-none o1-border-l-0 o1-font-mono"
         >
           {{ field.pathSuffix }}
         </div>
 
         <button
-          class="npm-cursor-pointer npm-font-bold text-primary-500 npm-ml-4 hover:npm-opacity-80"
+          class="o1-cursor-pointer o1-font-bold text-primary-500 o1-ml-4 hover:o1-opacity-80"
           v-if="field.showCustomizeButton"
           type="button"
           @click="toggleCustomizeClick"
