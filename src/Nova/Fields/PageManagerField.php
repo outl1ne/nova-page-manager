@@ -57,6 +57,8 @@ class PageManagerField extends Field
 
     protected function fillFields($request, $attributeKey, $baseFields, $model)
     {
+        $flexibleAttrRegKey = $this->getFlexibleAttributeRegisterKey();
+
         $locales = array_keys(NPM::getLocales());
         $data = $request->get($attributeKey, []);
 
@@ -65,11 +67,25 @@ class PageManagerField extends Field
             $fileAttributes = [];
             $localeData = $data[$locale] ?? [];
 
+            $flexibleKeys = null;
+            if ($flexibleAttrRegKey && isset($localeData[$flexibleAttrRegKey])) {
+                $flexibleKeys = json_decode($localeData[$flexibleAttrRegKey], true);
+                $localeData[$flexibleAttrRegKey] = $flexibleKeys;
+            }
+
             foreach ($localeData as $k => $v) {
-                $fullKey = $attributeKey . '->' . $locale . '->' . $k;
+                $fullKey = "{$attributeKey}->{$locale}->{$k}";
 
                 if ($v instanceof UploadedFile) {
                     $fileAttributes[$fullKey] = $v;
+                } else if ($flexibleKeys) {
+                    if ($k === $flexibleAttrRegKey) {
+                        // Modify flexible registration keys
+                        $dataAttributes[$fullKey] = array_map(fn ($fKey) => "{$attributeKey}->{$locale}->{$fKey}", $flexibleKeys);
+                    } else if (in_array($k, $flexibleKeys)) {
+                        // Decode flexible values
+                        $dataAttributes[$fullKey] = $this->getFlexibleCompatibleValue($v);
+                    }
                 } else {
                     $dataAttributes[$fullKey] = $v;
                 }
@@ -80,7 +96,7 @@ class PageManagerField extends Field
             $fakeRequest->setMethod(NovaRequest::METHOD_POST);
 
             $fields = $baseFields->map(fn ($field) => $this->transformFieldAttributes($field, "{$attributeKey}->{$locale}"));
-            $fields->resolve((object) $localeData);
+            $fields->resolve((object) array_merge($dataAttributes, $fileAttributes));
             $fields->map->fill($fakeRequest, $model);
         }
     }
@@ -102,5 +118,50 @@ class PageManagerField extends Field
         $field->attribute = $attribute;
 
         return $field;
+    }
+
+    protected function getFlexibleCompatibleValue($value)
+    {
+        if (!class_exists('\Whitecube\NovaFlexibleContent\Http\FlexibleAttribute')) return $value;
+        if (empty($value) || !is_string($value)) return $value;
+        $value = json_decode($value, true);
+
+        return array_map(function ($group) {
+            $clean = [
+                'layout' => $group['layout'] ?? null,
+                'key' => $group['key'] ?? null,
+                'attributes' => [],
+            ];
+
+            foreach ($group['attributes'] ?? [] as $attribute => $value) {
+                $newAttribute = new \Whitecube\NovaFlexibleContent\Http\FlexibleAttribute($attribute, $clean['key']);
+                $newAttribute->setDataIn($clean['attributes'], $value);
+            }
+
+            $flexAttrRegKey = $this->getFlexibleAttributeRegisterKey();
+            if ($subFlexbiles = $clean['attributes'][$flexAttrRegKey] ?? null) {
+                $subFlexbiles = json_decode($subFlexbiles, true);
+                $clean['attributes'][$flexAttrRegKey] = $subFlexbiles;
+                $subFlexbiles = array_map(function ($sfAttr) use ($clean) {
+                    return (new \Whitecube\NovaFlexibleContent\Http\FlexibleAttribute($sfAttr, $clean['key']))->name;
+                }, $subFlexbiles);
+
+                foreach ($clean['attributes'] as $attribute => $value) {
+                    $tempAttribute = new \Whitecube\NovaFlexibleContent\Http\FlexibleAttribute($attribute, $clean['key']);
+                    if (in_array($tempAttribute->name, $subFlexbiles)) {
+                        $clean['attributes'][$attribute] = $this->getFlexibleCompatibleValue($value);
+                    }
+                }
+            }
+
+            return $clean;
+        }, $value);
+    }
+
+    protected function getFlexibleAttributeRegisterKey()
+    {
+        return class_exists('\Whitecube\NovaFlexibleContent\Http\FlexibleAttribute')
+            ? \Whitecube\NovaFlexibleContent\Http\FlexibleAttribute::REGISTER
+            : null;
     }
 }
