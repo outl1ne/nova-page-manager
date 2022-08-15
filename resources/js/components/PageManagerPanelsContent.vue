@@ -1,5 +1,5 @@
 <template>
-  <div class="o1-relative">
+  <div class="o1-relative o1-w-full">
     <PageManagerFieldHeader :locales="locales" :activeLocale="locale" @changeLocale="changeLocale" />
 
     <template v-for="(localeName, key) in locales" :key="key">

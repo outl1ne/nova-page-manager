@@ -1,5 +1,5 @@
 <template>
-  <div ref="field">
+  <div ref="field" class="o1-w-full">
     <PageManagerPanelsContent
       v-if="seoPanelsWithFields"
       :view="field.view"
