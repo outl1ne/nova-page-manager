@@ -3,9 +3,12 @@
 namespace Outl1ne\PageManager;
 
 use Illuminate\Http\Request;
+use Outl1ne\PageManager\Traits\DataReplaceHelpers;
 
 class Template
 {
+    use DataReplaceHelpers;
+
     const TYPE_PAGE = 'page';
     const TYPE_REGION = 'region';
 
