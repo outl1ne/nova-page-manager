@@ -2,7 +2,6 @@
 
 namespace Outl1ne\PageManager\Http\Controllers;
 
-use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\ResolvesFields;
@@ -17,7 +16,7 @@ class PageManagerController extends Controller
 {
     use ResolvesFields, ConditionallyLoadsAttributes;
 
-    public function getFields(Request $request, $type, $resourceId)
+    public function getFields(Request $request, $type, $resourceId, $isSyncRequest = false)
     {
         $locales = NPM::getLocales();
 
@@ -44,6 +43,15 @@ class PageManagerController extends Controller
             $dataObject = (object) ($model->data[$key] ?? []);
             $fields = $templateClass->fields($request);
             $fieldCollection = FieldCollection::make($this->filter($fields));
+
+            if ($isSyncRequest) {
+                $fieldCollection = $fieldCollection->filter(function ($field) use ($request) {
+                    return $request->query('field') === $field->attribute && $request->query('component') === $field->component;
+                })->each->syncDependsOn(resolve(NovaRequest::class));
+
+                return response()->json($fieldCollection->first(), 200);
+            }
+
             $fieldCollection->each(fn ($field) => $field->template = $templateClass);
             $fieldCollection = $fieldCollection->map(fn ($field) => PageManagerField::transformFieldAttributes($field));
             $fieldCollection->resolve($dataObject);
@@ -82,6 +90,12 @@ class PageManagerController extends Controller
             'panelsWithFields' => $panelsData,
             'seoPanelsWithFields' => $seoPanelsData,
         ];
+    }
+
+    public function syncUpdateFields(Request $request, $panelType, $resourceType, $locale, $resourceId)
+    {
+        $resourceType = $resourceType === 'pages' ? Template::TYPE_PAGE : Template::TYPE_REGION;
+        return $this->getFields($request, $resourceType, $resourceId, true);
     }
 
     public function deleteFile(Request $request)
