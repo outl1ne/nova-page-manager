@@ -1,5 +1,35 @@
 ## Migrating from Nova 3 / Page Manager 4 to Nova 4 / Page Manager 5
 
+### Modify template classes
+
+To each template class, you need to add the following functions:
+
+```php
+// Name displayed in CMS
+public function name(Request $request)
+{
+    return 'Page template name';
+}
+
+// Fields displayed in CMS
+// Nothing changed here during the upgrade
+public function fields(Request $request): array
+{
+    return [];
+}
+
+// Resolve data for serialization
+public function resolve($page): array
+{
+    // Modify data as you please (ie turn ID-s into models)
+    return $page->data;
+}
+```
+
+### Replace resolveResponseUsing with resolve
+
+If you previosuly used the `resolveResponseUsing()` helper on the fields, you must remove that function and replace it with manual data retrieval inside the template's `resolve` function.
+
 ### Migration
 
 This is a working migration that migrates pages from Page Manager 4 from Page Manager 5.
