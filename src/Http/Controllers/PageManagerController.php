@@ -36,6 +36,7 @@ class PageManagerController extends Controller
 
         // Resolve with values
         $templateClass = new $template['class'];
+        $templateType = NPM::getTemplateClassType($templateClass::class);
 
         $fieldsData = [];
         $seoFieldsData = [];
@@ -58,7 +59,8 @@ class PageManagerController extends Controller
             $fieldCollection->assignDefaultPanel(__('novaPageManager.defaultPanelName'));
             $fieldsData[$key] = $fieldCollection;
 
-            if ($templateClass === Template::TYPE_PAGE) {
+
+            if ($templateType === Template::TYPE_PAGE) {
                 // SEO fields
                 $seoFields = NPM::getSeoFields();
                 if ($seoFields) {
@@ -81,7 +83,7 @@ class PageManagerController extends Controller
                 __('novaPageManager.defaultPanelName'),
             );
 
-            if ($template === Template::TYPE_PAGE) {
+            if ($templateType === Template::TYPE_PAGE) {
                 $seoPanelsData[$key] = $this->resolvePanelsFromFields(
                     app()->make(NovaRequest::class),
                     $seoFieldsData[$key],
