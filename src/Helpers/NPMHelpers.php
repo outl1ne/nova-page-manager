@@ -107,9 +107,10 @@ class NPMHelpers
         $template = NPM::getPageTemplateBySlug($page->template);
         if (empty($template)) return null;
 
+        $seoConfig = config('nova-page-manager.page_seo_fields', null);
         $templateClass = new $template['class'];
 
-        return [
+        return array_merge([
             'id' => $page->id,
             'created_at' => $page->created_at,
             'updated_at' => $page->updated_at,
@@ -119,7 +120,7 @@ class NPMHelpers
             'parent_id' => $page->parent_id,
             'data' => $templateClass->resolve($page, $params),
             'template' => $page->template ?: null,
-        ];
+        ], $seoConfig ? ['seo' =>  $page->seo] : []);
     }
 
     public static function formatRegion($region)
