@@ -85,6 +85,8 @@ class PageManagerField extends Field
                     } else if (in_array($k, $flexibleKeys)) {
                         // Decode flexible values
                         $dataAttributes[$fullKey] = $this->getFlexibleCompatibleValue($v);
+                    } else {
+                        $dataAttributes[$fullKey] = $v;
                     }
                 } else {
                     $dataAttributes[$fullKey] = $v;
