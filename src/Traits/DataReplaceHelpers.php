@@ -6,6 +6,14 @@ use Illuminate\Support\Arr;
 
 trait DataReplaceHelpers
 {
+    protected function collectAndReplaceUsing(array $data, array $keys, string $model, $modelMapFn = null)
+    {
+        $ids = $this->collectValues($data, $keys);
+        $replacementModels = $model::findMany($ids);
+        if (is_callable($modelMapFn)) $replacementModels = array_map($modelMapFn, $replacementModels);
+        return $this->replaceValues($data, $replacementModels, $keys);
+    }
+
     protected function collectValues($data, array $keys)
     {
         $values = [];
@@ -41,7 +49,7 @@ trait DataReplaceHelpers
 
                     if (preg_match($rgxKey, $newFullKey)) {
                         $lastKey = Arr::last(explode('.', $key));
-                        $data[$lastKey] = $replacementValueMap[$newFullKey][$data[$lastKey]] ?? null;
+                        $data[$lastKey] = $replacementValueMap[$data[$lastKey]] ?? null;
                     }
                 }
             }
