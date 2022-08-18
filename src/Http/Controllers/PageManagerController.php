@@ -36,6 +36,7 @@ class PageManagerController extends Controller
 
         // Resolve with values
         $templateClass = new $template['class'];
+        $templateType = NPM::getTemplateClassType($templateClass::class);
 
         $fieldsData = [];
         $seoFieldsData = [];
@@ -58,15 +59,18 @@ class PageManagerController extends Controller
             $fieldCollection->assignDefaultPanel(__('novaPageManager.defaultPanelName'));
             $fieldsData[$key] = $fieldCollection;
 
-            // SEO fields
-            $seoFields = NPM::getSeoFields();
-            if ($seoFields) {
-                $dataObject = (object) ($model->seo[$key] ?? []);
-                $seoFieldCollection = FieldCollection::make($seoFields);
-                $seoFieldCollection->each(fn ($field) => $field->template = $templateClass);
-                $seoFieldCollection->resolve($dataObject);
-                $seoFieldCollection->assignDefaultPanel(__('novaPageManager.seoPanelName'));
-                $seoFieldsData[$key] = $seoFieldCollection;
+
+            if ($templateType === Template::TYPE_PAGE) {
+                // SEO fields
+                $seoFields = NPM::getSeoFields();
+                if ($seoFields) {
+                    $dataObject = (object) ($model->seo[$key] ?? []);
+                    $seoFieldCollection = FieldCollection::make($seoFields);
+                    $seoFieldCollection->each(fn ($field) => $field->template = $templateClass);
+                    $seoFieldCollection->resolve($dataObject);
+                    $seoFieldCollection->assignDefaultPanel(__('novaPageManager.seoPanelName'));
+                    $seoFieldsData[$key] = $seoFieldCollection;
+                }
             }
         }
 
@@ -79,11 +83,13 @@ class PageManagerController extends Controller
                 __('novaPageManager.defaultPanelName'),
             );
 
-            $seoPanelsData[$key] = $this->resolvePanelsFromFields(
-                app()->make(NovaRequest::class),
-                $seoFieldsData[$key],
-                __('novaPageManager.seoPanelName'),
-            );
+            if ($templateType === Template::TYPE_PAGE) {
+                $seoPanelsData[$key] = $this->resolvePanelsFromFields(
+                    app()->make(NovaRequest::class),
+                    $seoFieldsData[$key],
+                    __('novaPageManager.seoPanelName'),
+                );
+            }
         }
 
         return [
