@@ -18,16 +18,24 @@ class NPMHelpers
         return NPM::getPageModel()::all()->map(fn ($page) => static::formatPage($page));
     }
 
-    public static function getPagesStructure()
+    public static function getPagesStructure($flat = false)
     {
         $allPages = NPM::getPageModel()::all();
 
         $pageStructure = [];
 
-        $formatAndAddChildren = function ($page) use ($allPages, &$formatAndAddChildren) {
+        $formatAndAddChildren = function ($page) use ($allPages, &$formatAndAddChildren, $flat, &$pageStructure) {
             $formattedPage = static::formatPage($page);
             $children = $allPages->filter(fn ($sp) => $sp->parent_id === $page->id)->values();
-            $formattedPage['children'] = $children->map(fn ($page) => $formatAndAddChildren($page));
+
+            if ($flat) {
+                $children->each(function ($childPage) use (&$pageStructure, &$formatAndAddChildren) {
+                    $pageStructure[] = static::formatPage($childPage);
+                    $formatAndAddChildren($childPage);
+                });
+            } else {
+                $formattedPage['children'] = $children->map(fn ($page) => $formatAndAddChildren($page));
+            }
             return $formattedPage;
         };
 
