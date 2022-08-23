@@ -10,7 +10,7 @@ trait DataReplaceHelpers
     {
         $ids = $this->collectValues($data, $keys);
         $replacementModels = $model::findMany($ids)->keyBy('id');
-        if (is_callable($modelMapFn)) $replacementModels = array_map($modelMapFn, $replacementModels);
+        if (is_callable($modelMapFn)) $replacementModels = $replacementModels->map($modelMapFn);
         return $this->replaceValues($data, $replacementModels, $keys);
     }
 
@@ -26,9 +26,10 @@ trait DataReplaceHelpers
         return array_values($values);
     }
 
-    protected function replaceValues(&$data, $replacementValueMap, array $replacementKeys)
+    protected function replaceValues(array &$data, $replacementValueMap, array $replacementKeys)
     {
         foreach ($data as &$localeData) {
+            if (empty($localeData)) continue;
             $this->walkAndReplace($localeData, $replacementValueMap, $replacementKeys);
         }
         return $data;
