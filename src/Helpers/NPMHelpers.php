@@ -5,6 +5,7 @@ namespace Outl1ne\PageManager\Helpers;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
+use Illuminate\Support\Facades\Storage;
 
 class NPMHelpers
 {
@@ -115,7 +116,7 @@ class NPMHelpers
         $template = NPM::getPageTemplateBySlug($page->template);
         if (empty($template)) return null;
 
-        $seoConfig = config('nova-page-manager.page_seo_fields', null);
+        $seo = static::formatSeo($page);
         $templateClass = new $template['class'];
 
         return array_merge([
@@ -128,7 +129,7 @@ class NPMHelpers
             'parent_id' => $page->parent_id,
             'data' => $templateClass->resolve($page, $params),
             'template' => $page->template ?: null,
-        ], $seoConfig ? ['seo' =>  $page->seo] : []);
+        ], $seo);
     }
 
     public static function formatRegion($region)
@@ -148,5 +149,26 @@ class NPMHelpers
             'data' => $templateClass->resolve($region),
             'template' => $region->template ?: null,
         ];
+    }
+
+    protected static function formatSeo($page)
+    {
+        $seoConfig = config('nova-page-manager.page_seo_fields', false);
+
+        if (!$seoConfig) {
+            return [];
+        }
+
+        if (is_callable($seoConfig)) {
+            return ['seo' => $page->seo];
+        }
+
+        return ['seo' => array_map(function ($localeSeo) {
+            if (isset($localeSeo['image'])) {
+                $localeSeo['image'] = Storage::disk('public')->url($localeSeo['image']);
+            }
+
+            return $localeSeo;
+        }, $page->seo)];
     }
 }
