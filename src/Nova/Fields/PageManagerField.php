@@ -5,12 +5,12 @@ namespace Outl1ne\PageManager\Nova\Fields;
 use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Field;
-use Illuminate\Http\UploadedFile;
 use Outl1ne\PageManager\Template;
 use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Symfony\Component\HttpFoundation\HeaderBag;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerField extends Field
@@ -50,7 +50,7 @@ class PageManagerField extends Field
         $this->fillFields($request, 'data', $fields, $model);
 
         if ($this->meta['type'] === Template::TYPE_PAGE) {
-            $seoFields = new FieldCollection($this->seoFields);
+            $seoFields = FieldCollection::make(array_values($this->seoFields));
             $this->fillFields($request, 'seo', $seoFields, $model);
         }
     }
@@ -60,7 +60,9 @@ class PageManagerField extends Field
         $flexibleAttrRegKey = $this->getFlexibleAttributeRegisterKey();
 
         $locales = array_keys(NPM::getLocales());
-        $data = $request->get($attributeKey, []);
+        $body = $request->get($attributeKey, []);
+        $files = $request->files->get($attributeKey, []);
+        $data = array_merge($body, $files);
 
         foreach ($locales as $locale) {
             $dataAttributes = [];
