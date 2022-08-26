@@ -9,6 +9,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- Fixed page seo image field storing
+
+## [5.4.0] - 25-08-2022
+
+### Changed
+
 - Fixed NPMHelpers page formatter not returning name and slug translations
   - NB! Previously returned a default translation string for 'name' and 'slug', now it returns an object, ie: (`['en' => 'Name']`)
 - Fixed migrations on Postgres (thanks to [@KasparRosin](https://github.com/KasparRosin))
