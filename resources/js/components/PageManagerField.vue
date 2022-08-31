@@ -117,19 +117,20 @@ export default {
         for (const panel of panels) {
           for (const field of panel.fields) {
             field.fill(fd);
-
-            for (const key of fd.keys()) {
-              const [realKey, realValue] = this.getKeyAndValue(key, fd);
-
-              if (this.isKeyAnArray(key)) {
-                if (!localeData[realKey]) localeData[realKey] = [];
-                localeData[realKey].push(realValue);
-              } else {
-                localeData[realKey] = realValue;
-              }
-            }
           }
         }
+
+        for (const key of fd.keys()) {
+          const [realKey, realValue] = this.getKeyAndValue(key, fd);
+
+          if (this.isKeyAnArray(key)) {
+            if (!localeData[realKey]) localeData[realKey] = [];
+            localeData[realKey].push(realValue);
+          } else {
+            localeData[realKey] = realValue;
+          }
+        }
+
         data[key] = localeData;
       }
 
