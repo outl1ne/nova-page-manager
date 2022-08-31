@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.4.1] - 31-08-2022
+
+### Changed
+
+- Fixed support for fields that wished to read other fields values.
+  - Specifically targeted `nova-flexible-content` package where having multiple
+    Flexible fields inside a page would throw an error.
+
 ## [5.4.0] - 25-08-2022
 
 ### Changed
