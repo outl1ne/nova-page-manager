@@ -3,13 +3,15 @@
 namespace Outl1ne\PageManager\Traits;
 
 use Illuminate\Support\Arr;
+use Illuminate\Database\Eloquent\Builder;
 
 trait DataReplaceHelpers
 {
-    protected function collectAndReplaceUsing(array $data, array $keys, string $model, $modelMapFn = null)
+    protected function collectAndReplaceUsing(array $data, array $keys, string|Builder $model, $modelMapFn = null)
     {
         $ids = $this->collectValues($data, $keys);
-        $replacementModels = $model::findMany($ids)->keyBy('id');
+        $replacementModels = is_string($model) ? $model::findMany($ids) : $model->findMany($ids);
+        $replacementModels = $replacementModels->keyBy('id');
         if (is_callable($modelMapFn)) $replacementModels = $replacementModels->map($modelMapFn);
         return $this->replaceValues($data, $replacementModels, $keys);
     }
