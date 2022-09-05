@@ -48,7 +48,7 @@ trait DataReplaceHelpers
                 foreach ($replacementKeys as $rplKey) {
                     $rgxKey = str_replace('.', '\.', $rplKey);
                     $rgxKey = str_replace('*', '\d', $rgxKey);
-                    $rgxKey = "($rgxKey)";
+                    $rgxKey = "/^($rgxKey)$/";
 
                     if (preg_match($rgxKey, $newFullKey)) {
                         $lastKey = Arr::last(explode('.', $key));

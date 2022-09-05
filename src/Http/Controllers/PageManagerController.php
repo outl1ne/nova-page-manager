@@ -2,11 +2,13 @@
 
 namespace Outl1ne\PageManager\Http\Controllers;
 
+use Laravel\Nova\Nova;
 use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\ResolvesFields;
 use Outl1ne\PageManager\Template;
 use Illuminate\Routing\Controller;
+use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
@@ -126,5 +128,34 @@ class PageManagerController extends Controller
         $model->save();
 
         return response('', 204);
+    }
+
+    public function downloadFile(NovaRequest $request)
+    {
+        $panelType = $request->route('panelType');
+        $resourceType = $request->route('resourceType');
+        $locale = $request->route('locale');
+        $resourceId = $request->route('resourceId');
+        $fieldAttribute = $request->route('fieldAttribute');
+
+        if (!in_array($panelType, ['seo', 'data'])) return response()->json(['error' => 'Invalid panel type.'], 400);
+        if (!in_array($resourceType, ['pages', 'regions'])) return response()->json(['error' => 'Invalid resource type.'], 400);
+
+        $modelClass = $resourceType === 'pages' ? NPM::getPageModel() : NPM::getRegionModel();
+        $resourceClass = $resourceType === 'pages' ? NPM::getPageResource() : NPM::getRegionResource();
+        $templates = $resourceType === 'pages' ? NPM::getPageTemplates() : NPM::getRegionTemplates();
+
+        $model = $modelClass::findOrFail($resourceId);
+        $resource = new $resourceClass($model);
+        $template = new $templates[$model->template]['class'];
+        $resource->authorizeToView($request);
+
+        $fields = $panelType === 'seo' ? NPM::getSeoFields() : $template->fields($request);
+        $fields = FieldCollection::make(array_values($this->filter($fields)));
+        $field = $fields->findFieldByAttribute($fieldAttribute, fn () => abort(404));
+        $field = PageManagerField::transformFieldAttributes($field, "{$panelType}->{$locale}");
+        $field->resolveForDisplay($resource->resource);
+
+        return $field->toDownloadResponse($request, $resource);
     }
 }

@@ -109,7 +109,8 @@ export default {
     },
 
     eventName() {
-      return `${this.field.from}-change`;
+      const from = this.field.from.replace('*', this.translatableLocale);
+      return `${from}-change`;
     },
 
     extraAttributes() {

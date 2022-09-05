@@ -141,6 +141,8 @@ export default {
       if (this.isKeyAnArray(key)) {
         const result = /\[\d+\]$/g.exec(key);
         return [key.slice(0, result.index), formData.get(key)];
+      } else if (key.endsWith('[]')) {
+        return [key.replace('[]', ''), formData.getAll(key)];
       } else {
         return [key, formData.get(key)];
       }

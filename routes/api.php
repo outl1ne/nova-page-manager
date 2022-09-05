@@ -8,4 +8,5 @@ Route::prefix('nova-vendor/page-manager')->group(function () {
 });
 
 Route::patch('/nova-api/page-manager/{panelType}/{resourceType}/{locale}/{resourceId}/update-fields', [PageManagerController::class, 'syncUpdateFields']);
+Route::get('/nova-api/page-manager/{panelType}/{resourceType}/{locale}/{resourceId}/download/{fieldAttribute}', [PageManagerController::class, 'downloadFile']);
 Route::delete('/nova-api/page-manager/{panelType}/{resourceType}/{locale}/{resourceId}/field/{fieldAttribute}', [PageManagerController::class, 'deleteFile']);
