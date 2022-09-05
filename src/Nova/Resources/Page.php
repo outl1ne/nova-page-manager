@@ -3,15 +3,18 @@
 namespace Outl1ne\PageManager\Nova\Resources;
 
 use Laravel\Nova\Panel;
-use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Select;
 use Outl1ne\PageManager\Template;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\PageManager\Nova\Fields\PageLinkField;
 use Outl1ne\PageManager\Nova\Fields\PrefixSlugField;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
+use Outl1ne\PageManager\Nova\Filters\TemplatesUniqueFilter;
+use Outl1ne\PageManager\Nova\Filters\TemplatesExcludeFilter;
+use Outl1ne\PageManager\Nova\Filters\TemplatesIncludeFilter;
 
 class Page extends TemplateResource
 {
@@ -157,5 +160,14 @@ class Page extends TemplateResource
         }
 
         return [$pathPrefix, $pathSuffix];
+    }
+
+    public function filters(NovaRequest $request)
+    {
+        return [
+            TemplatesUniqueFilter::make('pages'),
+            TemplatesIncludeFilter::make('pages'),
+            TemplatesExcludeFilter::make('pages'),
+        ];
     }
 }
