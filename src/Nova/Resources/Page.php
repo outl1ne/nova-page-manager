@@ -91,7 +91,7 @@ class Page extends TemplateResource
             // Slug on form views
             PrefixSlugField::make(__('novaPageManager.slugField'), 'slug')
                 ->translatable(NPM::getLocales())
-                ->from('name.en')
+                ->from('name.*')
                 ->onlyOnForms()
                 ->pathPrefix($pathPrefix)
                 ->pathSuffix($pathSuffix)
