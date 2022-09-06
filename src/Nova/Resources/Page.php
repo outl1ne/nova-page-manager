@@ -69,22 +69,6 @@ class Page extends TemplateResource
         [$pathPrefix, $pathSuffix] = $this->getPathPrefixAndSuffix();
 
         return [
-            // Parent selector
-            Select::make('Parent page', 'parent_id')
-                ->options($this->getParentOptions())
-                ->hideFromIndex()
-                ->hideFromDetail()
-                ->displayUsingLabels()
-                ->nullable()
-                ->showOnPreview(),
-
-            // Template selector
-            Select::make(__('novaPageManager.templateField'), 'template')
-                ->options(fn () => $this->getTemplateOptions(Template::TYPE_PAGE))
-                ->rules('required', 'max:255')
-                ->displayUsingLabels()
-                ->showOnPreview(),
-
             // Name field
             Text::make(__('novaPageManager.nameField'), 'name')
                 ->translatable(NPM::getLocales())
@@ -105,6 +89,22 @@ class Page extends TemplateResource
                 ->exceptOnForms()
                 ->withPageUrl(NPM::getBaseUrl($this->resource))
                 ->translatable(NPM::getLocales())
+                ->showOnPreview(),
+
+            // Template selector
+            Select::make(__('novaPageManager.templateField'), 'template')
+                ->options(fn () => $this->getTemplateOptions(Template::TYPE_PAGE))
+                ->rules('required', 'max:255')
+                ->displayUsingLabels()
+                ->showOnPreview(),
+
+            // Parent selector
+            Select::make('Parent page', 'parent_id')
+                ->options($this->getParentOptions())
+                ->hideFromIndex()
+                ->hideFromDetail()
+                ->displayUsingLabels()
+                ->nullable()
                 ->showOnPreview(),
 
             // Page data panel
