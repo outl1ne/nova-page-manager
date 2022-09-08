@@ -154,13 +154,14 @@ class NPMHelpers
     protected static function formatSeo($page)
     {
         $seoConfig = config('nova-page-manager.page_seo_fields', false);
+        $seoData = $page->seo ?? [];
 
         if (!$seoConfig) {
             return [];
         }
 
         if (is_callable($seoConfig)) {
-            return ['seo' => $page->seo];
+            return ['seo' => $seoData];
         }
 
         return ['seo' => array_map(function ($localeSeo) {
@@ -169,6 +170,6 @@ class NPMHelpers
             }
 
             return $localeSeo;
-        }, $page->seo)];
+        }, $seoData)];
     }
 }
