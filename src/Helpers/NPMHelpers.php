@@ -146,7 +146,7 @@ class NPMHelpers
             'created_at' => $region->created_at,
             'updated_at' => $region->updated_at,
             'name' => $region->name ?: [],
-            'data' => $templateClass->resolve($region),
+            'data' => $templateClass->resolve($region, []),
             'template' => $region->template ?: null,
         ];
     }
