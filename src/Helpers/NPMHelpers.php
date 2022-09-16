@@ -19,33 +19,77 @@ class NPMHelpers
         return NPM::getPageModel()::all()->map(fn ($page) => static::formatPage($page));
     }
 
-    public static function getPagesStructure($flat = false)
+    public static function getPagesStructure($flat = false, $keys = null)
     {
-        $allPages = NPM::getPageModel()::all();
+        $model = NPM::getPageModel();
+        $query = $model::query();
 
-        $pageStructure = [];
+        if (isset($keys)) {
+            $query->select(array_merge(
+                array_values(array_replace(array_combine($keys, $keys), ['path' => 'slug'])),
+                ['id', 'parent_id', 'template'] // Mandatory keys
+            ));
+        }
 
-        $formatAndAddChildren = function ($page) use ($allPages, &$formatAndAddChildren, $flat, &$pageStructure) {
-            $formattedPage = static::formatPage($page);
-            $children = $allPages->filter(fn ($sp) => $sp->parent_id === $page->id)->values();
+        $pages = $query->orderByDesc('parent_id')->get();
+        $pagesById = $pages->keyBy('id');
+        $pageChildrenMap = array_fill_keys($pagesById->keys()->toArray(), []);
+        $structure = [];
+
+
+        $formatPageForStructure = function ($page) use (
+            $flat,
+            $keys,
+            &$pageChildrenMap,
+            &$formatPageForStructure,
+            &$structure,
+        ) {
+            $children = array_map(fn ($child) => $formatPageForStructure($child), $pageChildrenMap[$page->id]);
+            $formattedPage = [];
+
+
+            if (isset($keys)) {
+                $formattedPage = $page->only($keys);
+                $template = NPM::getPageTemplateBySlug($page->template);
+                $templateClass = new $template['class'];
+
+                if (in_array('slug', $keys)) $formattedPage['slug'] = $page->getTranslations('slug') ?: [];
+                if (in_array('name', $keys)) $formattedPage['name'] = $page->getTranslations('name') ?: [];
+
+                if (isset($template)) {
+                    if (in_array('data', $keys)) $formattedPage['data'] = $templateClass->resolve($page, []);
+                    if (in_array('seo', $keys)) $formattedPage['seo'] = static::formatSeo($page);
+                }
+            } else {
+                // Fallback to default formatting
+                $formattedPage = static::formatPage($page);
+            }
 
             if ($flat) {
-                $children->each(function ($childPage) use (&$pageStructure, &$formatAndAddChildren) {
-                    $pageStructure[] = static::formatPage($childPage);
-                    $formatAndAddChildren($childPage);
-                });
-            } else {
-                $formattedPage['children'] = $children->map(fn ($page) => $formatAndAddChildren($page));
+                array_push($structure, $formattedPage);
+                return;
             }
-            return $formattedPage;
+
+            $formattedPage['children'] = $children;
+            if (!empty($page->parent_id)) return $formattedPage;
+            array_push($structure, $formattedPage);
         };
 
-        $rootPages = $allPages->filter(fn ($page) => empty($page->parent_id))->values();
-        $rootPages->each(function ($page) use (&$pageStructure, $formatAndAddChildren) {
-            $pageStructure[] = $formatAndAddChildren($page);
-        });
 
-        return $pageStructure;
+        foreach ($pages as $page) {
+            if (!empty($page->parent_id)) {
+                $page->setRelation('parent', $pagesById[$page->parent_id]);
+                $pageChildrenMap[$page->parent_id][] = $page;
+
+                // We want root pages only.
+                continue;
+            }
+
+            $formatPageForStructure($page);
+        }
+
+
+        return $structure;
     }
 
     protected static function getParams($path, $pagePath)
