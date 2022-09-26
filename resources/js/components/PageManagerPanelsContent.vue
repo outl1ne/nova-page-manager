@@ -1,5 +1,5 @@
 <template>
-  <div class="o1-relative o1-w-full">
+  <div class="o1-relative o1-w-full" v-if="hasFields">
     <PageManagerFieldHeader :locales="locales" :activeLocale="locale" @changeLocale="changeLocale" />
 
     <template v-for="(localeName, key) in locales" :key="key">
@@ -51,6 +51,12 @@ export default {
   methods: {
     changeLocale(locale) {
       this.locale = locale;
+    },
+  },
+
+  computed: {
+    hasFields() {
+      return (this.panelsWithFields[this.locale] || []).length > 0;
     },
   },
 };
