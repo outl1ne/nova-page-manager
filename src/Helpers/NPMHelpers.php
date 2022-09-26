@@ -6,6 +6,7 @@ use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class NPMHelpers
 {
@@ -31,7 +32,7 @@ class NPMHelpers
             ));
         }
 
-        $pages = $query->orderByDesc('parent_id')->get();
+        $pages = $query->orderBy(DB::raw('parent_id IS NULL, parent_id'), 'desc')->get();
         $pagesById = $pages->keyBy('id');
         $pageChildrenMap = array_fill_keys($pagesById->keys()->toArray(), []);
         $structure = [];
