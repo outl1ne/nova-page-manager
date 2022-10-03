@@ -113,8 +113,12 @@ class PageManagerField extends Field
 
         $attribute = $field->meta['originalAttribute'];
 
-        if (isset($field->assignedPanel->meta['fieldPrefix'])) {
-            $fieldPrefix = $field->assignedPanel->meta['fieldPrefix'];
+        if (isset($field->assignedPanel)) {
+            if(isset($field->assignedPanel->meta['fieldPrefix'])) {
+                $fieldPrefix = $field->assignedPanel->meta['fieldPrefix'];
+            } else {
+                $fieldPrefix = Str::slug($field->assignedPanel->name, '_');
+            }
             $attribute = $fieldPrefix . '->' . $attribute;
         }
 
