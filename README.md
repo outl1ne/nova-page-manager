@@ -9,7 +9,7 @@ This [Laravel Nova](https://nova.laravel.com) package allows you to create and m
 
 ```
 - PHP >=8.0
-- laravel/nova ^4.0
+- laravel/nova ^4.13
 ```
 
 ## Features
