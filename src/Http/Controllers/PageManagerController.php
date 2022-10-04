@@ -49,7 +49,7 @@ class PageManagerController extends Controller
 
             if ($isSyncRequest) {
                 $fieldCollection = $fieldCollection->filter(function ($field) use ($request) {
-                    return $request->query('field') === $field->attribute && $request->query('component') === $field->component;
+                    return $request->query('field') === $field->attribute && $request->query('component') === $field->dependentComponentKey();
                 })->each->syncDependsOn(resolve(NovaRequest::class));
 
                 return response()->json($fieldCollection->first(), 200);
