@@ -24,8 +24,10 @@ export default {
   computed: {
     fullUrl() {
       if (this.field.pageUrl) {
-        return this.field.pageUrl[this.locale];
+        if (this.locale) return this.field.pageUrl[this.locale];
+        return this.field.pageUrl;
       }
+
       return void 0;
     },
   },
