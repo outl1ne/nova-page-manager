@@ -128,8 +128,8 @@ class NPM
     {
         $baseUrl = config('nova-page-manager.base_url');
         if (empty($baseUrl)) return null;
-
         if (is_callable($baseUrl)) return call_user_func($baseUrl, $page);
+        if (empty($page)) return $baseUrl;
 
         // Create full URL myself
         $baseUrl = rtrim($baseUrl, '/');

@@ -126,7 +126,7 @@ class Page extends TemplateResource
     public function getParentOptions()
     {
         $page = NPM::getPageModel();
-        if ($this->id) {
+        if ($this->resource?->id) {
             $pages = $page::query()
                 ->where('id', '<>', $this->id)
                 ->where(fn ($query) => $query
@@ -144,7 +144,7 @@ class Page extends TemplateResource
         $pathPrefix = []; // translatable
         $pathSuffix = null;
 
-        if ($this->id) {
+        if ($this->resource?->id) {
             $path = $this->path ?? [];
             $locales = NPM::getLocales();
             $pathSuffix = $this->template->pathSuffix();

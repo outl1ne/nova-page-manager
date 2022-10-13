@@ -16,7 +16,7 @@ abstract class TemplateResource extends Resource
     public function __construct($resource)
     {
         $this->resource = $resource;
-        $this->templateConfig = $this->getTemplateConfig();
+        $this->templateConfig = !is_null($resource) ? $this->getTemplateConfig() : null;
 
         $className = $this->templateConfig['class'] ?? null;
         $this->template = $className ? new $className : null;
