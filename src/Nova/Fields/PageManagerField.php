@@ -59,7 +59,7 @@ class PageManagerField extends Field
     {
         $flexibleAttrRegKey = $this->getFlexibleAttributeRegisterKey();
 
-        $locales = array_keys(NPM::getLocales());
+        $locales = ['__', ...array_keys(NPM::getLocales())];
         $body = $request->get($attributeKey, []);
         $files = $request->files->get($attributeKey, []);
         $data = array_merge($body, $files);

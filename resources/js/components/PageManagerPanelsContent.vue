@@ -1,12 +1,31 @@
 <template>
-  <div class="o1-relative o1-w-full" v-if="hasFields">
-    <PageManagerFieldHeader :locales="locales" :activeLocale="locale" @changeLocale="changeLocale" />
+  <div class="o1-relative o1-w-full">
+    <template v-for="(panel, i) in panelsWithFields" :key="i">
+      <template v-if="!panel.npmDoNotTranslate && Object.values(panel.fields)[0].length">
+        <PageManagerFieldHeader :locales="locales" :activeLocale="locale" @changeLocale="changeLocale" />
 
-    <template v-for="(localeName, key) in locales" :key="key">
-      <div v-show="locale === key">
+        <template v-for="(localeName, key) in locales" :key="key">
+          <div v-show="locale === key">
+            <component
+              class="o1-py-6"
+              :key="panel.id"
+              :is="view + '-' + panel.component"
+              @field-changed="(e) => $emit('field-changed', e)"
+              :panel="{ ...panel, fields: panel.fields[key] }"
+              :name="panel.name"
+              :resource-id="resourceId"
+              :resource-name="`page-manager/${type}/${resourceName}/${key}`"
+              :form-unique-id="formUniqueId"
+              mode="form"
+              :validation-errors="validationErrors"
+            />
+          </div>
+        </template>
+      </template>
+
+      <template v-else>
         <component
           class="o1-py-6"
-          v-for="panel in panelsWithFields[key]"
           :key="panel.id"
           :is="view + '-' + panel.component"
           @field-changed="(e) => $emit('field-changed', e)"
@@ -18,7 +37,7 @@
           mode="form"
           :validation-errors="validationErrors"
         />
-      </div>
+      </template>
     </template>
   </div>
 </template>
