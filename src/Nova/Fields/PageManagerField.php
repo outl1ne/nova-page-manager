@@ -42,12 +42,6 @@ class PageManagerField extends Field
         return $this;
     }
 
-    // Validation alpha test - theoretical
-    // protected function fields()
-    // {
-    //     return $this->template->fields(request());
-    // }
-
     public function fill(NovaRequest $request, $model)
     {
         $fields = new FieldCollection($this->filter($this->template->fields($request)));
@@ -57,22 +51,6 @@ class PageManagerField extends Field
             $seoFields = FieldCollection::make(array_values($this->seoFields));
             $this->fillFields($request, 'seo', $seoFields, $model);
         }
-
-        // Validation alpha test - theoretical
-        // $validator = Validator::make($request->all(), static::rulesForUpdate($request, $this));
-        // if ($validator->fails()) {
-        //     $errors = $validator->errors();
-        //     $messages = collect($errors->getMessages())->mapWithKeys(function ($value, $key) {
-        //         return ["data.{$key}" => $value];
-        //     })->toArray();
-
-        //     return abort(
-        //         response()->json(
-        //             ['errors' => $messages, 'message' => $validator->messages()->first()],
-        //             422
-        //         )
-        //     );
-        // }
     }
 
     protected function fillFields($request, $attributeKey, $baseFields, $model)
