@@ -99,7 +99,21 @@ export default {
               formData.set(`${keyPrefix}[${locale}][${key}][${objKey}]`, val[objKey]);
             }
           } else {
-            formData.set(`${keyPrefix}[${locale}][${key}]`, val);
+            const matches = key.match(/(\[[\da-zA-Z]+\])/g);
+            if (matches && matches.length) {
+              let newKey = key;
+
+              // Remove matches from key
+              matches.forEach((match) => (newKey = newKey.replace(match, '')));
+
+              // Append them to formData key
+              newKey = `${keyPrefix}[${locale}][${newKey}]`;
+              matches.forEach((match) => (newKey = `${newKey}${match}`));
+
+              formData.set(newKey, val);
+            } else {
+              formData.set(`${keyPrefix}[${locale}][${key}]`, val);
+            }
           }
         }
       }
@@ -108,30 +122,40 @@ export default {
     getDataFromFill(panelsWithFields) {
       const localeKeys = Object.keys(this.field.locales);
 
-      const data = {};
-      for (const key of localeKeys) {
-        const localeData = {};
-        const panels = panelsWithFields[key];
-        const fd = new FormData();
+      const formDataToRealData = (formData) => {
+        const data = {};
 
-        for (const panel of panels) {
+        for (const key of formData.keys()) {
+          const [realKey, realValue] = this.getKeyAndValue(key, formData);
+
+          if (this.isKeyAnArray(key)) {
+            if (!data[realKey]) data[realKey] = [];
+            data[realKey].push(realValue);
+          } else {
+            data[realKey] = realValue;
+          }
+        }
+
+        return data;
+      };
+
+      const data = {};
+      for (const panel of panelsWithFields) {
+        if (panel.npmDoNotTranslate) {
+          const fd = new FormData();
           for (const field of panel.fields) {
             field.fill(fd);
           }
-        }
-
-        for (const key of fd.keys()) {
-          const [realKey, realValue] = this.getKeyAndValue(key, fd);
-
-          if (this.isKeyAnArray(key)) {
-            if (!localeData[realKey]) localeData[realKey] = [];
-            localeData[realKey].push(realValue);
-          } else {
-            localeData[realKey] = realValue;
+          data['__'] = formDataToRealData(fd);
+        } else {
+          for (const key of localeKeys) {
+            const fd = new FormData();
+            for (const field of panel.fields[key]) {
+              field.fill(fd);
+            }
+            data[key] = formDataToRealData(fd);
           }
         }
-
-        data[key] = localeData;
       }
 
       return data;

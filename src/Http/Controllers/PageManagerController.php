@@ -2,13 +2,11 @@
 
 namespace Outl1ne\PageManager\Http\Controllers;
 
-use Laravel\Nova\Nova;
 use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\ResolvesFields;
 use Outl1ne\PageManager\Template;
 use Illuminate\Routing\Controller;
-use Illuminate\Support\Facades\Storage;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
@@ -42,15 +40,21 @@ class PageManagerController extends Controller
 
         $fieldsData = [];
         $seoFieldsData = [];
-        foreach ($locales as $key => $locale) {
+
+        $localeKeys = ['__', ...array_keys($locales)];
+        foreach ($localeKeys as $key) {
             $dataObject = (object) ($model->data[$key] ?? []);
             $fields = $templateClass->fields($request);
             $fieldCollection = FieldCollection::make($this->filter($fields));
 
             if ($isSyncRequest) {
-                $fieldCollection = $fieldCollection->filter(function ($field) use ($request) {
-                    return $request->query('field') === $field->attribute && in_array($request->query('component'), [$field->dependentComponentKey(), $field->component]);
-                })->each->syncDependsOn(resolve(NovaRequest::class));
+                $fieldCollection = $fieldCollection
+                    ->resolve($dataObject)
+                    ->filter(function ($field) use ($request) {
+                        $isSameAttribute = $request->query('field') === $field->attribute;
+                        $isSameComponent = in_array($request->query('component'), [$field->dependentComponentKey(), $field->component]);
+                        return $isSameAttribute && $isSameComponent;
+                    })->each->syncDependsOn(resolve(NovaRequest::class));
 
                 return response()->json($fieldCollection->first(), 200);
             }
@@ -60,7 +64,6 @@ class PageManagerController extends Controller
             $fieldCollection->resolve($dataObject);
             $fieldCollection->assignDefaultPanel(__('novaPageManager.defaultPanelName'));
             $fieldsData[$key] = $fieldCollection;
-
 
             if ($templateType === Template::TYPE_PAGE) {
                 // SEO fields
@@ -78,7 +81,7 @@ class PageManagerController extends Controller
 
         $panelsData = [];
         $seoPanelsData = [];
-        foreach ($locales as $key => $locale) {
+        foreach ($localeKeys as $key) {
             $panelsData[$key] = $this->resolvePanelsFromFields(
                 app()->make(NovaRequest::class),
                 $fieldsData[$key],
@@ -94,9 +97,38 @@ class PageManagerController extends Controller
             }
         }
 
+        // Re-map everything into format
+        // Panels: [{ fields: { et: [], en: [] } }, { fields: [], npmDoNotTranslate: true }]
+        $formattedPanels = $panelsData['__'];
+        foreach ($formattedPanels as $i => &$panel) {
+            if ($panel->meta['npmDoNotTranslate'] ?? false) {
+                $panel->data = $panelsData['__'][$i]->data;
+                $panel->meta['fields'] = $panelsData['__'][$i]->meta['fields'];
+            } else {
+                $panel->data = [];
+                $panel->meta['fields'] = [];
+
+                foreach (array_keys($locales) as $locale) {
+                    $panel->data[$locale] = $panelsData[$locale][$i]->data;
+                    $panel->meta['fields'][$locale] = $panelsData[$locale][$i]->meta['fields'];
+                }
+            }
+        }
+
+        $formattedSeoPanels = $seoPanelsData['__'];
+        foreach ($formattedSeoPanels as $i => &$panel) {
+            $panel->data = [];
+            $panel->meta['fields'] = [];
+
+            foreach (array_keys($locales) as $locale) {
+                $panel->data[$locale] = $seoPanelsData[$locale][$i]->data;
+                $panel->meta['fields'][$locale] = $seoPanelsData[$locale][$i]->meta['fields'];
+            }
+        }
+
         return [
-            'panelsWithFields' => $panelsData,
-            'seoPanelsWithFields' => $seoPanelsData,
+            'panelsWithFields' => $formattedPanels,
+            'seoPanelsWithFields' => $formattedSeoPanels,
         ];
     }
 

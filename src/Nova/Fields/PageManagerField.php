@@ -2,11 +2,9 @@
 
 namespace Outl1ne\PageManager\Nova\Fields;
 
-use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Field;
 use Outl1ne\PageManager\Template;
-use Illuminate\Support\Facades\Log;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -59,7 +57,7 @@ class PageManagerField extends Field
     {
         $flexibleAttrRegKey = $this->getFlexibleAttributeRegisterKey();
 
-        $locales = array_keys(NPM::getLocales());
+        $locales = ['__', ...array_keys(NPM::getLocales())];
         $body = $request->get($attributeKey, []);
         $files = $request->files->get($attributeKey, []);
         $data = array_merge($body, $files);
