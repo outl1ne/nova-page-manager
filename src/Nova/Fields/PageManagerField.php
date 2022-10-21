@@ -2,11 +2,11 @@
 
 namespace Outl1ne\PageManager\Nova\Fields;
 
-use Illuminate\Support\Str;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Field;
+use Laravel\Nova\ResolvesFields;
 use Outl1ne\PageManager\Template;
-use Illuminate\Support\Facades\Log;
+use Laravel\Nova\PerformsValidation;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -15,7 +15,7 @@ use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerField extends Field
 {
-    use ConditionallyLoadsAttributes;
+    use ConditionallyLoadsAttributes, PerformsValidation, ResolvesFields;
 
     public $component = 'page-manager-field';
 
@@ -44,6 +44,11 @@ class PageManagerField extends Field
         return $this;
     }
 
+    protected function fields()
+    {
+        return $this->template->fields(request());
+    }
+
     public function fill(NovaRequest $request, $model)
     {
         $fields = new FieldCollection($this->filter($this->template->fields($request)));
@@ -53,6 +58,22 @@ class PageManagerField extends Field
             $seoFields = FieldCollection::make(array_values($this->seoFields));
             $this->fillFields($request, 'seo', $seoFields, $model);
         }
+
+        // Validate
+        // $validator = Validator::make($request->all(), static::rulesForUpdate($request, $this));
+        // if ($validator->fails()) {
+        //     $errors = $validator->errors();
+        //     $messages = collect($errors->getMessages())->mapWithKeys(function ($value, $key) {
+        //         return ["data.{$key}" => $value];
+        //     })->toArray();
+
+        //     return abort(
+        //         response()->json(
+        //             ['errors' => $messages, 'message' => $validator->messages()->first()],
+        //             422
+        //         )
+        //     );
+        // }
     }
 
     protected function fillFields($request, $attributeKey, $baseFields, $model)
