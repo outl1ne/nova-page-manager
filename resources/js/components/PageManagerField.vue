@@ -158,8 +158,6 @@ export default {
         }
       }
 
-      console.info(data);
-
       return data;
     },
 

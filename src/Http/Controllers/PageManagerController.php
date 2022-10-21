@@ -48,9 +48,13 @@ class PageManagerController extends Controller
             $fieldCollection = FieldCollection::make($this->filter($fields));
 
             if ($isSyncRequest) {
-                $fieldCollection = $fieldCollection->filter(function ($field) use ($request) {
-                    return $request->query('field') === $field->attribute && in_array($request->query('component'), [$field->dependentComponentKey(), $field->component]);
-                })->each->syncDependsOn(resolve(NovaRequest::class));
+                $fieldCollection = $fieldCollection
+                    ->resolve($dataObject)
+                    ->filter(function ($field) use ($request) {
+                        $isSameAttribute = $request->query('field') === $field->attribute;
+                        $isSameComponent = in_array($request->query('component'), [$field->dependentComponentKey(), $field->component]);
+                        return $isSameAttribute && $isSameComponent;
+                    })->each->syncDependsOn(resolve(NovaRequest::class));
 
                 return response()->json($fieldCollection->first(), 200);
             }

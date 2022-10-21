@@ -18,6 +18,7 @@
               :form-unique-id="formUniqueId"
               mode="form"
               :validation-errors="validationErrors"
+              :show-help-text="true"
             />
           </div>
         </template>
@@ -36,6 +37,7 @@
           :form-unique-id="formUniqueId"
           mode="form"
           :validation-errors="validationErrors"
+          :show-help-text="true"
         />
       </template>
     </template>
