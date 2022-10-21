@@ -182,7 +182,7 @@ public function fields() {
       Text::make('Sub-translatable', 'subtranslatable')
         ->translatable(),
     ])
-    ->withMeta(['npmDoNotTranslate' => true]),
+    ->translatable(false),
   ];
 }
 ```

@@ -73,5 +73,9 @@ class NPMServiceProvider extends ServiceProvider
         Panel::macro('fieldPrefix', function ($attribute) {
             return $this->withMeta(['fieldPrefix' => $attribute]);
         });
+
+        Panel::macro('translatable', function ($translatable = true) {
+            return $this->withMeta(['npmDoNotTranslate' => !$translatable]);
+        });
     }
 }
