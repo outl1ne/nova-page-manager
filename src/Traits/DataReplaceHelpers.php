@@ -9,11 +9,12 @@ trait DataReplaceHelpers
 {
     protected function collectAndReplaceUsing(array $data, array $keys, string|Builder $model, $modelMapFn = null)
     {
-        $ids = $this->collectValues($data, $keys);
+        $uniqueKeys = array_unique($keys);
+        $ids = $this->collectValues($data, $uniqueKeys);
         $replacementModels = is_string($model) ? $model::findMany($ids) : $model->findMany($ids);
         $replacementModels = $replacementModels->keyBy('id');
         if (is_callable($modelMapFn)) $replacementModels = $replacementModels->map($modelMapFn);
-        return $this->replaceValues($data, $replacementModels, $keys);
+        return $this->replaceValues($data, $replacementModels, $uniqueKeys);
     }
 
     protected function collectValues($data, array $keys)
