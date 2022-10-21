@@ -4,9 +4,7 @@ namespace Outl1ne\PageManager\Nova\Fields;
 
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\Fields\Field;
-use Laravel\Nova\ResolvesFields;
 use Outl1ne\PageManager\Template;
-use Laravel\Nova\PerformsValidation;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Symfony\Component\HttpFoundation\HeaderBag;
@@ -15,7 +13,7 @@ use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerField extends Field
 {
-    use ConditionallyLoadsAttributes, PerformsValidation, ResolvesFields;
+    use ConditionallyLoadsAttributes;
 
     public $component = 'page-manager-field';
 
@@ -44,10 +42,11 @@ class PageManagerField extends Field
         return $this;
     }
 
-    protected function fields()
-    {
-        return $this->template->fields(request());
-    }
+    // Validation alpha test - theoretical
+    // protected function fields()
+    // {
+    //     return $this->template->fields(request());
+    // }
 
     public function fill(NovaRequest $request, $model)
     {
@@ -59,7 +58,7 @@ class PageManagerField extends Field
             $this->fillFields($request, 'seo', $seoFields, $model);
         }
 
-        // Validate
+        // Validation alpha test - theoretical
         // $validator = Validator::make($request->all(), static::rulesForUpdate($request, $this));
         // if ($validator->fails()) {
         //     $errors = $validator->errors();
