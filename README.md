@@ -164,6 +164,45 @@ To display a link to the actual page next to the slug, add or overwrite the clos
 
 You can overwrite the page/region models or resources, just set the new classes in the config file.
 
+## Advanced usage
+
+### Non-translatable panels
+
+There's some cases where it's more sensible to translate sub-fields of a panel instead of the whole panel. This is possible, but is considered an "advanced usecase" as the feature is really new and experimental, also the developer experience of it is questionable.
+
+You can create a non-translatable panel like so:
+
+```php
+// In your PageTemplate class
+
+public function fields() {
+  return [
+    Panel::make('Some panel', [
+      Text::make('Somethingsomething'),
+      Text::make('Sub-translatable', 'subtranslatable')
+        ->translatable(),
+    ])
+    ->withMeta(['npmDoNotTranslate' => true]),
+  ];
+}
+```
+
+This will create a key with `__` in the page data object. This means that the page data will end up looking something like this:
+
+```php
+[
+  '__' => [
+    'somethingsomething' => 'your value',
+    'subtranslatable' => [
+      'en' => 'eng value',
+      'et' => 'et value'
+    ]
+  ],
+  'en' => [],
+  'et' => [],
+]
+```
+
 ## Helper functions
 
 Helper functions can be found in the `Outl1ne\PageManager\Helpers\NPMHelpers` class.
