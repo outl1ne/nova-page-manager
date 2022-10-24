@@ -48,7 +48,7 @@ trait DataReplaceHelpers
             } else {
                 foreach ($replacementKeys as $rplKey) {
                     $rgxKey = str_replace('.', '\.', $rplKey);
-                    $rgxKey = str_replace('*', '\d', $rgxKey);
+                    $rgxKey = str_replace('*', '\d+', $rgxKey);
                     $rgxKey = "/^($rgxKey)$/";
 
                     if (preg_match($rgxKey, $newFullKey)) {
