@@ -23,7 +23,7 @@ class :className extends Template
     public function resolve($page, $params): array
     {
         // Modify data as you please (ie turn ID-s into models)
-        return $page->data;
+        return $page->data ?? [];
     }
 
     // Optional suffix to the route (ie {blogPostName})
