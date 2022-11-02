@@ -23,6 +23,6 @@ class :className extends Template
     public function resolve($region, $params): array
     {
         // Modify data as you please (ie turn ID-s into models)
-        return $region->data;
+        return $region->data ?? [];
     }
 }
