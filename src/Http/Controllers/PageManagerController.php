@@ -99,7 +99,7 @@ class PageManagerController extends Controller
 
         // Re-map everything into format
         // Panels: [{ fields: { et: [], en: [] } }, { fields: [], npmDoNotTranslate: true }]
-        $formattedPanels = $panelsData['__'];
+        $formattedPanels = $panelsData['__'] ?? [];
         foreach ($formattedPanels as $i => &$panel) {
             if ($panel->meta['npmDoNotTranslate'] ?? false) {
                 $panel->data = $panelsData['__'][$i]->data;
@@ -115,7 +115,7 @@ class PageManagerController extends Controller
             }
         }
 
-        $formattedSeoPanels = $seoPanelsData['__'];
+        $formattedSeoPanels = $seoPanelsData['__'] ?? [];
         foreach ($formattedSeoPanels as $i => &$panel) {
             $panel->data = [];
             $panel->meta['fields'] = [];
