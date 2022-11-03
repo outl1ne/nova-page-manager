@@ -11,7 +11,8 @@ trait DataReplaceHelpers
     {
         $ids = $this->collectValues($data, $keys);
         $replacementModels = is_string($model) ? $model::findMany($ids) : $model->findMany($ids);
-        $replacementModels = $replacementModels->keyBy('id');
+        $keyName = is_string($model) ? (new $model)->getKeyName() : $model->getModel()->getKeyName();
+        $replacementModels = $replacementModels->keyBy($keyName);
         if (is_callable($modelMapFn)) $replacementModels = $replacementModels->map($modelMapFn);
         return $this->replaceValues($data, $replacementModels, $keys);
     }
@@ -47,7 +48,7 @@ trait DataReplaceHelpers
             } else {
                 foreach ($replacementKeys as $rplKey) {
                     $rgxKey = str_replace('.', '\.', $rplKey);
-                    $rgxKey = str_replace('*', '\d', $rgxKey);
+                    $rgxKey = str_replace('*', '\d+', $rgxKey);
                     $rgxKey = "/^($rgxKey)$/";
 
                     if (preg_match($rgxKey, $newFullKey)) {
