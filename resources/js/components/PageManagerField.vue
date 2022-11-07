@@ -146,14 +146,24 @@ export default {
           for (const field of panel.fields) {
             field.fill(fd);
           }
-          data['__'] = formDataToRealData(fd);
+
+          if (data['__']) {
+            data['__'] = { ...data['__'], ...formDataToRealData(fd) };
+          } else {
+            data['__'] = formDataToRealData(fd);
+          }
         } else {
           for (const key of localeKeys) {
             const fd = new FormData();
             for (const field of panel.fields[key]) {
               field.fill(fd);
             }
-            data[key] = formDataToRealData(fd);
+
+            if (data[key]) {
+              data[key] = { ...data[key], ...formDataToRealData(fd) };
+            } else {
+              data[key] = formDataToRealData(fd);
+            }
           }
         }
       }
