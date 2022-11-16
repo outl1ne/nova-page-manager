@@ -144,7 +144,7 @@ export default {
         if (panel.npmDoNotTranslate) {
           const fd = new FormData();
           for (const field of panel.fields) {
-            field.fill(fd);
+            if (field.fill) field.fill(fd);
           }
 
           if (data['__']) {
