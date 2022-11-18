@@ -73,8 +73,6 @@ if (!function_exists('nova_get_pages_structure_flat')) {
                 $localeChildren = NovaPageManager::getPageModel()::where('locale_parent_id', $page->id)->where(function ($query) use ($previewToken) {
                     $query->where('published', true);
                     if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
-                })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-                    if (!empty($previewToken)) $query->where('preview_token', $previewToken);
                 })->get();
 
                 $_pages = collect([$page, $localeChildren])->flatten();
@@ -94,8 +92,6 @@ if (!function_exists('nova_get_pages_structure_flat')) {
         $pages = NovaPageManager::getPageModel()::where(function ($query) use ($previewToken) {
             $query->where('published', true);
             if (!empty($previewToken)) $query->orWhere('preview_token', $previewToken);
-        })->whereDoesntHave('childDraft', function ($query) use ($previewToken) {
-            if (!empty($previewToken)) $query->where('preview_token', $previewToken);
         })->whereNull('locale_parent_id')->get();
 
         return $formatPages($pages);
