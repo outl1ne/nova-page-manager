@@ -65,13 +65,13 @@ class Page extends TemplateModel
 
     public function getChildDraftAttribute()
     {
-        if ($this->relationLoaded('child_draft')) {
-            return $this->getRelationValue('child_draft');
+        if ($this->relationLoaded('childDraft')) {
+            return $this->getRelationValue('childDraft');
         }
 
         $childDraft = NovaPageManagerCache::whereChildDraft($this->id);
 
-        $this->setRelation('child_draft', $childDraft);
+        $this->setRelation('childDraft', $childDraft);
 
         return $childDraft;
     }
@@ -83,13 +83,13 @@ class Page extends TemplateModel
 
     public function getLocaleParentAttribute()
     {
-        if ($this->relationLoaded('locale_parent')) {
-            return $this->getRelationValue('locale_parent');
+        if ($this->relationLoaded('localeParent')) {
+            return $this->getRelationValue('localeParent');
         }
 
         $localeParent = NovaPageManagerCache::find($this->locale_parent_id);
 
-        $this->setRelation('locale_parent', $localeParent);
+        $this->setRelation('localeParent', $localeParent);
 
         return $localeParent;
     }
