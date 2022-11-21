@@ -99,12 +99,6 @@ class Page extends TemplateResource
             $fields[] = Text::make(__('novaPageManager.locale'), 'locale')->exceptOnForms();
         }
 
-        if (NovaPageManager::hasNovaDrafts()) {
-            $fields[] = \OptimistDigital\NovaDrafts\PublishedField::make(__('novaPageManager.status'), 'published');
-            $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make(__('novaPageManager.draft'),'draft');
-            $fields[] = \OptimistDigital\NovaDrafts\UnpublishButton::make(__('novaPageManager.unpublish'),'unpublish');
-        }
-
         if (isset($templateClass) && $templateClass::$seo) $fields[] = new Panel(__('novaPageManager.seo'), $this->getSeoFields());
 
         if (!empty($templateFieldsAndPanels)) {
@@ -117,6 +111,11 @@ class Page extends TemplateResource
             }
         }
 
+        if (NovaPageManager::hasNovaDrafts()) {
+            $fields[] = \OptimistDigital\NovaDrafts\PublishedField::make(__('novaPageManager.status'), 'published');
+            $fields[] = \OptimistDigital\NovaDrafts\DraftButton::make(__('novaPageManager.draft'),'draft');
+            $fields[] = \OptimistDigital\NovaDrafts\UnpublishButton::make(__('novaPageManager.unpublish'),'unpublish');
+        }
         return $fields;
     }
 
