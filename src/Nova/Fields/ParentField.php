@@ -31,7 +31,7 @@ class ParentField extends Field
         $options = [];
 
         NovaPageManager::getPageModel()::whereNull('locale_parent_id')
-            ->where('published', true)
+            ->where('published', 1)
             ->get()
             ->each(function ($page) use (&$options) {
                 $options[$page->id] = $page->name . ' (' . trim($page->path, '/') . ')';
