@@ -30,6 +30,8 @@ import API from '../api';
 import { FormField } from 'laravel-nova';
 import PageManagerPanelsContent from './PageManagerPanelsContent';
 
+const FLEXIBLE_KEY = '___nova_flexible_content_fields';
+
 export default {
   mixins: [FormField],
   components: { PageManagerPanelsContent },
@@ -148,7 +150,9 @@ export default {
           }
 
           if (data['__']) {
-            data['__'] = { ...data['__'], ...formDataToRealData(fd) };
+            let newData = formDataToRealData(fd);
+            newData = this.handleFlexibleKeyIfNecessary(data['__'], newData);
+            data['__'] = { ...data['__'], ...newData };
           } else {
             data['__'] = formDataToRealData(fd);
           }
@@ -160,7 +164,9 @@ export default {
             }
 
             if (data[key]) {
-              data[key] = { ...data[key], ...formDataToRealData(fd) };
+              let newData = formDataToRealData(fd);
+              newData = this.handleFlexibleKeyIfNecessary(data[key], newData);
+              data[key] = { ...data[key], ...newData };
             } else {
               data[key] = formDataToRealData(fd);
             }
@@ -169,6 +175,17 @@ export default {
       }
 
       return data;
+    },
+
+    handleFlexibleKeyIfNecessary(existingData, newData) {
+      if (newData[FLEXIBLE_KEY]) {
+        if (existingData[FLEXIBLE_KEY]) {
+          const existingKeys = JSON.parse(existingData[FLEXIBLE_KEY]);
+          const newKeys = JSON.parse(newData[FLEXIBLE_KEY]);
+          newData[FLEXIBLE_KEY] = JSON.stringify([...existingKeys, ...newKeys]);
+        }
+      }
+      return newData;
     },
 
     getKeyAndValue(key, formData) {
