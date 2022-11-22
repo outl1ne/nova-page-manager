@@ -127,9 +127,12 @@ class NPMHelpers
 
                 if (count($originalPathSlugs) !== count($pagePathSlugs)) continue;
 
-                $pathSlugs = Arr::map(explode('/', $path), function ($slug, $i) use ($pagePathSlugs) {
-                    return $pagePathSlugs[$i] === ':' ? ':' : $slug;
-                });
+                $explodedPath = explode('/', $path);
+                $pathSlugs = array_map(
+                    fn ($slug, $i) => $pagePathSlugs[$i] === ':' ? ':' : $slug,
+                    $explodedPath,
+                    array_keys($explodedPath)
+                );
 
                 if ($pagePath === join('/', $pathSlugs)) {
                     $page = $model::find($page->id);
