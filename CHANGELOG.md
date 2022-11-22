@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.8.4] - 22-11-2022
+
+### Changed
+
+- Fixed issue with multiple Flexible fields on the same page
+- Removed usages of Arr::map() to support Laravel 8
+- Updated packages
+
 ## [5.8.3] - 16-11-2022
 
 ### Changed
