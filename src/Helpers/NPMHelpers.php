@@ -15,9 +15,9 @@ class NPMHelpers
         return NPM::getRegionModel()::all()->map(fn ($region) => static::formatRegion($region));
     }
 
-    public static function getPages()
+    public static function getPages($resolve = true)
     {
-        return NPM::getPageModel()::all()->map(fn ($page) => static::formatPage($page));
+        return NPM::getPageModel()::all()->map(fn ($page) => static::formatPage($page, [], $resolve));
     }
 
     public static function getPagesStructure($flat = false, $keys = null)
@@ -157,7 +157,7 @@ class NPMHelpers
         return $pages->map(fn ($page) => static::formatPage($page))->toArray();
     }
 
-    public static function formatPage($page, $params = [])
+    public static function formatPage($page, $params = [], $resolve = true)
     {
         if (empty($page)) return null;
 
@@ -175,7 +175,7 @@ class NPMHelpers
             'slug' => $page->getTranslations('slug') ?: [],
             'path' => $page->path ?: [],
             'parent_id' => $page->parent_id,
-            'data' => $templateClass->resolve($page, $params),
+            'data' => $resolve ? $templateClass->resolve($page, $params) : null,
             'template' => $page->template ?: null,
         ], $seo);
     }
