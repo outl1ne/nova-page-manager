@@ -157,7 +157,7 @@ class PageManagerController extends Controller
         $data = $model->{$panelType};
         $data[$locale][$fieldAttribute] = null;
         $model->{$panelType} = $data;
-        $model->save();
+        $model->save(['timestamps' => false]);
 
         return response('', 204);
     }
