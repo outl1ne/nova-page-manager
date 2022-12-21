@@ -2,6 +2,7 @@
 
 namespace Outl1ne\PageManager\Http\Controllers;
 
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Outl1ne\PageManager\NPM;
 use Laravel\Nova\ResolvesFields;
@@ -45,6 +46,14 @@ class PageManagerController extends Controller
         foreach ($localeKeys as $key) {
             $dataObject = (object) ($model->data[$key] ?? []);
             $fields = $templateClass->fields($request);
+
+            // Fix DateTime fields
+            collect($fields)->pluck('data')->flatten(1)->each(function ($field) use ($dataObject) {
+                if ($field instanceof \Laravel\Nova\Fields\DateTime) {
+                    $dataObject->{$field->attribute} = Carbon::parse($dataObject->{$field->attribute} ?? null);
+                }
+            });
+
             $fieldCollection = FieldCollection::make($this->filter($fields));
 
             if ($isSyncRequest) {
