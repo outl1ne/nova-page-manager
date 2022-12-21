@@ -60,7 +60,7 @@ class PageManagerField extends Field
         $locales = ['__', ...array_keys(NPM::getLocales())];
         $body = $request->get($attributeKey, []);
         $files = $request->files->get($attributeKey, []);
-        $data = array_merge($body, $files);
+        $data = array_merge_recursive($body, $files);
 
         foreach ($locales as $locale) {
             $dataAttributes = [];
