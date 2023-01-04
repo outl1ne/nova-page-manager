@@ -52,6 +52,7 @@ class NPMHelpers
             if (isset($keys)) {
                 $formattedPage = $page->only($keys);
                 $template = NPM::getPageTemplateBySlug($page->template);
+                if (empty($template)) return null;
                 $templateClass = new $template['class'];
 
                 if (in_array('slug', $keys)) $formattedPage['slug'] = $page->getTranslations('slug') ?: [];
