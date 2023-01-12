@@ -25,13 +25,13 @@ return [
     'templates' => [
         'pages' => [
             // 'home-page' => [
-            //     'class' => '\App\Nova\Templates\HomePageTemplate',
+            //     'class' => 'App\Nova\Templates\HomePageTemplate',
             //     'unique' => true, // Whether more than one page can be created with this template
             // ],
         ],
         'regions' => [
             // 'header' => [
-            //     'class' => '\App\Nova\Templates\HeaderRegionTemplate',
+            //     'class' => 'App\Nova\Templates\HeaderRegionTemplate',
             //     'unique' => true,
             // ],
         ],
