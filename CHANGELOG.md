@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.8.6] - 12-01-2023
+
+### Changed
+
+- Fixed `getPagesStructure` error when template for page has been deleted (thanks to [@KaarelOun](https://github.com/kaareloun))
+- Fixed `nova-page-manager.php` config typos (thanks to [@marcelosantos89](https://github.com/marcelosantos89))
+- Updated dependencies
+
 ## [5.8.5] - 21-12-2022
 
 ### Changed
