@@ -7,21 +7,21 @@
       :resourceId="resourceId"
       :resourceName="resourceName"
       @field-changed="onUpdateFormStatus"
-      :validationErrors="validationErrors"
+      :validationErrors="errors"
       :panelsWithFields="seoPanelsWithFields"
       :locales="field.locales"
     />
-
     <PageManagerPanelsContent
       :view="field.view"
       :type="'data'"
       :resourceId="resourceId"
       :resourceName="resourceName"
       @field-changed="onUpdateFormStatus"
-      :validationErrors="validationErrors"
+      :validationErrors="errors"
       :locales="field.locales"
       :panelsWithFields="panelsWithFields"
     />
+    {{ panelsWithFields }}
   </div>
 </template>
 
@@ -35,7 +35,7 @@ const FLEXIBLE_KEY = '___nova_flexible_content_fields';
 export default {
   mixins: [FormField],
   components: { PageManagerPanelsContent },
-  props: ['resourceName', 'resourceId', 'field'],
+  props: ['resourceName', 'resourceId', 'field', 'errors'],
 
   data: () => ({
     locale: void 0,
@@ -92,6 +92,7 @@ export default {
         const dataKeys = Object.keys(data);
 
         for (const key of dataKeys) {
+          console.log(data);
           const val = data[key];
           const isFile = val instanceof File || val instanceof Blob;
 
@@ -114,7 +115,8 @@ export default {
 
               formData.set(newKey, val);
             } else {
-              formData.set(`${keyPrefix}[${locale}][${key}]`, val);
+              const name = key.split('.').reduce((a, c) => a + `[${c}]`);
+              formData.set(name, val);
             }
           }
         }

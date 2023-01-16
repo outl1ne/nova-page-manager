@@ -6,6 +6,7 @@
 
         <template v-for="(localeName, key) in locales" :key="key">
           <div v-show="locale === key">
+            {{ panel.fields[key] }}
             <component
               class="o1-py-6"
               :key="panel.id"

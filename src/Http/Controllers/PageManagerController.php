@@ -15,7 +15,8 @@ use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerController extends Controller
 {
-    use ResolvesFields, ConditionallyLoadsAttributes;
+    use ResolvesFields;
+    use ConditionallyLoadsAttributes;
 
     public function getFields(Request $request, $type, $resourceId, $isSyncRequest = false)
     {
@@ -30,13 +31,17 @@ class PageManagerController extends Controller
             : NPM::getRegionModel();
 
         $model = $modelClass::find($resourceId);
-        if (!$model) return response('Model not found', 404);
+        if (!$model) {
+            return response('Model not found', 404);
+        }
 
         $template = $templates[$model->template] ?? null;
-        if (!$template) return response('Template not found.', 404);
+        if (!$template) {
+            return response('Template not found.', 404);
+        }
 
         // Resolve with values
-        $templateClass = new $template['class'];
+        $templateClass = new $template['class']();
         $templateType = NPM::getTemplateClassType($templateClass::class);
 
         $fieldsData = [];
@@ -69,7 +74,7 @@ class PageManagerController extends Controller
             }
 
             $fieldCollection->each(fn ($field) => $field->template = $templateClass);
-            $fieldCollection = $fieldCollection->map(fn ($field) => PageManagerField::transformFieldAttributes($field));
+            $fieldCollection = $fieldCollection->map(fn ($field) => PageManagerField::transformFieldAttributes($field, "data.{$key}", seperator: "."));
             $fieldCollection->resolve($dataObject);
             $fieldCollection->assignDefaultPanel(__('novaPageManager.defaultPanelName'));
             $fieldsData[$key] = $fieldCollection;
@@ -155,8 +160,12 @@ class PageManagerController extends Controller
         $resourceId = $request->route('resourceId');
         $fieldAttribute = $request->route('fieldAttribute');
 
-        if (!in_array($panelType, ['seo', 'data'])) return response()->json(['error' => 'Invalid panel type.'], 400);
-        if (!in_array($resourceType, ['pages', 'regions'])) return response()->json(['error' => 'Invalid resource type.'], 400);
+        if (!in_array($panelType, ['seo', 'data'])) {
+            return response()->json(['error' => 'Invalid panel type.'], 400);
+        }
+        if (!in_array($resourceType, ['pages', 'regions'])) {
+            return response()->json(['error' => 'Invalid resource type.'], 400);
+        }
 
         $modelClass = $resourceType === 'pages'
             ? NPM::getPageModel()
@@ -179,8 +188,12 @@ class PageManagerController extends Controller
         $resourceId = $request->route('resourceId');
         $fieldAttribute = $request->route('fieldAttribute');
 
-        if (!in_array($panelType, ['seo', 'data'])) return response()->json(['error' => 'Invalid panel type.'], 400);
-        if (!in_array($resourceType, ['pages', 'regions'])) return response()->json(['error' => 'Invalid resource type.'], 400);
+        if (!in_array($panelType, ['seo', 'data'])) {
+            return response()->json(['error' => 'Invalid panel type.'], 400);
+        }
+        if (!in_array($resourceType, ['pages', 'regions'])) {
+            return response()->json(['error' => 'Invalid resource type.'], 400);
+        }
 
         $modelClass = $resourceType === 'pages' ? NPM::getPageModel() : NPM::getRegionModel();
         $resourceClass = $resourceType === 'pages' ? NPM::getPageResource() : NPM::getRegionResource();
@@ -188,7 +201,7 @@ class PageManagerController extends Controller
 
         $model = $modelClass::findOrFail($resourceId);
         $resource = new $resourceClass($model);
-        $template = new $templates[$model->template]['class'];
+        $template = new $templates[$model->template]['class']();
         $resource->authorizeToView($request);
 
         $fields = $panelType === 'seo' ? NPM::getSeoFields() : $template->fields($request);

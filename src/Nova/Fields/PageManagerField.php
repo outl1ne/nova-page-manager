@@ -53,6 +53,20 @@ class PageManagerField extends Field
         }
     }
 
+    public function getRules(NovaRequest $request): array
+    {
+        $rules = $this->getPageFields($request)
+             ->applyDependsOn($request)
+             ->withoutReadonly($request)
+             ->mapWithKeys(fn ($field) => $field->getUpdateRules($request))
+             ->all();
+
+        return is_callable($rules) ? call_user_func($rules, $request) : $rules;
+    }
+
+    /**
+     * @return void
+     */
     protected function fillFields($request, $attributeKey, $baseFields, $model)
     {
         $flexibleAttrRegKey = $this->getFlexibleAttributeRegisterKey();
@@ -78,11 +92,11 @@ class PageManagerField extends Field
 
                 if ($v instanceof UploadedFile) {
                     $fileAttributes[$fullKey] = $v;
-                } else if ($flexibleKeys) {
+                } elseif ($flexibleKeys) {
                     if ($k === $flexibleAttrRegKey) {
                         // Modify flexible registration keys
                         $dataAttributes[$fullKey] = array_map(fn ($fKey) => "{$attributeKey}->{$locale}->{$fKey}", $flexibleKeys);
-                    } else if (in_array($k, $flexibleKeys)) {
+                    } elseif (in_array($k, $flexibleKeys)) {
                         // Decode flexible values
                         $dataAttributes[$fullKey] = $this->getFlexibleCompatibleValue($v);
                     } else {
@@ -103,7 +117,23 @@ class PageManagerField extends Field
         }
     }
 
-    public static function transformFieldAttributes($field, $prefix = null)
+    public function getPageFields(NovaRequest $request): FieldCollection
+    {
+        $locales = collect(array_keys(NPM::getLocales()));
+        $baseFields = new FieldCollection($this->filter($this->template->fields($request)));
+        $fields = new FieldCollection();
+
+        foreach ($locales as $locale) {
+            foreach ($baseFields as $field) {
+                $field = $this->transformFieldAttributes(clone $field, "data.{$locale}", seperator: '.');
+                $fields->push($field);
+            }
+        }
+
+        return $fields;
+    }
+
+    public static function transformFieldAttributes($field, $prefix = null, $seperator = '->'): Field
     {
         if (empty($field->meta['originalAttribute'])) {
             $field->withMeta(['originalAttribute' => $field->attribute]);
@@ -113,19 +143,28 @@ class PageManagerField extends Field
 
         if (isset($field->assignedPanel->meta['fieldPrefix'])) {
             $fieldPrefix = $field->assignedPanel->meta['fieldPrefix'];
-            $attribute = $fieldPrefix . '->' . $attribute;
+            $attribute = $fieldPrefix . $seperator . $attribute;
         }
 
-        if ($prefix) $attribute = $prefix . '->' . $attribute;
+        if ($prefix) {
+            $attribute = $prefix . $seperator . $attribute;
+        }
         $field->attribute = $attribute;
 
         return $field;
     }
 
+    /**
+     * @return <missing>|array
+     */
     protected function getFlexibleCompatibleValue($value)
     {
-        if (!class_exists('\Whitecube\NovaFlexibleContent\Http\FlexibleAttribute')) return $value;
-        if (empty($value) || !is_string($value)) return $value;
+        if (!class_exists('\Whitecube\NovaFlexibleContent\Http\FlexibleAttribute')) {
+            return $value;
+        }
+        if (empty($value) || !is_string($value)) {
+            return $value;
+        }
         $value = json_decode($value, true);
 
         return array_map(function ($group) {
@@ -160,6 +199,9 @@ class PageManagerField extends Field
         }, $value);
     }
 
+    /**
+     * @return <missing>|null
+     */
     protected function getFlexibleAttributeRegisterKey()
     {
         return class_exists('\Whitecube\NovaFlexibleContent\Http\FlexibleAttribute')

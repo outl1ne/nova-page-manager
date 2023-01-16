@@ -68,13 +68,15 @@ class NPMServiceProvider extends ServiceProvider
             ->group(__DIR__ . '/../routes/api.php');
     }
 
-    protected function registerMacros()
+    protected function registerMacros(): void
     {
         Panel::macro('fieldPrefix', function ($attribute) {
+            /* @var Laravel\Nova\Panel $this */
             return $this->withMeta(['fieldPrefix' => $attribute]);
         });
 
         Panel::macro('translatable', function ($translatable = true) {
+            /* @var Laravel\Nova\Panel $this */
             return $this->withMeta(['npmDoNotTranslate' => !$translatable]);
         });
     }
