@@ -120,17 +120,18 @@ class PageManagerField extends Field
     public function getPageFields(NovaRequest $request): FieldCollection
     {
         $locales = collect(array_keys(NPM::getLocales()));
-        $baseFields = new FieldCollection($this->filter($this->template->fields($request)));
-        $fields = new FieldCollection();
+        $fields = FieldCollection::make($this->filter($this->template->fields($request)));
 
-        foreach ($locales as $locale) {
-            foreach ($baseFields as $field) {
-                $field = $this->transformFieldAttributes(clone $field, "data.{$locale}", seperator: '.');
-                $fields->push($field);
-            }
-        }
+        return $fields->map(function (Field $field) use ($locales) {
+            $panel = $field->assignedPanel;
+            $translate = empty($panel) ? true : !boolval($panel->meta['npmDoNotTranslate'] ?? false);
 
-        return $fields;
+            return collect($translate ? $locales : ['__'])->map(function ($locale) use ($field) {
+                $field = clone $field;
+                $field->withMeta(['locale' => $locale]);
+                return $this->transformFieldAttributes($field, "data.{$locale}", seperator: '.');
+            });
+        })->flatten();
     }
 
     public static function transformFieldAttributes($field, $prefix = null, $seperator = '->'): Field
