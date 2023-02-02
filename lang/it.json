@@ -1,0 +1,14 @@
+{
+  "novaPageManager.sidebarTitle": "Gestore pagine",
+  "novaPageManager.pageResourceLabel": "Pagine",
+  "novaPageManager.pageResourceSingularLabel": "Pagina",
+  "novaPageManager.regionResourceLabel": "Sezioni",
+  "novaPageManager.regionResourceSingularLabel": "Sezione",
+  "novaPageManager.templateField": "Template",
+  "novaPageManager.nameField": "Nome",
+  "novaPageManager.slugField": "Slug",
+  "novaPageManager.defaultPanelName": "Dati della pagina",
+  "novaPageManager.seoPanelName": "Dati SEO",
+  "novaPageManager.customizeSlug": "Personalizza",
+  "novaPageManager.pageLinkViewButton": "Anteprima"
+}
