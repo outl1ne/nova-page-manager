@@ -147,7 +147,7 @@ class Page extends TemplateResource
         if ($this->resource?->id) {
             $path = $this->path ?? [];
             $locales = NPM::getLocales();
-            $pathSuffix = $this->template->pathSuffix();
+            $pathSuffix = $this->template?->pathSuffix();
 
             foreach ($locales as $key => $localeName) {
                 // Explode path and remove page's own path + suffix if it has one
