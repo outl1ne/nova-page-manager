@@ -48,9 +48,12 @@ class PageManagerController extends Controller
             $fields = $templateClass->fields($request);
 
             // Fix DateTime fields
-            collect($fields)->pluck('data')->flatten(1)->each(function ($field) use ($dataObject) {
+            collect($fields)->each(function ($field) use ($dataObject) {
                 if ($field instanceof \Laravel\Nova\Fields\DateTime) {
-                    $dataObject->{$field->attribute} = Carbon::parse($dataObject->{$field->attribute} ?? null);
+                    $currentValue = $dataObject->{$field->attribute} ?? null;
+                    if ($currentValue) {
+                        $dataObject->{$field->attribute} = Carbon::parse($currentValue);
+                    }
                 }
             });
 
