@@ -78,6 +78,11 @@ class PageManagerField extends Field
 
                 if ($v instanceof UploadedFile) {
                     $fileAttributes[$fullKey] = $v;
+                } else if ($k === "vaporFile" && is_array($v)) {
+                    foreach ($v as $n => $f) {
+                        $fullKey = "{$attributeKey}->{$locale}->{$n}";
+                        $dataAttributes["vaporFile"] = [$fullKey => $f];
+                    }
                 } else if ($flexibleKeys) {
                     if ($k === $flexibleAttrRegKey) {
                         // Modify flexible registration keys
