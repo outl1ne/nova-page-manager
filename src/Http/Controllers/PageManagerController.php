@@ -12,6 +12,7 @@ use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
 use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
+use Illuminate\Support\Facades\Storage;
 
 class PageManagerController extends Controller
 {
@@ -167,9 +168,12 @@ class PageManagerController extends Controller
 
         $model = $modelClass::findOrFail($resourceId);
         $data = $model->{$panelType};
+        $fileName = $data[$locale][$fieldAttribute];
         $data[$locale][$fieldAttribute] = null;
         $model->{$panelType} = $data;
-        $model->save(['timestamps' => false]);
+        $model->timestamps = false;
+        $model->save();
+        Storage::disk('public')->delete($fileName);
 
         return response('', 204);
     }
