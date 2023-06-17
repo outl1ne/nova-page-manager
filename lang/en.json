@@ -10,5 +10,8 @@
   "novaPageManager.defaultPanelName": "Page Data",
   "novaPageManager.seoPanelName": "SEO Data",
   "novaPageManager.customizeSlug": "Customize",
-  "novaPageManager.pageLinkViewButton": "View"
+  "novaPageManager.pageLinkViewButton": "View",
+  "novaPageManager.seoTitle": "SEO Title",
+  "novaPageManager.seoDescription": "SEO Description",
+  "novaPageManager.seoImage": "SEO Image"
 }
