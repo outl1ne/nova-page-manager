@@ -160,9 +160,9 @@ class NPM
 
         if ($seoConfig) {
             return [
-                Text::make('SEO Title', 'title'),
-                Textarea::make('SEO Description', 'description'),
-                Image::make('SEO Image', 'image'),
+                Text::make(__('novaPageManager.seoTitle'), 'title'),
+                Textarea::make(__('novaPageManager.seoDescription'), 'description'),
+                Image::make(__('novaPageManager.seoImage'), 'image'),
             ];
         }
 
