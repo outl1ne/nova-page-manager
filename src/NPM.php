@@ -160,7 +160,7 @@ class NPM
         if (is_callable($seoConfig)) return call_user_func($seoConfig);
         if (is_array($seoConfig)) return $seoConfig;
 
-        if ($seoConfig) {
+        if ($seoConfig === true) {
             return [
                 Text::make(__('novaPageManager.seoTitle'), 'title'),
                 Textarea::make(__('novaPageManager.seoDescription'), 'description'),
