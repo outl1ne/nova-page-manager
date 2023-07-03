@@ -10,6 +10,8 @@ use Laravel\Nova\Menu\MenuSection;
 
 class PageManager extends Tool
 {
+    protected $seoFieldsConfig = null;
+
     public function boot()
     {
         Nova::script('nova-page-manager', __DIR__ . '/../dist/js/entry.js');
@@ -34,5 +36,16 @@ class PageManager extends Tool
         ]))
             ->icon('newspaper')
             ->collapsable();
+    }
+
+    public function withSeoFields($seoFields)
+    {
+        $this->seoFieldsConfig = $seoFields;
+        return $this;
+    }
+
+    public function getSeoFieldsConfig()
+    {
+        return $this->seoFieldsConfig ?? config('nova-page-manager.page_seo_fields', []);
     }
 }

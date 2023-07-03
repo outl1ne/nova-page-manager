@@ -2,6 +2,7 @@
 
 namespace Outl1ne\PageManager;
 
+use Laravel\Nova\Nova;
 use Illuminate\Support\Arr;
 use Laravel\Nova\Fields\Text;
 use Laravel\Nova\Fields\Image;
@@ -155,8 +156,9 @@ class NPM
 
     public static function getSeoFields()
     {
-        $seoConfig = config('nova-page-manager.page_seo_fields', null);
+        $seoConfig = static::getTool()->getSeoFieldsConfig();
         if (is_callable($seoConfig)) return call_user_func($seoConfig);
+        if (is_array($seoConfig)) return $seoConfig;
 
         if ($seoConfig) {
             return [
@@ -167,5 +169,10 @@ class NPM
         }
 
         return null;
+    }
+
+    private static function getTool(): PageManager
+    {
+        return collect(Nova::registeredTools())->first(fn ($tool) => $tool instanceof PageManager);
     }
 }
