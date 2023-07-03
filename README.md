@@ -7,18 +7,16 @@ This [Laravel Nova](https://nova.laravel.com) package allows you to create and m
 
 ## Notices
 
-```markdown
-Nova 4.18.0 - 4.18.2 does not work with this package due to a bug in Nova. If you're using this package, please use Nova 4.17.1 until 4.18.3 or 4.19.0 version of Nova is released.
-```
-
-See [nova-issues #5005](https://github.com/laravel/nova-issues/issues/5005) for more information.
+````markdown
+Nova 4.18.0 - 4.18.2 does not work with this package due to a bug in Nova.
 
 ## Requirements
 
-```json
+```
 - PHP >=8.0
 - laravel/nova ^4.13
 ```
+````
 
 ## Features
 
