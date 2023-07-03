@@ -54,7 +54,8 @@ public function tools()
 {
     return [
         // ...
-        new \Outl1ne\PageManager\PageManager(),
+        new \Outl1ne\PageManager\PageManager()
+          ->withSeoFields(fn () => []), // Optional
     ];
 }
 ```
