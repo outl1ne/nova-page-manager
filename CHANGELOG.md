@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added Italian translations (thanks to [@trippo](https://github.com/trippo))
+- Added ->withSeoFields() function to PageManager tool for easier SEO fields override
 
 ### Changed
 
