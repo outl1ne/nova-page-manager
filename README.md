@@ -5,18 +5,12 @@
 
 This [Laravel Nova](https://nova.laravel.com) package allows you to create and manage pages and regions for your frontend application.
 
-## Notices
-
-````markdown
-Nova 4.18.0 - 4.18.2 does not work with this package due to a bug in Nova.
-
 ## Requirements
 
 ```
 - PHP >=8.0
 - laravel/nova ^4.13
 ```
-````
 
 ## Features
 
