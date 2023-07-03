@@ -5,6 +5,21 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.0] - 12-01-2023
+
+### Added
+
+- Added Italian translations (thanks to [@trippo](https://github.com/trippo))
+
+### Changed
+
+- Fixed an error on index view when a Template has gone missing (thanks to [@kaareloun](https://github.com/kaareloun))
+- Fixed DateTime casting error (thanks to [@kaareloun](https://github.com/kaareloun))
+- Fixed Vapor Image fields (thanks to [@ferdiunal](https://github.com/ferdiunal))
+- Fixed image not deleted from filesystem after removing it from SEO section (thanks to [@ndrez-outl1ne](https://github.com/ndrez-outl1ne))
+- Fixed SEO field titles translations (thanks to [@RibesAlexandre](https://github.com/RibesAlexandre))
+- Fixed rare crash with missing SEO fields
+
 ## [5.8.6] - 12-01-2023
 
 ### Changed
