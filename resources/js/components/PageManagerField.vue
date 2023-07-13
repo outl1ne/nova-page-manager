@@ -98,7 +98,13 @@ export default {
           if (typeof val === 'object' && !isFile) {
             const objKeys = Object.keys(val);
             for (const objKey of objKeys) {
-              formData.set(`${keyPrefix}[${locale}][${key}][${objKey}]`, val[objKey]);
+              const prefix = key.match(/^([^\[]+)/)?.[0]
+              if (prefix) {
+                const nestedKey = key.replace(prefix, '');
+                formData.set(`${keyPrefix}[${locale}][${prefix}]${nestedKey}[${objKey}]`, val[objKey]);
+              } else {
+                formData.set(`${keyPrefix}[${locale}][${key}][${objKey}]`, val[objKey]);
+              }
             }
           } else {
             const matches = key.match(/(\[[\da-zA-Z]+\])/g);
