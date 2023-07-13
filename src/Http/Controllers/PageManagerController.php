@@ -75,6 +75,7 @@ class PageManagerController extends Controller
             $fieldCollection->each(fn ($field) => $field->template = $templateClass);
             $fieldCollection = $fieldCollection->map(fn ($field) => PageManagerField::transformFieldAttributes($field));
             $fieldCollection->resolve($dataObject);
+            $fieldCollection->resolveForDisplay($dataObject);
             $fieldCollection->assignDefaultPanel(__('novaPageManager.defaultPanelName'));
             $fieldsData[$key] = $fieldCollection;
 
