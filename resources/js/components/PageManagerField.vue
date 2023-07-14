@@ -98,8 +98,12 @@ export default {
           if (typeof val === 'object' && !isFile) {
             const objKeys = Object.keys(val);
             for (const objKey of objKeys) {
+
+              // Matches with first part of nested keys (ex. repeater[0][title] match is repeater)
               const prefix = key.match(/^([^\[]+)/)?.[0]
+
               if (prefix) {
+                // Remove prefix from key and put it inside brackets to form a valid key
                 const nestedKey = key.replace(prefix, '');
                 formData.set(`${keyPrefix}[${locale}][${prefix}]${nestedKey}[${objKey}]`, val[objKey]);
               } else {
