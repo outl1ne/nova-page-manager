@@ -59,7 +59,7 @@ export default {
   methods: {
     async refreshFields() {
       this.loading = true;
-      const { data } = await API.getFields(this.field.type, this.resourceId);
+      const { data } = await API.getFields(this.field.type, this.resourceId, this.field.view);
       this.panelsWithFields = data.panelsWithFields;
       this.seoPanelsWithFields = data.seoPanelsWithFields;
       this.loading = false;
