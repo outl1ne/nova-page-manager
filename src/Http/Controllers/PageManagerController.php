@@ -102,10 +102,12 @@ class PageManagerController extends Controller
             );
 
             if ($templateType === Template::TYPE_PAGE) {
+                 $fieldCollection = FieldCollection::make($seoFieldsData);
+
                 $seoPanelsData[$key] = $this->resolvePanelsFromFields(
                     app()->make(NovaRequest::class),
-                    $seoFieldsData[$key] ?? [],
-                    __('novaPageManager.seoPanelName'),
+                    $fieldCollection,
+                    __('novaPageManager.seoPanelName')
                 );
             }
         }
