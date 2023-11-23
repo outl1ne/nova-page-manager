@@ -66,23 +66,24 @@ class Page extends TemplateResource
 
     public function fields(Request $request)
     {
+        $firstLocale = array_keys(NPM::getLocales())[0] ?? null;
         [$pathPrefix, $pathSuffix] = $this->getPathPrefixAndSuffix();
 
         return [
             // Name field
             Text::make(__('novaPageManager.nameField'), 'name')
-                ->translatable(NPM::getLocales())
-                ->rules('required', 'max:255')
+                ->translatable(NPM::getLocales(), ['fillOtherLocalesFrom' => $firstLocale])
+                ->rulesFor($firstLocale, ['required', 'max:255'])
                 ->showOnPreview(),
 
             // Slug on form views
             PrefixSlugField::make(__('novaPageManager.slugField'), 'slug')
-                ->translatable(NPM::getLocales())
+                ->translatable(NPM::getLocales(), ['fillOtherLocalesFrom' => $firstLocale])
                 ->from('name.*')
                 ->onlyOnForms()
                 ->pathPrefix($pathPrefix)
                 ->pathSuffix($pathSuffix)
-                ->rules('required'),
+                ->rulesFor($firstLocale, ['required', 'max:255']),
 
             // Slug on index and detail views
             PageLinkField::make(__('novaPageManager.slugField'), 'path')
@@ -94,7 +95,7 @@ class Page extends TemplateResource
             // Template selector
             Select::make(__('novaPageManager.templateField'), 'template')
                 ->options(fn () => $this->getTemplateOptions(Template::TYPE_PAGE))
-                ->rules('required', 'max:255')
+                ->rules('required')
                 ->displayUsingLabels()
                 ->showOnPreview(),
 
