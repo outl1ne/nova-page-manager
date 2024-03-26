@@ -30,6 +30,9 @@ class NPMServiceProvider extends ServiceProvider
      */
     public function boot()
     {
+        Nova::script('nova-page-manager', __DIR__ . '/../dist/js/entry.js');
+        Nova::style('nova-page-manager', __DIR__ . '/../dist/css/entry.css');
+        
         // Load all data
         $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         $this->loadTranslations(__DIR__ . '/../lang', 'nova-page-manager');
