@@ -1,5 +1,5 @@
 <template>
-  <div id="page-manager-field-header" class="md:w-3/4 overflow-x-auto">
+  <div id="page-manager-field-header" class="overflow-x-auto">
     <div
       class="o1-px-4 o1-py-2 o1-bg-white dark:o1-bg-gray-800 o1-rounded-lg o1-flex o1-align-center o1-justify-center"
       v-if="Object.keys(locales).length > 1"
@@ -32,6 +32,7 @@ export default {
   right: 0;
   top: 14px;
   display: flex;
+  max-width: 80%;
 
   &::-webkit-scrollbar {
     height: 5px;
