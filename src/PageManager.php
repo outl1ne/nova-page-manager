@@ -14,8 +14,7 @@ class PageManager extends Tool
 
     public function boot()
     {
-        Nova::script('nova-page-manager', __DIR__ . '/../dist/js/entry.js');
-        Nova::style('nova-page-manager', __DIR__ . '/../dist/css/entry.css');
+       //
     }
 
     public function menu(Request $request)
