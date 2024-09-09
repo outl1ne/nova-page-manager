@@ -72,8 +72,8 @@ class PageManagerController extends Controller
                 return response()->json($fieldCollection->first(), 200);
             }
 
-            $fieldCollection->each(fn ($field) => $field->template = $templateClass);
-            $fieldCollection = $fieldCollection->map(fn ($field) => PageManagerField::transformFieldAttributes($field));
+            $fieldCollection->each(fn($field) => $field->template = $templateClass);
+            $fieldCollection = $fieldCollection->map(fn($field) => PageManagerField::transformFieldAttributes($field));
 
             $fieldCollection->resolve($dataObject);
             if ($request->get('view') == 'detail') {
@@ -89,7 +89,7 @@ class PageManagerController extends Controller
                 if ($seoFields) {
                     $dataObject = (object) ($model->seo[$key] ?? []);
                     $seoFieldCollection = FieldCollection::make($seoFields);
-                    $seoFieldCollection->each(fn ($field) => $field->template = $templateClass);
+                    $seoFieldCollection->each(fn($field) => $field->template = $templateClass);
                     $seoFieldCollection->resolve($dataObject);
                     $seoFieldCollection->assignDefaultPanel(__('novaPageManager.seoPanelName'));
                     $seoFieldsData[$key] = $seoFieldCollection;
@@ -102,14 +102,14 @@ class PageManagerController extends Controller
         foreach ($localeKeys as $key) {
             $panelsData[$key] = $this->resolvePanelsFromFields(
                 app()->make(NovaRequest::class),
-                $fieldsData[$key],
+                $fieldsData[$key] ?? FieldCollection::make(),
                 __('novaPageManager.defaultPanelName'),
             );
 
             if ($templateType === Template::TYPE_PAGE) {
                 $seoPanelsData[$key] = $this->resolvePanelsFromFields(
                     app()->make(NovaRequest::class),
-                    $seoFieldsData[$key] ?? [],
+                    $seoFieldsData[$key] ?? FieldCollection::make(),
                     __('novaPageManager.seoPanelName'),
                 );
             }
@@ -205,7 +205,7 @@ class PageManagerController extends Controller
 
         $fields = $panelType === 'seo' ? NPM::getSeoFields() : $template->fields($request);
         $fields = FieldCollection::make(array_values($this->filter($fields)));
-        $field = $fields->findFieldByAttribute($fieldAttribute, fn () => abort(404));
+        $field = $fields->findFieldByAttribute($fieldAttribute, fn() => abort(404));
         $field = PageManagerField::transformFieldAttributes($field, "{$panelType}->{$locale}");
         $field->resolveForDisplay($resource->resource);
 
