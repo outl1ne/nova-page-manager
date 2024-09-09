@@ -5,6 +5,14 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.2] - 09-09-2024
+
+### Changed
+
+- Fix broken layout with too many locales (thanks to [@Gertiozuni](https://github.com/Gertiozuni))
+- Fix Nova::script() and Nova::style() loading (thanks to [@matthewjumpsoffbuildings](https://github.com/matthewjumpsoffbuildings))
+- Updated packages
+
 ## [5.9.1] - 23-11-2023
 
 ### Changed
