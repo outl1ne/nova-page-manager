@@ -165,6 +165,27 @@ To display a link to the actual page next to the slug, add or overwrite the clos
 
 You can overwrite the page/region models or resources, just set the new classes in the config file.
 
+### Custom locale display
+
+To customize the locale display you can use `Nova::provideToScript` to pass `customLocaleDisplay` as in the example below.
+
+```php
+// in app/Providers/NovaServiceProvider.php
+
+public function boot()
+{
+    Nova::serving(function () {
+        Nova::provideToScript([
+            // ...
+            'customLocaleDisplay' => [
+                'en' => <img src="/flag-en.png"/>,
+                'et' => <img src="/flag-et.png"/>,
+            ]
+        ]);
+    });
+}
+```
+
 ## Advanced usage
 
 ### Non-translatable panels
