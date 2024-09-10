@@ -14,7 +14,7 @@
           'o1-text-80 o1-border-transparent': activeLocale !== locale,
         }"
       >
-        <span>{{ locales[locale] }}</span>
+        <span v-html="getLocaleDisplay(locale)" />
       </div>
     </div>
   </div>
@@ -23,6 +23,18 @@
 <script>
 export default {
   props: ['locales', 'activeLocale'],
+
+  methods: {
+    getLocaleDisplay(locale) {
+      const customDisplay = Nova.config('customLocaleDisplay');
+
+      if (customDisplay && customDisplay[locale]) {
+        return customDisplay[locale];
+      }
+
+      return `${this.locales[locale]} (${locale})`;
+    },
+  }
 };
 </script>
 
