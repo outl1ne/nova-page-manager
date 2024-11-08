@@ -58,7 +58,7 @@ class NPM
 
         $filterTemplates = function ($templates) {
             // Move 'key' aka 'slug' into the array itself for easy access
-            $mappedTemplates = array_map(fn ($t, $s) => array_merge($t, ['slug' => $s]), $templates, array_keys($templates));
+            $mappedTemplates = array_map(fn($t, $s) => array_merge($t, ['slug' => $s]), $templates, array_keys($templates));
             $mappedTemplates = array_combine(array_keys($templates), $mappedTemplates);
 
             return array_filter($mappedTemplates, function ($template) {
@@ -87,22 +87,22 @@ class NPM
 
     public static function getPageTemplateByClass($className)
     {
-        return Arr::first(static::getPageTemplates(), fn ($template) => $template['class'] === $className);
+        return Arr::first(static::getPageTemplates(), fn($template) => $template['class'] === $className);
     }
 
     public static function getRegionTemplateByClass($className)
     {
-        return Arr::first(static::getRegionTemplates(), fn ($template) => $template['class'] === $className);
+        return Arr::first(static::getRegionTemplates(), fn($template) => $template['class'] === $className);
     }
 
     public static function getPageTemplateBySlug($templateSlug)
     {
-        return Arr::first(static::getPageTemplates(), fn ($template) => $template['slug'] === $templateSlug);
+        return Arr::first(static::getPageTemplates(), fn($template) => $template['slug'] === $templateSlug);
     }
 
     public static function getRegionTemplateBySlug($templateSlug)
     {
-        return Arr::first(static::getRegionTemplates(), fn ($template) => $template['slug'] === $templateSlug);
+        return Arr::first(static::getRegionTemplates(), fn($template) => $template['slug'] === $templateSlug);
     }
 
     public static function getTemplateClassType($templateClass)
@@ -164,7 +164,7 @@ class NPM
             return [
                 Text::make(__('novaPageManager.seoTitle'), 'title'),
                 Textarea::make(__('novaPageManager.seoDescription'), 'description'),
-                Image::make(__('novaPageManager.seoImage'), 'image'),
+                // Image::make(__('novaPageManager.seoImage'), 'image'),
             ];
         }
 
@@ -173,6 +173,7 @@ class NPM
 
     private static function getTool(): PageManager
     {
-        return collect(Nova::registeredTools())->first(fn ($tool) => $tool instanceof PageManager);
+        $tool = collect(Nova::registeredTools())->first(fn($tool) => $tool instanceof PageManager);
+        return $tool ?? new PageManager();
     }
 }

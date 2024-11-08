@@ -12,12 +12,12 @@ class NPMHelpers
 {
     public static function getRegions()
     {
-        return NPM::getRegionModel()::all()->map(fn ($region) => static::formatRegion($region));
+        return NPM::getRegionModel()::all()->map(fn($region) => static::formatRegion($region));
     }
 
     public static function getPages()
     {
-        return NPM::getPageModel()::all()->map(fn ($page) => static::formatPage($page));
+        return NPM::getPageModel()::all()->map(fn($page) => static::formatPage($page));
     }
 
     public static function getPagesStructure($flat = false, $keys = null)
@@ -45,14 +45,14 @@ class NPMHelpers
             &$formatPageForStructure,
             &$structure,
         ) {
-            $children = array_map(fn ($child) => $formatPageForStructure($child), $pageChildrenMap[$page->id]);
+            $children = array_map(fn($child) => $formatPageForStructure($child), $pageChildrenMap[$page->id]);
             $formattedPage = [];
 
 
             if (isset($keys)) {
                 $formattedPage = $page->only($keys);
                 $template = NPM::getPageTemplateBySlug($page->template);
-                
+
                 if (empty($template)) return null;
                 $templateClass = new $template['class'];
 
@@ -131,7 +131,7 @@ class NPMHelpers
 
                 $explodedPath = explode('/', $path);
                 $pathSlugs = array_map(
-                    fn ($slug, $i) => $pagePathSlugs[$i] === ':' ? ':' : $slug,
+                    fn($slug, $i) => $pagePathSlugs[$i] === ':' ? ':' : $slug,
                     $explodedPath,
                     array_keys($explodedPath)
                 );
@@ -156,7 +156,7 @@ class NPMHelpers
     public static function getPagesByTemplate($templateSlug)
     {
         $pages = NPM::getPageModel()::where('template', $templateSlug)->get();
-        return $pages->map(fn ($page) => static::formatPage($page))->toArray();
+        return $pages->map(fn($page) => static::formatPage($page))->toArray();
     }
 
     public static function formatPage($page, $params = [])
@@ -210,16 +210,19 @@ class NPMHelpers
             return [];
         }
 
-        if (is_callable($seoConfig)) {
-            return ['seo' => $seoData];
-        }
+        $seoFields = NPM::getSeoFields();
 
-        return ['seo' => array_map(function ($localeSeo) {
+        return ['seo' => array_map(function ($localeSeo) use ($seoFields) {
             if (isset($localeSeo['image'])) {
-                $localeSeo['image'] = Storage::disk('public')->url($localeSeo['image']);
+                $imageField = collect($seoFields)->first(fn($field) => $field->attribute === 'image');
+                if ($imageField && get_class($imageField) === 'Outl1ne\NovaMediaHub\Nova\Fields\MediaHubField') {
+                    $localeSeo['image'] = \Outl1ne\NovaMediaHub\Models\Media::find($localeSeo['image'])?->getUrl();
+                } else {
+                    $localeSeo['image'] = Storage::disk('public')->url($localeSeo['image']);
+                }
             }
 
             return $localeSeo;
-        }, $seoData)];
+        }, $seoData ?? [])];
     }
 }

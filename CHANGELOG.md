@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [5.9.3] - 09-09-2024
+
+### Added
+
+- Custom locale display config options (thanks to [@Gertiozuni](https://github.com/Gertiozuni))
+
+### Changed
+
+- **NB!** Removed SEO image field from defaults since deleting media no longer works
+  - Suggested replacement is nova-media-hub
+- Updated packages
+
+Migrating SEO images to nova-media-hub migration example:
+
+```php
+Page::all()->each(function ($page) {
+    $page->seo = collect($page->seo)->map(function ($seoInfo) {
+        if ($imagePath = $seoInfo['image'] ?? null) {
+            if (!Storage::disk('public')->exists($imagePath)) {
+                $seoInfo['image'] = null;
+                return $seoInfo;
+            }
+
+            $base64File = base64_encode(Storage::disk('public')->get($imagePath));
+            $media = rescue(fn() => MediaHub::storeMediaFromBase64($base64File, 'public', 'default'), null);
+            $seoInfo['image'] = $media?->id ?? null;
+        }
+        return $seoInfo;
+    })->toArray();
+
+    $page->save();
+});
+```
+
 ## [5.9.2] - 09-09-2024
 
 ### Changed
