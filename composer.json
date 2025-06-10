@@ -22,8 +22,8 @@
   "license": "MIT",
   "require": {
     "php": ">=8.0",
-    "laravel/nova": "^4.13",
-    "outl1ne/nova-translatable": "^2.0.4",
+    "laravel/nova": "^4.13 | ^5.0",
+    "outl1ne/nova-translatable": "^2.0.4 | ^3.0",
     "outl1ne/nova-translations-loader": "^5.0",
     "outl1ne/nova-multiselect-filter": "^4.0.2"
   },
