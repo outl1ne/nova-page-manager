@@ -2,7 +2,7 @@
 
 namespace Outl1ne\PageManager\Nova\Filters;
 
-use Illuminate\Http\Request;
+use Laravel\Nova\Http\Requests\NovaRequest as Request;
 use Laravel\Nova\Filters\Filter;
 use Outl1ne\PageManager\NPM;
 
