@@ -22,10 +22,10 @@
   "license": "MIT",
   "require": {
     "php": ">=8.0",
-    "laravel/nova": "^4.13 | ^5.0",
-    "outl1ne/nova-translatable": "^2.0.4 | ^3.0",
+    "laravel/nova": "^5.0",
+    "outl1ne/nova-translatable": "^3.0",
     "outl1ne/nova-translations-loader": "^5.0",
-    "outl1ne/nova-multiselect-filter": "^4.0.2 | ^5.0.1"
+    "outl1ne/nova-multiselect-filter": "^5.0.1"
   },
   "autoload": {
     "psr-4": {

@@ -13,7 +13,20 @@ use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
 
 class PageManagerField extends Field
 {
-    use ConditionallyLoadsAttributes;
+    use ConditionallyLoadsAttributes {
+        when as traitWhen;//due a conflict with parent method
+        unless as traitUnless;//due a conflict with parent method
+    }
+
+    public function when($value = null, ?callable $callback = null, ?callable $default = null)
+    {
+        return parent::when($value, $callback, $default);
+    }
+
+    public function unless($value = null, ?callable $callback = null, ?callable $default = null)
+    {
+        return parent::unless($value, $callback, $default);
+    }
 
     public $component = 'page-manager-field';
 
@@ -23,6 +36,7 @@ class PageManagerField extends Field
 
     public function __construct($type)
     {
+        parent::__construct($type);
         return $this->withMeta([
             'type' => $type,
             'locales' => NPM::getLocales(),

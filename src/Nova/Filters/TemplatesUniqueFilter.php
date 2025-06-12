@@ -3,6 +3,7 @@
 namespace Outl1ne\PageManager\Nova\Filters;
 
 use Laravel\Nova\Http\Requests\NovaRequest as Request;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 use Laravel\Nova\Filters\Filter;
 use Outl1ne\PageManager\NPM;
 
@@ -17,7 +18,7 @@ class TemplatesUniqueFilter extends Filter
         $this->type = $type;
     }
 
-    public function apply(Request $request, $query, $value)
+    public function apply(Request $request, Builder $query, mixed $value) : Builder
     {
         if (empty($value)) return $query;
 
