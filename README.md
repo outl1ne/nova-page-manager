@@ -271,6 +271,22 @@ Route::get('/page/{path?}', [PageController::class, 'show'])
 
 In the controller
 ```php
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
+use Outl1ne\PageManager\NPM;
+use Inertia\Inertia;
+
+class PageController extends Controller
+{
+  /**
+     * Handles dynamic page requests
+     *
+     * @param Request $request
+     * @param string|null $path
+     * @return \Inertia\Response
+     */
 public function show(Request $request, $path = '/')
     {
         
@@ -331,6 +347,7 @@ public function show(Request $request, $path = '/')
 
         // ...
     }
+}
 ```
 
 ## Credits
