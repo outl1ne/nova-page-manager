@@ -93,11 +93,7 @@ return [
     | Base URL
     |--------------------------------------------------------------------------
     |
-    | Define the base URL for your pages. Can be a string (ie https://webshop.com)
-    | or a closure.
-    |
-    | If a closure is specified, the function is called with the $page as a
-    | parameter. For example: fn($page) => config('app.url') . $page->path;
+    | Define the base URL for your pages. Must be serializable values like a string (ie https://webshop.com)
     |
     */
 
