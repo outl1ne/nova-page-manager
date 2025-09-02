@@ -19,8 +19,6 @@ class WorkbenchServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->publishes([
-            __DIR__.'/../../config/nova-page-manager.php' => config_path('nova-page-manager.php'),
-        ]);
+        //
     }
 }
