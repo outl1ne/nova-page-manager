@@ -1,57 +1,81 @@
 {
-  "name": "outl1ne/nova-page-manager",
-  "description": "Page(s) and region(s) manager for Laravel Nova.",
-  "keywords": [
-    "laravel",
-    "nova",
-    "page",
-    "manager"
-  ],
-  "authors": [
-    {
-      "name": "Tarvo Reinpalu",
-      "email": "tarvoreinpalu@gmail.com",
-      "role": "Developer"
+    "name": "outl1ne/nova-page-manager",
+    "description": "Page(s) and region(s) manager for Laravel Nova.",
+    "keywords": [
+        "laravel",
+        "nova",
+        "page",
+        "manager"
+    ],
+    "authors": [
+        {
+            "name": "Tarvo Reinpalu",
+            "email": "tarvoreinpalu@gmail.com",
+            "role": "Developer"
+        },
+        {
+            "name": "Outl1ne",
+            "email": "info@outl1ne.com",
+            "role": "Maintainer"
+        }
+    ],
+    "license": "MIT",
+    "require": {
+        "php": ">=8.0",
+        "laravel/nova": "^5.0",
+        "outl1ne/nova-translatable": "^3.0",
+        "outl1ne/nova-translations-loader": "^5.0",
+        "outl1ne/nova-multiselect-filter": "^5.0.1"
     },
-    {
-      "name": "Outl1ne",
-      "email": "info@outl1ne.com",
-      "role": "Maintainer"
-    }
-  ],
-  "license": "MIT",
-  "require": {
-    "php": ">=8.0",
-    "laravel/nova": "^5.0",
-    "outl1ne/nova-translatable": "^3.0",
-    "outl1ne/nova-translations-loader": "^5.0",
-    "outl1ne/nova-multiselect-filter": "^5.0.1"
-  },
-  "autoload": {
-    "psr-4": {
-      "Outl1ne\\PageManager\\": "src/"
+    "autoload": {
+        "psr-4": {
+            "Outl1ne\\PageManager\\": "src/"
+        },
+        "files": []
     },
-    "files": []
-  },
-  "extra": {
-    "laravel": {
-      "providers": [
-        "Outl1ne\\PageManager\\NPMServiceProvider"
-      ],
-      "aliases": {
-        "NPMCache": "Outl1ne\\PageManager\\Facades\\NPMCache"
-      }
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Outl1ne\\PageManager\\NPMServiceProvider"
+            ],
+            "aliases": {
+                "NPMCache": "Outl1ne\\PageManager\\Facades\\NPMCache"
+            }
+        }
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
+    "repositories": [
+        {
+            "type": "composer",
+            "url": "https://nova.laravel.com"
+        }
+    ],
+    "require-dev": {
+        "laravel/nova-devtool": "^1.8"
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Workbench\\App\\": "workbench/app/",
+            "Workbench\\Database\\Factories\\": "workbench/database/factories/",
+            "Workbench\\Database\\Seeders\\": "workbench/database/seeders/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "@clear",
+            "@prepare"
+        ],
+        "clear": "@php vendor/bin/testbench package:purge-skeleton --ansi",
+        "prepare": "@php vendor/bin/testbench package:discover --ansi",
+        "build": "@php vendor/bin/testbench workbench:build --ansi",
+        "serve": [
+            "Composer\\Config::disableProcessTimeout",
+            "@build",
+            "@php vendor/bin/testbench serve --ansi"
+        ]
     }
-  },
-  "config": {
-    "sort-packages": true
-  },
-  "minimum-stability": "dev",
-  "prefer-stable": true,
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://nova.laravel.com"
-    }
-  ]
 }
