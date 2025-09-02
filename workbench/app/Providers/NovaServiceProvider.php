@@ -76,7 +76,9 @@ class NovaServiceProvider extends NovaApplicationServiceProvider
      */
     public function tools(): array
     {
-        return [];
+        return [
+            new \Outl1ne\PageManager\PageManager(),
+        ];
     }
 
     /**

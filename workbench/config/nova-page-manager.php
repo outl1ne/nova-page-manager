@@ -1,6 +1,5 @@
 <?php
 
-dd('test');
 
 return [
     /*
@@ -26,10 +25,10 @@ return [
 
     'templates' => [
         'pages' => [
-            // 'home-page' => [
-            //     'class' => 'App\Nova\Templates\HomePageTemplate',
-            //     'unique' => true, // Whether more than one page can be created with this template
-            // ],
+             'home-page' => [
+                'class' => '\Workbench\App\Nova\Templates\HomePage',
+                'unique' => true, // Whether more than one page can be created with this template
+             ],
         ],
         'regions' => [
             // 'header' => [
