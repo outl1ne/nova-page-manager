@@ -2,9 +2,10 @@
 
 namespace Outl1ne\PageManager\Nova\Filters;
 
-use Illuminate\Http\Request;
+use Laravel\Nova\Http\Requests\NovaRequest as Request;
 use Outl1ne\PageManager\NPM;
 use Outl1ne\NovaMultiselectFilter\MultiselectFilter;
+use Illuminate\Contracts\Database\Eloquent\Builder;
 
 class TemplatesExcludeFilter extends MultiselectFilter
 {
@@ -18,7 +19,7 @@ class TemplatesExcludeFilter extends MultiselectFilter
         return $this;
     }
 
-    public function apply(Request $request, $query, $value)
+    public function apply(Request $request, Builder $query, mixed $value) : Builder
     {
         if (empty($value)) return $query;
         return $query->whereNotIn('template', $value);

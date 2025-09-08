@@ -147,18 +147,12 @@ The locales are defined in the config file.
 
 ### Add links to front-end pages
 
-To display a link to the actual page next to the slug, add or overwrite the closure in `config/nova-page-manager.php` for the key `base_url`.
+To display a link to the actual page next to the slug, add or overwrite the value in `config/nova-page-manager.php` for the key `base_url`.
 
 ```php
 // in /config/nova-page-manager.php
 
 'base_url' => 'https://webshop.com', // Will add slugs to the end to make the URLs
-
-// OR
-
-'base_url' => function ($page) {
-  return env('FRONTEND_URL') . '/' . $page->path;
-},
 ```
 
 ### Overwriting models and resources
@@ -266,6 +260,78 @@ php artisan vendor:publish --provider="Outl1ne\PageManager\ToolServiceProvider" 
 ```
 
 You can add your translations to `resources/lang/vendor/nova-page-manager/` by creating a new translations file with the locale name (ie `et.json`) and copying the JSON from the existing `en.json`.
+
+## Example of route and controller to serve pages
+
+In routes/web.php
+```php
+Route::get('/page/{path?}', [PageController::class, 'show'])
+    ->where('path', '[\w-]+');
+```
+
+In the controller
+```php
+public function show(Request $request, $path = '/')
+    {
+        
+        // Get the current locale
+        $locale = App::getLocale();
+        $locales = NPM::getLocales();
+        
+        // Force a valid locale
+        if (!isset($locales[$locale])) {
+            $locale = array_key_first($locales);
+        }
+        
+        // get page model class
+        $pageModel = NPM::getPageModel();
+        
+        // get the model istance
+        $page = $pageModel::where('active', true)
+        ->where(function($query) use ($locales, $path) {
+            foreach($locales as $locale => $name){
+                $query->orWhere('slug->' . $locale, $path);
+            }
+        })
+        ->first();
+        
+        // return 404 if page not found
+        if (!$page) {
+            abort(404);
+        }
+        
+        // Get the page template
+        $templateSlug = $page->template;
+        
+        
+        // Prepare page data
+        // maybe here you should filter the data by the locale
+        $pageData = $page->toArray();
+        
+        // Render the dynamic page component
+        return Inertia::render('DynamicPage', [
+            'page' => $pageData,
+            'template' => $templateSlug,
+            //maybe here you're interested also in regions
+            //'regions' => NPM::getRegions(),
+        ]);
+
+        //OR
+
+        //  return view('page', [
+        //     'page' => $pageData,
+        //     'template' => $templateSlug,
+        // ]);
+
+        //OR
+
+        //  return view('page.' . $templateSlug, [
+        //     'page' => $pageData,
+        // ]);
+
+        // ...
+    }
+```
 
 ## Credits
 

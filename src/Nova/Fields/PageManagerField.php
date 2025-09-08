@@ -16,13 +16,13 @@ class PageManagerField extends Field
     use ConditionallyLoadsAttributes;
 
     public $component = 'page-manager-field';
-
     protected $template = null;
     protected $seoFields = null;
     protected $fieldOriginalAttributes = [];
 
     public function __construct($type)
     {
+        parent::__construct($type);
         return $this->withMeta([
             'type' => $type,
             'locales' => NPM::getLocales(),
