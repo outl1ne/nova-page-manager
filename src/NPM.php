@@ -129,8 +129,8 @@ class NPM
     public static function getBaseUrl($page = null)
     {
         $baseUrl = config('nova-page-manager.base_url');
-        if (empty($baseUrl)) return config('app.url');
-        //if (is_callable($baseUrl)) return call_user_func($baseUrl, $page);
+        if (empty($baseUrl)) return null;
+        if (is_callable($baseUrl)) return call_user_func($baseUrl, $page);
         if (empty($page)) return $baseUrl;
 
         // Create full URL myself
