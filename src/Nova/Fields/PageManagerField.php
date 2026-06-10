@@ -9,12 +9,10 @@ use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
-use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
+use Illuminate\Http\Resources\MissingValue;
 
 class PageManagerField extends Field
 {
-    use ConditionallyLoadsAttributes;
-
     public $component = 'page-manager-field';
     protected $template = null;
     protected $seoFields = null;
@@ -55,6 +53,17 @@ class PageManagerField extends Field
     {
         $this->seoFields = $seoFields;
         return $this;
+    }
+
+    /**
+     * Filter the given data, removing any missing values.
+     *
+     * @param  array  $data
+     * @return array
+     */
+    protected function filter($data)
+    {
+        return collect($data)->filter(fn ($value) => ! $value instanceof MissingValue)->all();
     }
 
     public function fill(NovaRequest $request, $model)

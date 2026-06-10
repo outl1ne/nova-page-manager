@@ -11,12 +11,23 @@ use Illuminate\Routing\Controller;
 use Laravel\Nova\Fields\FieldCollection;
 use Laravel\Nova\Http\Requests\NovaRequest;
 use Outl1ne\PageManager\Nova\Fields\PageManagerField;
-use Illuminate\Http\Resources\ConditionallyLoadsAttributes;
+use Illuminate\Http\Resources\MissingValue;
 use Illuminate\Support\Facades\Storage;
 
 class PageManagerController extends Controller
 {
-    use ResolvesFields, ConditionallyLoadsAttributes;
+    use ResolvesFields;
+
+    /**
+     * Filter the given data, removing any missing values.
+     *
+     * @param  array  $data
+     * @return array
+     */
+    protected function filter($data)
+    {
+        return collect($data)->filter(fn ($value) => ! $value instanceof MissingValue)->all();
+    }
 
     public function getFields(Request $request, $type, $resourceId, $isSyncRequest = false)
     {
