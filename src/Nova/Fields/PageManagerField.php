@@ -20,6 +20,21 @@ class PageManagerField extends Field
     protected $seoFields = null;
     protected $fieldOriginalAttributes = [];
 
+    // The ConditionallyLoadsAttributes trait (used here only for filter()) declares
+    // when()/unless() that clash with Nova Field's Conditionable when()/unless() - the
+    // trait's protected when() would reduce visibility and its unless() signature is
+    // incompatible, both fatal errors. Redeclare them here (class methods take precedence
+    // over trait methods) and delegate to the parent to keep Nova's fluent behaviour.
+    public function when($value = null, $callback = null, $default = null)
+    {
+        return parent::when($value, $callback, $default);
+    }
+
+    public function unless($value = null, $callback = null, $default = null)
+    {
+        return parent::unless($value, $callback, $default);
+    }
+
     public function __construct($type)
     {
         parent::__construct($type);
