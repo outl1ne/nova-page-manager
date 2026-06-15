@@ -1,0 +1,39 @@
+src/Http/Controllers/PageManagerController.php
+  s_d7504012d3ada1::t_15bdda464c18e3 23-29,36-40
+  s_6270f04b1206fe::t_eb0d11f370ba1a 103-110
+  s_d7504012d3ada1::t_93275583c82579 14
+webpack.mix.js
+  s_e5f647b5d73c64::t_e6535ea4c33bf4 7
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "652dc2ea15b5e69fe684678bc2d3929a4d15f42f",
+  "prompts": {},
+  "sessions": {
+    "s_6270f04b1206fe": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "b7657876-19e8-4a17-aa18-d044932f9209",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Tarvo Reinpalu <tarvo@versioon.ee>"
+    },
+    "s_d7504012d3ada1": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "0527e95f-97ba-41f1-b200-ab35db514ed0",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Tarvo Reinpalu <tarvo@versioon.ee>"
+    },
+    "s_e5f647b5d73c64": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "f7179feb-4642-420a-83c0-c936006c7fd7",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Tarvo Reinpalu <tarvo@versioon.ee>"
+    }
+  }
+}
