@@ -1,0 +1,20 @@
+src/Nova/Fields/PageManagerField.php
+  s_69f84e8c77f675::t_2f06852efd8e63 45-53,60-64
+  s_69f84e8c77f675::t_4b2f3fa867b958 12
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.7",
+  "base_commit_sha": "421bd908322bc5a0f2530bd40663f364d8537867",
+  "prompts": {},
+  "sessions": {
+    "s_69f84e8c77f675": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "d9540558-b76e-441b-bd8e-0488edab2e77",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Tarvo Reinpalu <tarvo@versioon.ee>"
+    }
+  }
+}
